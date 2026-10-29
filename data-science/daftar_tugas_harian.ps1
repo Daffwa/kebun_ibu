@@ -3,10 +3,15 @@
 # Hapus lagi:      Unregister-ScheduledTask -TaskName "KebunIbu-TarikHarian" -Confirm:$false
 
 $dasar = $PSScriptRoot
-$aksi = New-ScheduledTaskAction `
-    -Execute (Join-Path $dasar ".venv\Scripts\pythonw.exe") `
-    -Argument ('"' + (Join-Path $dasar "tarik_harian.py") + '"') `
-    -WorkingDirectory $dasar
+$pythonw = Join-Path $dasar ".venv\Scripts\pythonw.exe"
+
+# Aksi dijalankan berurutan: tarik dulu, lalu salin hasil VPS (data_lake_vps\).
+$aksi = @(
+    New-ScheduledTaskAction -Execute $pythonw `
+        -Argument ('"' + (Join-Path $dasar "tarik_harian.py") + '"') -WorkingDirectory $dasar
+    New-ScheduledTaskAction -Execute $pythonw `
+        -Argument ('"' + (Join-Path $dasar "sinkron_vps.py") + '"') -WorkingDirectory $dasar
+)
 
 # 06:00 tarikan utama; 12:00 hanya mengulang sumber yang pagi tadi gagal (yang sukses dilewati).
 $pemicu = @(
@@ -24,5 +29,5 @@ $aturan = New-ScheduledTaskSettingsSet `
 
 Register-ScheduledTask `
     -TaskName "KebunIbu-TarikHarian" `
-    -Description "Tarik harga buah Blibli + Tokopedia (data-science/tarik_harian.py)" `
+    -Description "Tarik harga buah Blibli + Tokopedia, lalu salin hasil VPS (tarik_harian.py, sinkron_vps.py)" `
     -Action $aksi -Trigger $pemicu -Settings $aturan -Force

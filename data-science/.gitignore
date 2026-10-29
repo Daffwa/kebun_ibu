@@ -1,5 +1,6 @@
 .venv/
 data_lake/
+data_lake_vps/
 warehouse/
 logs/
 __pycache__/
