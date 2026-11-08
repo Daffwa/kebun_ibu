@@ -81,6 +81,7 @@ pyarrow, curl_cffi ≥ 0.7, pytest.
 | 1, 4, 5, 6, 7 | **diperbarui hari ini** mengikuti spec bagian 0 (berat, kolom Blibli, satu baris per opsi, cek A–G) |
 | 1A berat (8 Nov) | ✅ kode + tes (`berat_gram`, `berat_dari_slug`, `pilih_berat`, `jumlah_buah`, `jenis_satuan`, `mangga_manalagi`, `satuan_baris` [A1]), + aturan rentang dua satuan ("900g - 1 Kg" → 950, dari data Tokopedia asli). Bagian di `transform/transform.ipynb`; **menunggu tinjauan pengguna** |
 | 1B (8 Nov) | ✅ kode + tes: `jenis_buah`, `olahan` (tanpa `sale`/`pohon`), `asal_dari_nama`, `terjual_dari_label`, `ember_terjual`, `region` (+ semua kota Jawa yang ada di data), multipack `berat_dikali`. **Menunggu tinjauan pengguna** di notebook |
+| 4 Blibli transform (8 Nov) | ✅ `transform/blibli.py` + 21 tes + fixture asli (8 Nov dengan varian, 6 Nov tanpa). Semua 15 tanggal asli: 24.648 baris, 2,5 detik. Opsi tanpa harga → harga NULL (B). URL tanpa pelacak + `?ds=` [usulan Claude]. **Menunggu tinjauan pengguna** |
 | 8–11 | belum, tidak berubah |
 
 **Aturan tinjauan (8 November):** setiap task 1, 4, 5, 6, 7, 8 diakhiri
@@ -648,8 +649,8 @@ punya `varian/` (8 November atau sesudahnya), di
   fixture saja;
 - satu produk ganda di dua berkas; satu produk dengan `location: null`.
 
-Fixture **tanpa** varian: 10 produk dari `date=2026-11-07` (tidak punya
-`varian/`).
+Fixture **tanpa** varian: 10 produk dari `date=2026-11-06` (7 Nov ternyata
+sudah punya `varian/` dari uji tarik).
 
 - [ ] **Step 2: Tulis tes yang gagal**
 
@@ -813,6 +814,9 @@ skema ini. Itu diuji di Task 7.
   itu dilewati untuk baris tersebut.
 - Cek C (opsi default berubah) **bukan** di sini; jadi view
   `v_opsi_berubah` di Task 8.
+- **Harga kosong (8 Nov, keputusan B):** baris dengan `harga` NULL (opsi
+  Blibli yang tidak tersedia, ±43/hari) gagal skema → karantina dengan
+  `alasan` yang menyebut `harga`. Tes: `test_harga_null_dikarantina`.
 - **Cek H (8 Nov):** baris dengan `berat_dikali = true` **disalin** ke
   karantina dengan `alasan = "cek_H_berat_dikali"` tetapi **tetap lolos** ke
   fakta. Berlaku untuk Blibli dan Tokopedia. Bukan `pa.Check` (yang

@@ -199,7 +199,7 @@ default.
 | 25 | `jumlah_ulasan` | `review.count` | salin |
 | 26 | `total_terjual` | `soldCountTotal` (NULL tetap NULL) | salin |
 | 27 | `terjual_bulan_ini_min` | angka dari `monthlySoldCountLabel` ("Dibeli 100+ kali bulan ini" → 100) | NULL |
-| 28 | `url` | `"https://www.blibli.com" + url` | salin |
+| 28 | `url` | `"https://www.blibli.com" + path url + "?ds=" + item_sku` (tanpa `sid`/`metaData` pelacak yang berubah tiap hari) **[usulan Claude 8 Nov]** | path dari baris default + `?ds=` item_sku opsi itu |
 | 29 | `sku` | `sku` | NULL (berkas `is--` tidak punya `sku`) |
 
 Catatan:
@@ -214,6 +214,11 @@ Catatan:
 - `itemCode` di berkas varian **tidak dipakai**: penomorannya terbalik
   terhadap `itemSku` (500 gr = `MTA-…-00002`). Hanya `itemSku` yang
   cocok dengan halaman.
+- **Opsi tanpa harga** (keputusan pengguna B, 8 Nov): 86 dari 665 berkas
+  `is--` punya `price: null`; semuanya opsi yang Blibli tandai
+  `available: false`. Barisnya **tetap dibuat** dengan `harga`,
+  `harga_coret`, `diskon_persen` NULL, lalu dikarantina di bagian 6
+  (±43 baris per hari).
 - Kunci unik: (`item_sku`, `tanggal`). Kalau satu `item_sku` muncul di
   dua kategori, yang pertama dipertahankan.
 
