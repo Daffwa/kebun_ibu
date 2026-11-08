@@ -1,7 +1,14 @@
 import pytest
 
 from transform.parser import (
+    asal_dari_nama,
+    ember_terjual,
+    jenis_buah,
+    olahan,
+    region,
+    terjual_dari_label,
     berat_dari_slug,
+    berat_dikali,
     berat_gram,
     jenis_satuan,
     jumlah_buah,
@@ -151,4 +158,109 @@ def test_mangga_manalagi(nama, hasil):
     ("Apel 1 kg isi 6 pcs", None, False, None, (1000, "nama", "berat", None)),   # berat menang, jumlah tidak diisi
 ])
 def test_satuan_baris(nama, variant, banyak_opsi, usp, hasil):
-    assert tuple(satuan_baris(nama, variant, banyak_opsi, usp)) == hasil
+    assert tuple(satuan_baris(nama, variant, banyak_opsi, usp))[:4] == hasil
+
+
+# ---- Task 1B ----
+
+@pytest.mark.parametrize("nama,jenis", [
+    ("MANGGA HARUMANIS 470 - 500 G", "mangga"),
+    ("Manga Harum Manis 1 kg", "mangga"),                # salah ketik, sama dengan mangga_manalagi
+    ("DRAGON FRUIT RED LOKAL", "buah naga"),
+    ("Buah Naga Merah", "buah naga"),
+    ("Avocadron Alpukat Mentega", "alpukat"),
+    ("PEAR MADU PREMIUM", "pir"),
+    ("Apel Fuji", "apel"),
+    ("Apel Manalagi 1 kg", "apel"),                      # perangkap spec 5.2
+    ("Semangka Merah 1 buah", "semangka"),
+    ("Buah Manggis Manis Segar 500gr", "manggis"),       # bukan mangga
+    ("Kelengkeng Bangkok", "lengkeng"),
+    ("Pisang Nangka", "pisang"),
+    ("Kurma Ajwa", "lainnya"),
+    ("Buah Nangka Manis", "lainnya"),
+])
+def test_jenis_buah(nama, jenis):
+    assert jenis_buah(nama) == jenis
+
+
+def test_olahan():
+    assert olahan("Keripik Pisang 250g")
+    assert olahan("Bibit Mangga Irwin")
+    assert not olahan("Pisang Cavendish 1 kg")
+
+
+def test_olahan_tidak_memakai_sale_dan_pohon():
+    # keputusan pengguna 8 Nov: "flash sale" = promo, "tua pohon" = matang di pohon
+    assert not olahan("MANGGA MANALAGI MANIS, (1KG) flash sale Buah")
+    assert not olahan("Mangga Manalagi Madu (Arum ) Tua Pohon asli Situbondo")
+
+
+@pytest.mark.parametrize("nama,asal", [
+    ("Kiwi Green 4s Impor", "impor"),
+    ("Anggur Red Globe Premium Import", "impor"),
+    ("Apel Fuji 1 kg", "impor"),
+    ("Jeruk Sunkist", "impor"),
+    ("Salak Pondoh 1 kg", "lokal"),
+    ("Manggis Super", "lokal"),
+    ("Mangga Arumanis", "lokal"),
+    ("Mangga Manalagi 1 kg", "lokal"),
+    ("Jeruk Medan Lokal", "lokal"),
+    ("Pisang Cavendish", "tidak_diketahui"),
+])
+def test_asal_dari_nama(nama, asal):
+    assert asal_dari_nama(nama) == asal
+
+
+@pytest.mark.parametrize("label,n", [
+    ("23 terjual", 23), ("100+ terjual", 100), ("1rb+ terjual", 1000),
+    ("1,5rb+ terjual", 1500), ("10rb+ terjual", 10000),
+    ("", None), (None, None), ("Hemat s.d 8%", None),
+])
+def test_terjual_dari_label(label, n):
+    assert terjual_dari_label(label) == n
+
+
+@pytest.mark.parametrize("n,ember", [
+    (0, 0), (23, 23), (29, 29), (30, 30), (47, 40), (99, 90), (100, 100),
+    (249, 100), (250, 250), (600, 500), (800, 750), (1499, 1000),
+    (6874, 6000), (None, None),
+])
+def test_ember_terjual(n, ember):
+    assert ember_terjual(n) == ember
+
+
+@pytest.mark.parametrize("kota,hasil", [
+    ("Jakarta Barat", "jabodetabek"), ("Kota Jakarta Barat", "jabodetabek"),
+    ("Kab. Bogor", "jabodetabek"), ("Bekasi", "jabodetabek"), ("Kota Tangerang Selatan", "jabodetabek"),
+    ("Kota Surabaya", "jawa_lain"), ("Kab. Sleman", "jawa_lain"),
+    ("Kab.Ciamis", "jawa_lain"),                          # tanpa spasi (data asli)
+    ("Surakarta (Solo)", "jawa_lain"),                    # data asli
+    ("Kab. Bandung Barat", "jawa_lain"),
+    ("Kota Denpasar", "luar_jawa"), ("Bandar Lampung", "luar_jawa"),
+    ("Kab. Kotawaringin Barat", "luar_jawa"),             # "Kota…" bukan awalan
+    (None, "tidak_diketahui"), ("", "tidak_diketahui"),
+])
+def test_region(kota, hasil):
+    assert region(kota) == hasil
+
+
+# Multipack (keputusan pengguna 8 Nov, spec 13 #6): dikalikan, dan ditandai supaya
+# barisnya dicatat di karantina untuk ditinjau.
+@pytest.mark.parametrize("nama,gram,dikali", [
+    ("BLUEBERRY TRAIN TOY 8x125GR PACK", 1000, True),          # data asli
+    ("Kurma Akram Bam Mazafati 550g x 12 (1 dus)", 6600, True),  # data asli
+    ("Strawberry 200 gr×12 Pcs", 2400, True),
+    ("Apel 1 kg x 2", 2000, True),
+    ("Jeruk 1 x 500gr", 500, False),                           # dikali 1 = tidak berubah
+    ("Mangga Manalagi 1 kg", 1000, False),
+    ("Anggur 3 x 10 kg", None, True),                          # 30 kg: di luar batas
+])
+def test_multipack(nama, gram, dikali):
+    assert berat_gram(nama) == gram
+    assert berat_dikali(nama) is dikali
+
+
+def test_satuan_baris_menandai_berat_dikali():
+    assert satuan_baris("BLUEBERRY TRAIN TOY 8x125GR PACK", None, False).berat_dikali is True
+    assert satuan_baris("Mangga Manalagi 1 kg", None, False).berat_dikali is False
+    assert satuan_baris("Kurma", "2 x 500 gr", True).berat_dikali is True

@@ -80,7 +80,7 @@ pyarrow, curl_cffi ≥ 0.7, pytest.
 | di luar plan | ✅ `tarik_harian.py` (Task Scheduler + cron VPS), `sinkron_vps.py`, `eksplor.ipynb` |
 | 1, 4, 5, 6, 7 | **diperbarui hari ini** mengikuti spec bagian 0 (berat, kolom Blibli, satu baris per opsi, cek A–G) |
 | 1A berat (8 Nov) | ✅ kode + tes (`berat_gram`, `berat_dari_slug`, `pilih_berat`, `jumlah_buah`, `jenis_satuan`, `mangga_manalagi`, `satuan_baris` [A1]), + aturan rentang dua satuan ("900g - 1 Kg" → 950, dari data Tokopedia asli). Bagian di `transform/transform.ipynb`; **menunggu tinjauan pengguna** |
-| 1B sisanya | belum: `jenis_buah`, `olahan`, `asal_dari_nama`, `terjual_dari_label`, `ember_terjual`, `region` |
+| 1B (8 Nov) | ✅ kode + tes: `jenis_buah`, `olahan` (tanpa `sale`/`pohon`), `asal_dari_nama`, `terjual_dari_label`, `ember_terjual`, `region` (+ semua kota Jawa yang ada di data), multipack `berat_dikali`. **Menunggu tinjauan pengguna** di notebook |
 | 8–11 | belum, tidak berubah |
 
 **Aturan tinjauan (8 November):** setiap task 1, 4, 5, 6, 7, 8 diakhiri
@@ -609,7 +609,7 @@ Task 5 dengan data tebakan.
 - Produces (`transform/blibli.py`):
   - `KOLOM_BLIBLI: dict[str, pl.DataType]`, urut sesuai tabel spec 5.1
     (kolom 1–29), lalu `berat_gram` Int64, `sumber_berat` Utf8,
-    `jenis_satuan` Utf8. Tipe: `tanggal` Date; `opsi_default`, `resmi`
+    `jenis_satuan` Utf8, `jumlah_buah` Int64, `berat_dikali` Boolean. Tipe: `tanggal` Date; `opsi_default`, `resmi`
     Boolean; `harga`, `harga_coret`, `diskon_persen`, `harga_voucher`,
     `harga_coret_voucher`, `diskon_voucher_persen`,
     `harga_sebelum_kampanye`, `jumlah_ulasan`, `total_terjual`,
@@ -627,7 +627,8 @@ Task 5 dengan data tebakan.
        dilewati.
     3. Berat: Blibli `satuan_baris(nama, variant, banyak_opsi=hasVariants,
        usp=uniqueSellingPoint)` → `berat_gram`, `sumber_berat`, `jenis_satuan`,
-       `jumlah_buah` (A1, 8 Nov: produk beberapa opsi hanya membaca `variant`).
+       `jumlah_buah`, `berat_dikali` (A1, 8 Nov: produk beberapa opsi hanya
+       membaca `variant`).
     4. Buang ganda per (`item_sku`), yang pertama dipertahankan.
 
 **Wajib ada:** `id`, `name`, `price`, `itemSku` di kartu; `data.itemSku`,
@@ -812,6 +813,10 @@ skema ini. Itu diuji di Task 7.
   itu dilewati untuk baris tersebut.
 - Cek C (opsi default berubah) **bukan** di sini; jadi view
   `v_opsi_berubah` di Task 8.
+- **Cek H (8 Nov):** baris dengan `berat_dikali = true` **disalin** ke
+  karantina dengan `alasan = "cek_H_berat_dikali"` tetapi **tetap lolos** ke
+  fakta. Berlaku untuk Blibli dan Tokopedia. Bukan `pa.Check` (yang
+  membuang baris), tetapi langkah terpisah di `pisahkan()`.
 
 Tes tambahan:
 - `test_cek_A_voucher_lebih_mahal_dikarantina`: `harga_voucher = harga + 1`.
@@ -822,6 +827,8 @@ Tes tambahan:
   `FRX-60021-01718` (sebelum kampanye 15000, harga 10000, `kampanye`
   NULL).
 - `test_cek_G_sku_beda_dari_id_dikarantina`: `sku = produk_id + "X"`.
+- `test_cek_H_berat_dikali_dicatat_tetapi_tetap_lolos`: satu baris
+  "8x125GR" ada di karantina **dan** di hasil lolos.
 - `test_cek_dilewati_kalau_kolom_null`: baris opsi lain (kolom voucher
   NULL) lolos.
 

@@ -16,7 +16,7 @@ Hasil eksplorasi data mentah 26 Oktober – 7 November (notebook
 2. **Blibli: harga semua opsi varian ikut ditarik** sejak 8 November
    (bagian 4.1). Lapisan 1 Blibli jadi **satu baris per opsi**
    (`item_sku`), bukan per produk (bagian 5.1).
-3. **Kolom Blibli: 29 kolom sumber** + 3 kolom turunan (bagian 5.1).
+3. **Kolom Blibli: 29 kolom sumber** + 5 kolom turunan (bagian 5.1).
 4. **Aturan berat diperbarui** dari profil ±9.400 nama asli: pecahan
    "1/2 kg" sekarang **dibaca** (menggantikan aturan lama "dilewati"),
    ditambah berat cadangan dari `variant` Blibli dan URL Tokopedia
@@ -230,8 +230,9 @@ mengisi `diskon_persen`, dan pilihan salinan laptop vs VPS.
 
 #### Kolom turunan (kedua platform)
 
-`berat_gram`, `sumber_berat` (`nama` / `variant` / `usp` / `url`), dan
-`jenis_satuan` (`berat` / `jumlah` / `kemasan` / `lain`). Dihitung di
+`berat_gram`, `sumber_berat` (`nama` / `variant` / `usp` / `url`),
+`jenis_satuan` (`berat` / `jumlah` / `kemasan` / `lain`), `jumlah_buah`
+(hanya kalau `jenis_satuan = jumlah`), dan `berat_dikali` (multipack, 8 Nov). Dihitung di
 lapisan 1 karena butuh field mentah yang bukan kolom
 (`uniqueSellingPoint` Blibli). Aturannya di bagian 5.2.
 
@@ -287,7 +288,7 @@ per jenis dibuat lewat view.
 | `jenis_buah(nama)` | Kamus kata kunci → jenis (mangga, apel, pisang, jeruk, anggur, melon, alpukat, pepaya, buah naga, pir, …), dengan sinonim. Tidak cocok → `lainnya`. **Perangkap:** "manalagi" juga ada di Apel Manalagi (±40 produk) dan manisan belimbing "simanalagi". Mangga Manalagi = nama memuat **mangga dan manalagi** (`mangga_manalagi(nama)`, 8 Nov). Salah ketik dihitung: tiap kata boleh beda **1 huruf** dari "mangga"/"manalagi" (manga, manggah, mangg, "Manalgi"), tertempel ke kata berikutnya ("ManggaMuda"), angka pengganti huruf ("M4ngg4 M4n4lgi"), dan "mango". **Batasnya 1 huruf**: pada 9.871 nama, 1 huruf dari "mangga" = tepat 4 salah ketik asli, 2 huruf = buah lain (nangka, manggis, bangka); 2 huruf dari "manalagi" = "simanalagi" (manisan belimbing). |
 | `asal(...)` | Blibli: dari kategori, `asal_sumber = 'label'`. Tokopedia: aturan kata + varietas, `asal_sumber = 'aturan'`. |
 | `olahan(nama)` | `True` untuk bibit, benih, keripik, sale, jus, dll. Baris tetap disimpan, hanya ditandai. Kata "kulit" dan "daun" sering salah cocok. **Aturan akhir ditunda** (bagian 13). |
-| `terjual_min(...)` | Blibli: angka pasti → batas bawah rentang Tokopedia. Tokopedia: "60+ terjual" → 60, "1rb+ terjual" → 1000. |
+| `terjual_min(...)` | Blibli: angka pasti → batas bawah rentang Tokopedia. Tokopedia: "60+ terjual" → 60, "1rb+ terjual" → 1000. Usulan Claude 13–16 Okt; **disetujui pengguna 8 Nov** ("keep"). Angka pasti Blibli tetap di `blibli_produk.total_terjual`. |
 | `jenis_toko(...)` | Blibli: `resmi`/`biasa`. Tokopedia: `tier_<n>`, arti tier belum diverifikasi. |
 | `region(kota)` | Kota → `jabodetabek` / `jawa_lain` / `luar_jawa`. |
 
@@ -354,6 +355,7 @@ ditinjau manual.
 | E | `diskon_voucher_persen` berbeda ≤ 1 poin dari `(1 − harga_voucher/harga_coret) × 100` | 0 gagal |
 | F | `harga_sebelum_kampanye ≥ harga`, dan berbeda dari `harga` hanya kalau `kampanye` terisi | **8 gagal** (2 produk mangga Rp10.000, diskon 60–75%, tanpa nama kampanye) |
 | G | `sku = produk_id` (kalau `sku` ada; ditambahkan 8 Nov) | 0 gagal di 24.000 baris (18 Okt – 8 Nov) |
+| H | `berat_dikali = true` (multipack "8x125GR" dikalikan, keputusan pengguna 8 Nov) | **Dicatat di karantina tetapi tetap masuk fakta**, untuk ditinjau. 6 nama di semua tanggal sampai 8 Nov (tidak ada mangga) |
 | C | `item_sku` opsi default berbeda dari kemarin | **Tanda saja, bukan karantina** (117 kali). Dibuat sebagai view DuckDB dengan `LAG` **[usulan Claude]**. |
 
 ### 6.2 Karantina
@@ -457,8 +459,8 @@ memakainya dimulai** (misalnya #1–3 di Task 5, #5–6 di Task 1/7).
 | 2 | **`diskon_persen` Tokopedia** selalu 0 dari API | Hitung dari `harga_asli` vs `harga` (tergantung #1) | 0 di semua baris |
 | 3 | **Salinan laptop vs VPS** untuk Tokopedia di tanggal yang sama | Pakai salinan VPS; laptop hanya mengisi tanggal yang VPS tidak punya | Keduanya tarik setiap hari sejak 27 Okt |
 | 4 | **Label Tokopedia yang belum dipakai**: `nett_price`, `promotion_label` ("Harga Diskon"), `ri_ribbon` ("12%"), `ri_product_offer` | Tidak dipakai dulu; tetap ada di data mentah | 614 / 637 / 640 / 4.356 baris pada 7 Nov |
-| 5 | **Olahan** (aturan akhir) dan **batas harga per kg** karantina | Batas 2.000–2.000.000/kg (usulan 4 Nov) supaya anggur Nagano Rp4 jt/kg tidak salah dikarantina | Ditunda pengguna 4 Nov: "filter later" |
-| 6 | **Multipack** ("8x125GR", "200 gr×12 Pcs") | Kalikan: 8 × 125 = 1.000 g | Penyebab utama harga per kg yang terlalu tinggi |
+| 5 | **Olahan** (aturan akhir) dan **batas harga per kg** karantina. *8 Nov: `sale` dan `pohon` dibuang dari daftar olahan (pengguna); sisanya tetap. Kurma/kelapa/lemon tetap `lainnya` (pengguna: bukan fokus)* | Batas 2.000–2.000.000/kg (usulan 4 Nov) supaya anggur Nagano Rp4 jt/kg tidak salah dikarantina | Ditunda pengguna 4 Nov: "filter later" |
+| 6 | ✅ **Multipack** ("8x125GR", "200 gr×12 Pcs"): **diputuskan 8 Nov: dikalikan + dicatat di karantina (cek H)** | Kalikan: 8 × 125 = 1.000 g | Penyebab utama harga per kg yang terlalu tinggi |
 | 7 | **URL gambar pertama Blibli** (diterima 4 Nov untuk ide computer vision) | Tambah kolom `gambar` kalau masih diinginkan; tidak ada di daftar 29 kolom | — |
 | 8 | **Arti `tier_toko`** Tokopedia | Tetap `tier_<n>` | Halaman produk menampilkan lencana hijau, artinya belum dicek |
 | 9 | **Dashboard `/admin/pasar` + 4 insight** (usulan 26 Okt) | Menunggu keputusan pengguna | — |
