@@ -71,6 +71,28 @@ pyarrow, curl_cffi ≥ 0.7, pytest.
    "10rb+", label kosong). Hasilnya angka yang benar atau `None`, tidak
    pernah crash. Tes: Task 1 `test_terjual_dari_label`.
 
+## Status dan perubahan (7 November 2026)
+
+| Task | Status |
+|---|---|
+| 2 Blibli extract | ✅ selesai, + tarikan varian (`07ddbff`) |
+| 3 Tokopedia extract | ✅ selesai |
+| di luar plan | ✅ `tarik_harian.py` (Task Scheduler + cron VPS), `sinkron_vps.py`, `eksplor.ipynb` |
+| 1, 4, 5, 6, 7 | **diperbarui hari ini** mengikuti spec bagian 0 (berat, kolom Blibli, satu baris per opsi, cek A–G) |
+| 8–11 | belum, tidak berubah |
+
+**Aturan tinjauan (8 November):** setiap task 1, 4, 5, 6, 7, 8 diakhiri
+dengan menambah satu bagian di `data-science/transform.ipynb`: sel kode
+fungsi baru (`IPython.display.Code(inspect.getsource(fungsi),
+language="python")`) lalu sel yang menjalankannya pada data asli terbaru
+dan menampilkan hasilnya. Notebook hanya memanggil fungsi dari `.py`,
+tidak menulis ulang logika. Task belum dianggap selesai sebelum
+pengguna meninjau bagian itu.
+
+Urutan berikutnya: **Task 1 → 4 → 5 → 6 → 7 → 8 → 9 → 10 → 11.**
+Task 5 punya tiga hal terbuka (spec 13 #1–3); kerjakan bagian yang sudah
+pasti dulu.
+
 ## Urutan pengerjaan (diubah 17 Oktober 2026)
 
 Pengguna membangun sendiri dengan bimbingan, dan memilih urutan ini:
@@ -116,6 +138,7 @@ Task 2–3 tidak bergantung pada parser, jadi urutan ini aman.
 kebun-ibu/data-science/
   requirements.txt, pyproject.toml, .gitignore, README.md
   run.py                         CLI: tahap extract/transform/load + pipeline_runs
+  transform.ipynb                tinjauan pengguna: kode + hasil tiap langkah
   evaluasi_asal.py               ketepatan aturan asal vs label Blibli
   extract/__init__.py
   extract/http.py                jeda, coba ulang, simpan halaman, HasilTarik
@@ -148,11 +171,27 @@ kebun-ibu/data-science/
   `transform/parser.py`
 - Test: `tests/test_parser.py`
 
+> **Diperbarui 7 November:** aturan berat mengikuti spec 5.2 (pecahan
+> dibaca, cari di seluruh nama, desimal/ribuan, per kilo, kata bilangan,
+> dua berat berbeda → `None`). Step 1 sudah selesai (folder, venv,
+> requirements ada). `tests/test_parser.py` yang lama ditulis ulang.
+
 **Interfaces:**
-- Consumes: logika berat dari `kebun-ibu/skrip/bersihkan_blibli.py`
-  (`POLA_BERAT`, tolak "1/2 kg", batas 100–20.000 g) dan `POLA_OLAHAN`.
+- Consumes: `POLA_OLAHAN` dari `kebun-ibu/skrip/bersihkan_blibli.py`.
+  Logika berat **tidak** disalin lagi; aturannya dari spec 5.2.
 - Produces (`transform/parser.py`):
-  - `berat_gram(nama: str) -> int | None`
+  - `berat_gram(teks: str | None) -> int | None`: dipakai untuk nama,
+    `variant`, `uniqueSellingPoint`, dan slug URL.
+  - `berat_dari_slug(url: str | None) -> int | None`: slug Tokopedia
+    (bagian setelah nama toko, tanpa ID panjang, `-` → spasi). Slug
+    ambigu (`\b\d+ \d+ ?<satuan>`) → `None`.
+  - `pilih_berat(kandidat: list[tuple[str, str | None]]) -> tuple[int | None, str | None]`:
+    `kandidat` = daftar (`sumber_berat`, teks) urut prioritas; hasilnya
+    berat pertama yang terbaca dan sumbernya, atau `(None, None)`.
+  - `jumlah_buah(nama: str) -> int | None`: angka sebelum `pcs`, `pc`,
+    `buah`, `sisir`, `butir`, `biji`, `btr`.
+  - `jenis_satuan(nama: str, berat: int | None) -> str`: `berat` /
+    `jumlah` / `kemasan` / `lain` (spec 5.2).
   - `jenis_buah(nama: str) -> str`
   - `olahan(nama: str) -> bool`
   - `asal_dari_nama(nama: str) -> str`, hasilnya `"lokal"`, `"impor"`,
@@ -196,27 +235,73 @@ Expected: selesai tanpa galat.
 
 ```python
 import pytest
-from transform.parser import (berat_gram, jenis_buah, olahan, asal_dari_nama,
+from transform.parser import (berat_gram, berat_dari_slug, pilih_berat, jenis_satuan,
+                              jenis_buah, olahan, asal_dari_nama,
                               terjual_dari_label, ember_terjual, region)
 
 @pytest.mark.parametrize("nama,gram", [
+    # Mangga Manalagi asli (target utama)
+    ("MANGGA MANALAGI 170 - 180 G", 175),
+    ("Mangga Manalagi 1 kg ( 0.9 - 1.1 kg / pack)", 1000),   # berat sama ditulis dua kali
+    ("Mangga Manalagi 500 gram ( 400 - 500 gram / pack)", 500),   # berat tunggal di dalam rentang → berat tunggal
+    ("Mangga manalagi segar manis 1/2 kg", 500),              # pecahan DIBACA (aturan baru)
+    ("Mangga manalagi madu (Arum )fres & segar  tua pohon 1kg isi 3-5 buah.", 1000),
+    ("Mangga Manalagi Super Kiloan Raja Alpukat", 1000),      # kiloan = 1 kg
+    ("Mangga Manalagi Potong Manis", None),                   # tanpa berat
+    ("Mangga Manalagi Madu", None),
+    # aturan umum
     ("PEPAYA CALIFORNIA 1300 - 1500 GR", 1400),
-    ("DRAGON FRUIT RED LOKAL 900 - 1100 G", 1000),
     ("MANGGA HARUMANIS 470 - 500 G", 485),
-    ("Jeruk Peras Fresh 1 kg", 1000),
     ("Avocadron Alpukat Mentega Mini [Paket 2 Kg]", 2000),
-    ("Apel Dazzle Impor 500 gram", 500),
     ("Castle Farms Kurma Ajwa 500gr", 500),
     ("Anggur 1,5kg", 1500),
-    ("Jeruk songkit ijo 500 grm", 500),      # profil data: "grm" muncul 7x
-    ("Alpukat Mentega 1 KILO", 1000),        # profil data: "KILO" muncul 4x
-    ("Mangga manalagi 1/2 kg", None),       # dilewati, bukan ditebak
-    ("Kiwi Green 4s Impor 1 pack", None),    # tanpa berat
-    ("Semangka 30 kg", None),                # di atas 20.000 g
-    ("Cabe 50 g", None),                     # di bawah 100 g
+    ("Apel 2.5 kg", 2500),
+    ("Jeruk 0,95kg", 950),
+    ("Salak Pondoh 1.000 gr", 1000),                          # titik + 3 angka = ribuan
+    ("Jeruk songkit ijo 500 grm", 500),
+    ("Alpukat Mentega 1 KILO", 1000),
+    ("Jeruk Medan 1/4Kg", 250),
+    ("Pisang sekilo", 1000),
+    ("Anggur setengah kilo", 500),
+    ("Mangga isi 3-5/ kg", 1000),
+    ("Kelengkeng per kg", 1000),
+    ("Apel Fuji 1 Kg 1/2 Kg", None),                          # dua pilihan berbeda
+    ("Apel 1 kg isi 6 pcs", 1000),                            # berat menang atas jumlah
+    ("Kiwi Green 4s Impor 1 pack", None),
+    ("Semangka 30 kg", None),                                 # di atas 20.000 g
+    ("Cabe 50 g", None),                                      # di bawah 100 g
+    ("Mangga +-0.9g-1kg", None),                              # salah ketik, di luar batas
+    (None, None),
 ])
 def test_berat_gram(nama, gram):
     assert berat_gram(nama) == gram
+
+@pytest.mark.parametrize("url,gram", [
+    ("https://www.tokopedia.com/toko/mangga-manalagi-madu-1-kg?extParam=x", 1000),
+    ("https://www.tokopedia.com/toko/mangga-manalagi-1-2-kg", None),   # ambigu: 1/2? 1.2? 1-2?
+    ("https://www.tokopedia.com/toko/mangga-manalagi-500gr-1731543572100384126", 500),
+    (None, None),
+])
+def test_berat_dari_slug(url, gram):
+    assert berat_dari_slug(url) == gram
+
+def test_pilih_berat_variant_menang_atas_nama():
+    # Blibli NAS-70965-00407: nama "1 Kg", variant "500 gr", harga = harga 500 gr
+    assert pilih_berat([("variant", "500 gr"), ("nama", "Apel Fuji Super Fresh 1 Kg")]) == (500, "variant")
+    assert pilih_berat([("variant", None), ("nama", "Mangga 1 kg")]) == (1000, "nama")
+    assert pilih_berat([("variant", "Standar"), ("nama", "Mangga Potong")]) == (None, None)
+
+@pytest.mark.parametrize("nama,berat,jenis", [
+    ("Mangga Manalagi 1 kg", 1000, "berat"),
+    ("Buah Naga Merah 1 Buah", None, "jumlah"),
+    ("Pisang Cavendish 1 sisir", None, "jumlah"),
+    ("Kiwi Green 4s Impor 1 pack", None, "kemasan"),
+    ("Jus Jeruk 250 ml", None, "kemasan"),
+    ("Mangga Manalagi Madu", None, "lain"),
+    ("Apel Fuji 1 Kg 1/2 Kg", None, "lain"),
+])
+def test_jenis_satuan(nama, berat, jenis):
+    assert jenis_satuan(nama, berat) == jenis
 
 @pytest.mark.parametrize("nama,jenis", [
     ("MANGGA HARUMANIS 470 - 500 G", "mangga"),
@@ -282,12 +367,24 @@ Expected: FAIL, `ModuleNotFoundError: No module named 'transform.parser'`.
 
 - [ ] **Step 4: Tulis `transform/parser.py`**
 
-- `berat_gram`: salin `POLA_BERAT` dan aturan dari `bersihkan_blibli.py`.
-  Satuannya diperluas menjadi `(kg|kilogram|kilo|gram|grm|gr|g)`. Ini
-  hasil profil 2.289 nama asli pada 17 Oktober: `grm` dan `KILO` muncul
-  tapi belum tertangkap. Huruf besar/kecil sudah ditangani `re.I`.
-  Satuan hitungan (pcs, sisir, buah, dus, pack) sengaja tidak diubah ke
-  gram. Hasilnya dibulatkan ke `int`.
+- `berat_gram` (spec 5.2, diperbarui 7 Nov):
+  1. Kata bilangan dulu: `sekilo` → 1000, `setengah kilo` → 500.
+  2. Per kilo: `/kg`, `/ kg`, `per kg`, `kiloan` → 1000.
+  3. Cari **semua** berat di seluruh teks dengan satuan
+     `(kg|kilogram|kilo|gram|grm|gr|g|ons)` (`re.I`, satuan sebagai kata
+     utuh). Angka: pecahan `a/b`, rentang `a - b` (titik tengah),
+     desimal (`,` atau `.` + 1–2 angka), ribuan (`.` + tepat 3 angka).
+     `kg`/`kilo`/`kilogram` ×1000, `ons` ×100.
+  4. Semua berat yang ketemu sama → itu hasilnya. Satu berat tunggal
+     yang jatuh **di dalam** rentang lain → berat tunggal itu. Selain itu
+     berbeda → `None`.
+  5. Di luar 100–20.000 g → `None`. Hasil dibulatkan ke `int`.
+- `berat_dari_slug`: ambil slug, buang ID angka panjang di ujung
+  (`(-\d{15,})+$`), ganti `-` jadi spasi; slug ambigu → `None`; selain
+  itu `berat_gram(slug)`.
+- `pilih_berat`: kembalikan `(berat_gram(teks), sumber)` pertama yang
+  bukan `None`.
+- `jumlah_buah` + `jenis_satuan`: lihat Interfaces dan spec 5.2.
 - `jenis_buah`: kamus urut, kata kunci huruf kecil yang dicari di
   `nama.lower()`, dan yang pertama cocok menang. Isinya:
   mangga; apel; pisang; jeruk; anggur; melon; semangka; alpukat/avocad;
@@ -497,72 +594,79 @@ Task 5 dengan data tebakan.
 ### Task 4: Fixture uji + transform Blibli (lapisan 1)
 
 **Files:**
-- Create: `tests/fixtures/blibli/date=2026-09-27/BU-1000190_page_001.json`,
-  `tests/fixtures/blibli/date=2026-09-27/BU-1000191_page_001.json`,
-  `transform/blibli.py`
+- Create: `tests/fixtures/blibli/date=<tanggal varian pertama>/` (dua
+  halaman + `varian/`), `tests/fixtures/blibli/date=2026-11-07/` (tanpa
+  varian), `transform/blibli.py`
 - Test: `tests/test_transform_blibli.py`
 
+> **Diperbarui 7–8 November:** 29 kolom sumber (`sku` disimpan 8 Nov) + 3 turunan, satu baris per
+> opsi (`item_sku`), baris opsi lain dari `varian/is--*.json` (spec 5.1).
+
 **Interfaces:**
+- Consumes: `pilih_berat`, `jenis_satuan` (Task 1).
 - Produces (`transform/blibli.py`):
-  - `KOLOM_BLIBLI: dict[str, pl.DataType]`, urut: `tanggal` Date,
-    `produk_id` Utf8, `sku` Utf8, `nama` Utf8, `harga` Int64,
-    `harga_coret` Int64, `diskon_persen` Int64, `merchant_code` Utf8,
-    `penjual` Utf8, `resmi` Boolean, `lokasi` Utf8, `kategori` Utf8,
-    `kategori_tarik` Utf8, `rating` Float64, `jumlah_ulasan` Int64,
-    `total_terjual` Int64, `url` Utf8.
-  - `ubah(folder: Path, tanggal: date) -> pl.DataFrame`: membaca semua
-    `*_page_*.json` di `folder`. `kategori_tarik` diambil dari awalan
-    nama berkas. Hasil sesuai `KOLOM_BLIBLI` persis, dan baris ganda per
-    `produk_id` dibuang (yang pertama dipertahankan).
+  - `KOLOM_BLIBLI: dict[str, pl.DataType]`, urut sesuai tabel spec 5.1
+    (kolom 1–29), lalu `berat_gram` Int64, `sumber_berat` Utf8,
+    `jenis_satuan` Utf8. Tipe: `tanggal` Date; `opsi_default`, `resmi`
+    Boolean; `harga`, `harga_coret`, `diskon_persen`, `harga_voucher`,
+    `harga_coret_voucher`, `diskon_voucher_persen`,
+    `harga_sebelum_kampanye`, `jumlah_ulasan`, `total_terjual`,
+    `terjual_bulan_ini_min` Int64; `rating`, `rating_toko` Float64;
+    sisanya Utf8.
+  - `angka_rupiah(teks: str | None) -> int | None`: "Rp39.100" → 39100,
+    `None`/"" → `None`.
+  - `ubah(folder: Path, tanggal: date) -> pl.DataFrame`:
+    1. Baca semua `*_page_*.json` → baris default (`opsi_default=True`).
+       `kategori_tarik` dari awalan nama berkas.
+    2. Kalau `folder/varian/` ada: untuk setiap `is--*.json`, buat baris
+       opsi (`opsi_default=False`) dengan pemetaan kolom kanan spec 5.1;
+       kolom "salin" diambil dari baris default `produk_id` yang sama.
+       `is--` tanpa baris default (produk hilang dari hasil cari) →
+       dilewati.
+    3. Berat: Blibli `pilih_berat([("variant", variant), ("nama", nama),
+       ("usp", uniqueSellingPoint)])`; baris opsi lain tidak punya usp.
+    4. Buang ganda per (`item_sku`), yang pertama dipertahankan.
 
-Pemetaan kolom:
-- `produk_id` ← `id`
-- `harga` ← `price.salePrice` (kalau kosong, `price.minPrice`)
-- `harga_coret` ← `price.listPrice`
-- `diskon_persen` ← `price.discount`
-- `merchant_code` ← `merchantCode`
-- `penjual` ← `merchantName`
-- `resmi` ← `official`
-- `lokasi` ← `location`
-- `kategori` ← `" > ".join(categoryNameHierarchy)`
-- `rating` ← `review.absoluteRating`
-- `jumlah_ulasan` ← `review.count`
-- `total_terjual` ← `soldCountTotal`
-- `url` ← `"https://www.blibli.com" + url`
-
-**Wajib ada:** `id`, `name`, `price`. Kalau salah satunya hilang dari
-sebuah produk, lempar `ValueError` yang menyebut nama kolomnya dan nama
-berkasnya. Kolom lain boleh tidak ada (jadi NULL).
+**Wajib ada:** `id`, `name`, `price`, `itemSku` di kartu; `data.itemSku`,
+`data.price` di berkas `is--`. Hilang → `ValueError` yang menyebut nama
+kolom dan nama berkasnya. Kolom lain boleh tidak ada (jadi NULL).
 
 - [ ] **Step 1: Buat fixture dari data asli**
 
-Dari `kebun-ibu/data-mentah/blibli_kategori_mentah.json`:
-- ambil 15 produk yang `categoryNameHierarchy` memuat "Buah Lokal" dan
-  15 yang memuat "Buah Impor";
-- bungkus masing-masing jadi
-  `{"code": 200, "data": {"products": [...], "paging": {"page": 1, "total_page": 1}}}`;
-- simpan ke dua berkas di atas.
+Fixture **dengan** varian: dari tarikan sungguhan tanggal pertama yang
+punya `varian/` (8 November atau sesudahnya), di
+`tests/fixtures/blibli/date=<tanggal>/`:
+- satu `BU-1000190_page_001.json` dan satu `BU-1000191_page_001.json`
+  masing-masing 15 produk, termasuk **Apel Fuji Super Fresh
+  `NAS-70965-00407`** (500 gr default + 1 kg) dan **Mangga Manalagi
+  `DOD-70072-00076`** (1/2 kg + 1 kg) kalau ada di tanggal itu;
+- folder `varian/` berisi `ps--`/`is--` milik produk bervarian di
+  fixture saja;
+- satu produk ganda di dua berkas; satu produk dengan `location: null`.
 
-Ganti produk ke-15 di berkas lokal dengan salinan produk ke-1, supaya
-ada satu produk ganda (uji buang ganda). Hasilnya 14 unik lokal + 15
-impor = 29. Ubah `location` satu produk impor menjadi `null` (dipakai
-Task 7).
-
-**Ruling:** lapisan 1 Blibli mendapat kolom tambahan `kategori_tarik`
-(tidak ada di spec 5.1). Kolom itu label asal yang paling bisa
-dipercaya, dan dipakai Task 7 serta Task 10.
+Fixture **tanpa** varian: 10 produk dari `date=2026-11-07` (tidak punya
+`varian/`).
 
 - [ ] **Step 2: Tulis tes yang gagal**
 
 - `test_kolom_dan_tipe_tepat`: `df.schema == KOLOM_BLIBLI`.
-- `test_baris_ganda_dibuang`: `df.height == 29`, `produk_id` unik.
-- `test_kategori_tarik_dari_nama_berkas`: semua baris dari berkas
-  `BU-1000190` punya `kategori_tarik == "BU-1000190"`.
-- `test_pemetaan_harga_dan_url`: untuk `HYP-60026-02571` (kalau masuk
-  fixture; kalau tidak, produk pertama), `harga == price.salePrice` dan
-  `url` diawali `https://www.blibli.com/p/`.
-- `test_kolom_hilang_gagal_jelas`: fixture sementara di `tmp_path` dengan
-  produk tanpa `price` → `pytest.raises(ValueError, match="price")`.
+- `test_satu_baris_per_opsi`: `NAS-70965-00407` punya 2 baris; baris
+  `…-00002` punya `harga 84900`, `harga_coret 90000`, `diskon_persen 6`,
+  `variant "1 kg"`, `opsi_default False`.
+- `test_opsi_lain_menyalin_kolom_produk`: `penjual`, `kategori`,
+  `rating_toko` baris opsi = baris default.
+- `test_opsi_lain_kolom_kartu_null`: `harga_voucher`, `kampanye`,
+  `terjual_bulan_ini_min` NULL di baris opsi lain.
+- `test_tanpa_folder_varian_hanya_baris_default`.
+- `test_rating_null_kalau_tanpa_ulasan`: `review.count = 0` → `rating`
+  NULL.
+- `test_angka_rupiah`: "Rp39.100" → 39100, "" → None.
+- `test_berat_variant_menang`: `NAS-70965-00407-00001` →
+  `berat_gram 500`, `sumber_berat "variant"`.
+- `test_kategori_tarik_dari_nama_berkas`.
+- `test_baris_ganda_dibuang`: `item_sku` unik.
+- `test_kolom_hilang_gagal_jelas`: produk tanpa `price` →
+  `pytest.raises(ValueError, match="price")`.
 
 - [ ] **Step 3: Jalankan, pastikan gagal**
 
@@ -571,9 +675,9 @@ Expected: FAIL, modul belum ada.
 
 - [ ] **Step 4: Tulis `transform/blibli.py`**
 
-Bangun list dict per produk dengan pemetaan di atas, lalu
-`pl.DataFrame(baris, schema=KOLOM_BLIBLI)`, lalu `.unique("produk_id",
-keep="first", maintain_order=True)`.
+Bangun list dict (baris default, lalu baris opsi lain) dengan pemetaan
+spec 5.1, lalu `pl.DataFrame(baris, schema=KOLOM_BLIBLI)`, lalu
+`.unique("item_sku", keep="first", maintain_order=True)`.
 
 - [ ] **Step 5: Jalankan, pastikan lulus.** Expected: lulus.
 
@@ -604,11 +708,20 @@ keep="first", maintain_order=True)`.
   - `ubah(folder: Path, tanggal: date) -> pl.DataFrame`, dengan sifat
     yang sama seperti Task 4.
 
+> **Diperbarui 7 November:** tambah kolom turunan `berat_gram`,
+> `sumber_berat`, `jenis_satuan` (berat: `pilih_berat([("nama", nama),
+> ("url", slug)])`, slug lewat `berat_dari_slug`). Tiga hal **menunggu
+> keputusan pengguna** (spec 13 #1–3): arti `harga_asli`, cara mengisi
+> `diskon_persen`, dan salinan laptop vs VPS. Sampai diputuskan:
+> `harga_asli` dan `diskon_persen` disimpan apa adanya, dan `ubah()`
+> hanya membaca satu folder yang diberikan.
+
 Pemetaan kolom:
 - `harga` ← `price.number`
 - `harga_asli` ← angka dari `price.original` ("Rp29.500" → 29500; ""
   → NULL)
-- `diskon_persen` ← `price.discountPercentage`
+- `diskon_persen` ← `price.discountPercentage` (selalu 0 di data asli;
+  spec 13 #2)
 - `rating` ← `float(rating)`, atau NULL kalau `""`
 - `terjual_label` ← `title` dari label `ri_product_credibility`, atau NULL
 - `kategori` ← `category.breadcrumb`
@@ -686,6 +799,29 @@ Run: `.venv\Scripts\python -m pytest tests/test_transform_tokopedia.py -q`
 Cek keterkaitan "setiap kunci fakta ada di dimensinya" **tidak** ada di
 skema ini. Itu diuji di Task 7.
 
+**Diperbarui 7 November:**
+- `SkemaBlibli` unik per (`item_sku`, `tanggal`), bukan `produk_id`.
+- `SkemaBlibli` mendapat cek perbandingan A, B, D, E, F, G (spec 6.1),
+  sebagai cek tingkat baris (`pa.Check` atas beberapa kolom) supaya
+  baris yang gagal punya `index` dan ikut dikarantina. Nama cek dipakai
+  di `alasan`: `cek_A_harga_urut`, `cek_B_diskon`, `cek_D_coret_voucher`,
+  `cek_E_diskon_voucher`, `cek_F_kampanye`, `cek_G_sku_sama_id`. Kolom yang NULL membuat cek
+  itu dilewati untuk baris tersebut.
+- Cek C (opsi default berubah) **bukan** di sini; jadi view
+  `v_opsi_berubah` di Task 8.
+
+Tes tambahan:
+- `test_cek_A_voucher_lebih_mahal_dikarantina`: `harga_voucher = harga + 1`.
+- `test_cek_B_diskon_tidak_cocok_dikarantina`: `diskon_persen` +5.
+- `test_cek_D_coret_voucher_beda_dikarantina`.
+- `test_cek_E_diskon_voucher_tidak_cocok_dikarantina`.
+- `test_cek_F_harga_turun_tanpa_kampanye_dikarantina`: salin kasus asli
+  `FRX-60021-01718` (sebelum kampanye 15000, harga 10000, `kampanye`
+  NULL).
+- `test_cek_G_sku_beda_dari_id_dikarantina`: `sku = produk_id + "X"`.
+- `test_cek_dilewati_kalau_kolom_null`: baris opsi lain (kolom voucher
+  NULL) lolos.
+
 - [ ] **Step 1: Tulis tes yang gagal**
 
 - `test_baris_bagus_lolos_semua`: fixture Blibli lewat `transform.blibli.ubah`
@@ -726,15 +862,26 @@ Run: `.venv\Scripts\python -m pytest tests/test_skema.py -q`
   - `@dataclass class Bintang: dim_produk: pl.DataFrame; dim_toko: pl.DataFrame; dim_tanggal: pl.DataFrame; fakta_harga: pl.DataFrame`
   - `bangun(blibli: pl.DataFrame | None, tokopedia: pl.DataFrame | None) -> Bintang`
 
+> **Diperbarui 7 November:** grain fakta = satu **opsi** per produk per
+> tanggal. `berat_gram` pindah ke fakta (tiap opsi beratnya sendiri).
+> Fakta mendapat `item_sku`, `opsi_default`, `variant`, `sumber_berat`,
+> `jenis_satuan`, `harga_per_buah`. Tokopedia: `item_sku = produk_id`,
+> `opsi_default = True`, `variant` NULL. Tes `test_jumlah_fakta_sama…`
+> tetap berlaku (satu baris lapisan 1 = satu baris fakta).
+> Tambah tes `test_harga_per_kg_per_opsi`: `NAS-70965-00407` →
+> 92000 (500 gr) dan 84900 (1 kg).
+
 Kolom keluaran:
 - `dim_produk`: `produk_key, sumber, produk_id, nama, jenis_buah, asal,
-  asal_sumber, berat_gram, olahan`.
+  asal_sumber, olahan`.
 - `dim_toko`: `toko_key, sumber, toko_id, nama_toko, kota, region,
   jenis_toko`.
 - `dim_tanggal`: `tanggal, tahun, bulan, minggu` (ISO week), `hari`
   (nama hari dalam bahasa Indonesia: Senin…Minggu).
-- `fakta_harga`: `tanggal, produk_key, toko_key, sumber, harga,
-  harga_coret, diskon_persen, harga_per_kg, rating, terjual_min`.
+- `fakta_harga`: `tanggal, produk_key, toko_key, sumber, item_sku,
+  opsi_default, variant, harga, harga_coret, diskon_persen, berat_gram,
+  sumber_berat, jenis_satuan, harga_per_kg, harga_per_buah, rating,
+  terjual_min`.
 
 Aturan per sumber:
 
@@ -748,9 +895,11 @@ Aturan per sumber:
 | `terjual_min` | `ember_terjual(total_terjual)` | `terjual_dari_label(terjual_label)` |
 
 Untuk semua sumber:
-- `berat_gram`, `jenis_buah`, dan `olahan` dari parser.
-- `harga_per_kg = round(harga / berat_gram * 1000)`, NULL kalau berat
-  NULL.
+- `jenis_buah` dan `olahan` dari parser. `berat_gram`, `sumber_berat`,
+  `jenis_satuan` sudah ada di lapisan 1 (Task 4–5).
+- `harga_per_kg = round(harga / berat_gram * 1000)` kalau
+  `jenis_satuan == "berat"`; `harga_per_buah = round(harga /
+  jumlah_buah(nama))` kalau `"jumlah"`; selain itu NULL.
 - Dimensi diambil unik per kunci (yang terakhir menang = SCD 1).
 
 **Fakta dibangun dengan menghitung kunci langsung dari kolom ID di
@@ -798,7 +947,12 @@ Run: `.venv\Scripts\python -m pytest tests/test_model.py -q`
     NOT EXISTS` untuk `blibli_produk`, `tokopedia_produk`,
     `produk_karantina`, `dim_produk` (PK `produk_key`), `dim_toko`
     (PK `toko_key`), `dim_tanggal` (PK `tanggal`), `fakta_harga`
-    (PK `tanggal, produk_key, toko_key`), `pipeline_runs`.
+    (PK `tanggal, produk_key, item_sku`, **diubah 7 Nov**: satu produk
+    bisa punya beberapa opsi per tanggal), `pipeline_runs`.
+  - **Tambahan 7 Nov:** view `v_opsi_berubah` (cek C, spec 6.1): baris
+    `opsi_default = true` yang `item_sku`-nya berbeda dari tanggal
+    sebelumnya untuk `produk_id` yang sama
+    (`LAG(item_sku) OVER (PARTITION BY sumber, produk_id ORDER BY tanggal)`).
     `CREATE OR REPLACE VIEW v_produk` (fakta join ketiga dimensi, semua
     kolom deskriptif).
   - `muat(con, sumber: str, tanggal: date, lapisan1: pl.DataFrame, karantina: pl.DataFrame, bintang: Bintang) -> None`.
