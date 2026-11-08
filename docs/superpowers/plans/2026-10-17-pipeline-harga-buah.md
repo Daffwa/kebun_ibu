@@ -79,12 +79,14 @@ pyarrow, curl_cffi ≥ 0.7, pytest.
 | 3 Tokopedia extract | ✅ selesai |
 | di luar plan | ✅ `tarik_harian.py` (Task Scheduler + cron VPS), `sinkron_vps.py`, `eksplor.ipynb` |
 | 1, 4, 5, 6, 7 | **diperbarui hari ini** mengikuti spec bagian 0 (berat, kolom Blibli, satu baris per opsi, cek A–G) |
+| 1A berat (8 Nov) | ✅ kode + tes (`berat_gram`, `berat_dari_slug`, `pilih_berat`, `jumlah_buah`, `jenis_satuan`, `mangga_manalagi`, `satuan_baris` [A1]), + aturan rentang dua satuan ("900g - 1 Kg" → 950, dari data Tokopedia asli). Bagian di `transform/transform.ipynb`; **menunggu tinjauan pengguna** |
+| 1B sisanya | belum: `jenis_buah`, `olahan`, `asal_dari_nama`, `terjual_dari_label`, `ember_terjual`, `region` |
 | 8–11 | belum, tidak berubah |
 
 **Aturan tinjauan (8 November):** setiap task 1, 4, 5, 6, 7, 8 diakhiri
-dengan menambah satu bagian di `data-science/transform.ipynb`: sel kode
-fungsi baru (`IPython.display.Code(inspect.getsource(fungsi),
-language="python")`) lalu sel yang menjalankannya pada data asli terbaru
+dengan menambah satu bagian di `data-science/transform/transform.ipynb`: sel kode
+fungsi baru (`tampilkan_kode(fungsi)` dari sel Persiapan: pygments
+`github-dark`) lalu sel yang menjalankannya pada data asli terbaru
 dan menampilkan hasilnya. Notebook hanya memanggil fungsi dari `.py`,
 tidak menulis ulang logika. Task belum dianggap selesai sebelum
 pengguna meninjau bagian itu.
@@ -138,7 +140,7 @@ Task 2–3 tidak bergantung pada parser, jadi urutan ini aman.
 kebun-ibu/data-science/
   requirements.txt, pyproject.toml, .gitignore, README.md
   run.py                         CLI: tahap extract/transform/load + pipeline_runs
-  transform.ipynb                tinjauan pengguna: kode + hasil tiap langkah
+  transform/transform.ipynb      tinjauan pengguna: kode + hasil tiap langkah
   evaluasi_asal.py               ketepatan aturan asal vs label Blibli
   extract/__init__.py
   extract/http.py                jeda, coba ulang, simpan halaman, HasilTarik
@@ -623,8 +625,9 @@ Task 5 dengan data tebakan.
        kolom "salin" diambil dari baris default `produk_id` yang sama.
        `is--` tanpa baris default (produk hilang dari hasil cari) →
        dilewati.
-    3. Berat: Blibli `pilih_berat([("variant", variant), ("nama", nama),
-       ("usp", uniqueSellingPoint)])`; baris opsi lain tidak punya usp.
+    3. Berat: Blibli `satuan_baris(nama, variant, banyak_opsi=hasVariants,
+       usp=uniqueSellingPoint)` → `berat_gram`, `sumber_berat`, `jenis_satuan`,
+       `jumlah_buah` (A1, 8 Nov: produk beberapa opsi hanya membaca `variant`).
     4. Buang ganda per (`item_sku`), yang pertama dipertahankan.
 
 **Wajib ada:** `id`, `name`, `price`, `itemSku` di kartu; `data.itemSku`,

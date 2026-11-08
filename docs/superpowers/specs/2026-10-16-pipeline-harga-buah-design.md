@@ -25,7 +25,7 @@ Hasil eksplorasi data mentah 26 Oktober – 7 November (notebook
    (bagian 6).
 6. **Target utama analisis: harga Mangga Manalagi.** Penarikan tetap
    per kategori buah (konteks pasar).
-7. **(8 Nov) Tinjauan lewat `transform.ipynb`:** logika tetap di `.py`
+7. **(8 Nov) Tinjauan lewat `transform/transform.ipynb`:** logika tetap di `.py`
    (supaya bisa dites pytest dan dijalankan terjadwal), tetapi setiap
    langkah transform punya bagian di notebook yang menampilkan **kode
    fungsinya dan hasilnya**. Pengguna meninjau kode + hasil di sana
@@ -70,7 +70,7 @@ Diperlakukan sebagai proyek data engineering yang serius:
 | Bentuk tabel akhir | **Star schema** + view datar `v_produk` |
 | Penarikan | **Harian otomatis**: `tarik_harian.py` (bagian 4.4) |
 | Transform + load | `run.py`, dijalankan manual dari laptop |
-| Tempat meninjau | **`transform.ipynb`**: satu bagian per langkah. Sel 1 menampilkan kode fungsi (`IPython.display.Code(inspect.getsource(fungsi))`), sel 2 menjalankannya pada data asli dan menampilkan tabel hasil. Logika tidak ditulis ulang di notebook (8 Nov) |
+| Tempat meninjau | **`transform/transform.ipynb`**: satu bagian per langkah. Sel 1 menampilkan kode fungsi (`tampilkan_kode(fungsi)`: `inspect.getsource` + pygments tema gelap `github-dark`), sel 2 menjalankannya pada data asli dan menampilkan tabel hasil. Logika tidak ditulis ulang di notebook (8 Nov) |
 | Tes | pytest + GitHub Actions |
 | Tidak dipakai | Airflow, Kafka, dbt, Selenium. Selenium **diuji 7 Nov dan gagal** di VPS (catatan scraping) |
 
@@ -261,7 +261,8 @@ Semua berupa fungsi Python murni, masing-masing dengan unit test.
 
 | Platform | Urutan | Alasan |
 |---|---|---|
-| Blibli | `variant` → nama → `uniqueSellingPoint` | `variant` = opsi yang harganya tercatat. "Apel Fuji Super Fresh 1 Kg" dengan variant "500 gr" berharga Rp46.000 = harga 500 gr (dicek di halaman, 5 Nov). Berat dari nama akan membagi dua harga per kg. |
+| Blibli, produk **beberapa opsi** (`hasVariants`) | **hanya `variant` opsi itu** (berat, lalu jumlah, lalu kemasan). Tidak pernah meminjam dari nama (**keputusan A1, 8 Nov**) | Nama menggambarkan seluruh produk, bukan tiap opsi. "Buy 1 Get 1" pada "HarvestMoon Mangga … Per Kg" akan jadi 65.000/kg kalau meminjam 1 kg dari nama. Pada 8 Nov: 27 dari 516 opsi kena; ±10 akan salah (Buy 1 Get 1, 2pack, LonganHitam50), ±17 kehilangan berat yang mungkin benar (PERU, Ungu) dan jadi `lain`. |
+| Blibli, produk **satu opsi** | `variant` → nama → `uniqueSellingPoint` | `variant` = opsi yang harganya tercatat. "Apel Fuji Super Fresh 1 Kg" dengan variant "500 gr" berharga Rp46.000 = harga 500 gr (dicek di halaman, 5 Nov). Berat dari nama akan membagi dua harga per kg. |
 | Tokopedia | nama → URL | Slug URL dipakai **hanya** kalau nama tanpa berat. Slug ambigu ("1 2 kg" dari 1/2, 1.2, atau 1-2) dilewati. Kecocokan URL vs nama: 98% (4.528/4.616). |
 
 `sumber_berat` mencatat asalnya. Urutan `uniqueSellingPoint` (paling
@@ -283,7 +284,7 @@ per jenis dibuat lewat view.
 
 | Fungsi | Aturan |
 |---|---|
-| `jenis_buah(nama)` | Kamus kata kunci → jenis (mangga, apel, pisang, jeruk, anggur, melon, alpukat, pepaya, buah naga, pir, …), dengan sinonim. Tidak cocok → `lainnya`. **Perangkap:** "manalagi" juga ada di Apel Manalagi (±40 produk) dan manisan belimbing "simanalagi". Mangga Manalagi = nama memuat **mangga dan manalagi**. |
+| `jenis_buah(nama)` | Kamus kata kunci → jenis (mangga, apel, pisang, jeruk, anggur, melon, alpukat, pepaya, buah naga, pir, …), dengan sinonim. Tidak cocok → `lainnya`. **Perangkap:** "manalagi" juga ada di Apel Manalagi (±40 produk) dan manisan belimbing "simanalagi". Mangga Manalagi = nama memuat **mangga dan manalagi** (`mangga_manalagi(nama)`, 8 Nov). Salah ketik dihitung: tiap kata boleh beda **1 huruf** dari "mangga"/"manalagi" (manga, manggah, mangg, "Manalgi"), tertempel ke kata berikutnya ("ManggaMuda"), angka pengganti huruf ("M4ngg4 M4n4lgi"), dan "mango". **Batasnya 1 huruf**: pada 9.871 nama, 1 huruf dari "mangga" = tepat 4 salah ketik asli, 2 huruf = buah lain (nangka, manggis, bangka); 2 huruf dari "manalagi" = "simanalagi" (manisan belimbing). |
 | `asal(...)` | Blibli: dari kategori, `asal_sumber = 'label'`. Tokopedia: aturan kata + varietas, `asal_sumber = 'aturan'`. |
 | `olahan(nama)` | `True` untuk bibit, benih, keripik, sale, jus, dll. Baris tetap disimpan, hanya ditandai. Kata "kulit" dan "daun" sering salah cocok. **Aturan akhir ditunda** (bagian 13). |
 | `terjual_min(...)` | Blibli: angka pasti → batas bawah rentang Tokopedia. Tokopedia: "60+ terjual" → 60, "1rb+ terjual" → 1000. |
@@ -423,12 +424,12 @@ Subfolder `data-science/` di repo kebun-ibu (17 Oktober).
 ```
 kebun-ibu/data-science/
   extract/      blibli.py, tokopedia.py, http.py
-  transform/    blibli.py, tokopedia.py, parser.py, model.py, skema.py
+  transform/    blibli.py, tokopedia.py, parser.py, model.py, skema.py,
+                transform.ipynb (tinjauan: kode + hasil tiap langkah)
   load/         duckdb_loader.py
   tarik_harian.py, sinkron_vps.py, daftar_tugas_harian.ps1
   run.py
   eksplor.ipynb                     (eksplorasi, bukan kode produksi)
-  transform.ipynb                   (tinjauan: kode + hasil tiap langkah transform)
   data_lake/raw/...                 (diabaikan git)
   data_lake_vps/raw/tokopedia/...   (salinan VPS, diabaikan git)
   data_lake/halaman_tokopedia/...   (notebook bagian 5, diabaikan git)
@@ -462,3 +463,4 @@ memakainya dimulai** (misalnya #1–3 di Task 5, #5–6 di Task 1/7).
 | 8 | **Arti `tier_toko`** Tokopedia | Tetap `tier_<n>` | Halaman produk menampilkan lencana hijau, artinya belum dicek |
 | 9 | **Dashboard `/admin/pasar` + 4 insight** (usulan 26 Okt) | Menunggu keputusan pengguna | — |
 | 10 | **Batas ketepatan aturan asal** | ≥ 90% terhadap label Blibli | — |
+| 11 | **Varian Tokopedia tidak terlihat di hasil cari** (8 Nov): kartu cari bisa berupa satu opsi dari produk bervarian, tetapi namanya nama induk. Berat dari nama bisa salah untuk opsi itu | Putuskan di Task 5: (a) tarik halaman produk Mangga Manalagi saja (±23/hari) untuk `isVariant` + berat, (b) terima, atau (c) tandai baris yang harga/kg-nya jauh dari produk lain | 103999725486 "Mangga manalagi madu (Arum ) … 1kg isi 3-5 buah": Rp13.000, halaman: `isVariant=True`, berat 0,5 kg → parser 1000 g = 13.000/kg, kemungkinan sebenarnya 26.000/kg |
