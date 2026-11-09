@@ -1,3 +1,4 @@
+import json
 import time
 import urllib.parse
 from datetime import date
@@ -7,6 +8,8 @@ from typing import Callable
 
 
 from curl_cffi import requests
+
+from transform.parser import mangga_manalagi
 
 from extract.http import (
     AmbilGagal,
@@ -97,70 +100,95 @@ def ambil_halaman_http(sesi: requests.Session, halaman: int) -> list:
 def produk_dari_jawaban(jawaban: list) -> list[dict]:
     return jawaban[0]["data"]["searchProductV5"]["data"]["products"] or []
 
+
+# ---- Halaman produk Mangga Manalagi (spec 4.2, keputusan 13 #11 = a) ----
+
+PENANDA_CACHE = "window.__cache="
+
+
+def cache_dari_html(teks: str) -> dict:
+    """HTML halaman produk -> JSON `window.__cache`.
+
+    Tokopedia kadang mengirim halaman kosong (tanpa cache, atau cache tanpa
+    `pdpBasicInfo`); itu dianggap KesalahanSementara supaya dicoba ulang.
+    """
+    if PENANDA_CACHE not in teks:
+        raise KesalahanSementara("halaman produk kosong (tanpa window.__cache)")
+    awal = teks.index(PENANDA_CACHE) + len(PENANDA_CACHE)
+    cache, _ = json.JSONDecoder().raw_decode(teks[awal:])
+    if not any(isinstance(v, dict) and v.get("__typename") == "pdpBasicInfo" for v in cache.values()):
+        raise KesalahanSementara("halaman produk kosong (tanpa pdpBasicInfo)")
+    return cache
+
+
+def ambil_produk_http(url: str) -> dict:
+    """Satu halaman produk dengan sesi baru (sesi lama sering terus dapat halaman kosong)."""
+    try:
+        jawaban = buat_sesi().get(url, timeout=60)
+    except (requests.exceptions.Timeout, requests.exceptions.ConnectionError) as galat:
+        raise KesalahanSementara(str(galat)) from galat
+    if jawaban.status_code == 429 or jawaban.status_code >= 500:
+        raise KesalahanSementara(f"HTTP {jawaban.status_code}")
+    jawaban.raise_for_status()
+    return cache_dari_html(jawaban.text)
+
+
+def tarik_halaman_produk(
+    folder: Path,
+    produk: dict[str, str],
+    ambil_produk: Callable[[str], dict],
+    tidur: Callable[[float], None],
+) -> tuple[int, int]:
+    """Simpan halaman produk ke `folder/halaman/<id>.json`. `produk` = {id: url}.
+    Mengembalikan (jumlah berhasil, jumlah gagal)."""
+    folder_halaman = folder / "halaman"
+    folder_halaman.mkdir(exist_ok=True)
+    berhasil = gagal = 0
+    for id_, url in produk.items():
+        try:
+            cache = ambil_dengan_coba_ulang(lambda: ambil_produk(url), tidur=tidur)
+            simpan_json(folder_halaman, f"{id_}.json", cache)
+            berhasil += 1
+        except (AmbilGagal, requests.exceptions.HTTPError):
+            gagal += 1
+        jeda_sopan(tidur)
+    return berhasil, gagal
+
+
 def tarik(
     tanggal: date,
     akar: Path,
     ambil_halaman: Callable[[int], list] | None = None,
+    ambil_produk: Callable[[str], dict] = ambil_produk_http,
     tidur: Callable[[float], None] = time.sleep,
-    
 ) -> HasilTarik:
     if ambil_halaman is None:
         ambil_halaman = partial(ambil_halaman_http, buat_sesi())
-        
+
     folder = siapkan_folder(akar, "tokopedia", tanggal)
     jumlah = 0
-    
+    manalagi: dict[str, str] = {}
+
     for n in range(1, HALAMAN_MAKS + 1):
         try:
             jawaban = ambil_dengan_coba_ulang(lambda: ambil_halaman(n), tidur=tidur)
-            
         except AmbilGagal as galat:
             status = "gagal" if jumlah == 0 else "sebagian"
             return HasilTarik(jumlah, status, f"halaman {n}: {galat}")
-        
-        if not produk_dari_jawaban(jawaban):
+
+        produk = produk_dari_jawaban(jawaban)
+        if not produk:
             break
-        
+
         simpan_json(folder, f"page_{n:03d}.json", jawaban)
         jumlah += 1
+        for p in produk:
+            if mangga_manalagi(p.get("name")):
+                manalagi.setdefault(str(p["id"]), p["url"].split("?")[0])
         jeda_sopan(tidur)
-        
-    return HasilTarik(jumlah, "berhasil")
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    if not manalagi:
+        return HasilTarik(jumlah, "berhasil")
+    berhasil, gagal = tarik_halaman_produk(folder, manalagi, ambil_produk, tidur)
+    status = "sebagian" if berhasil == 0 else "berhasil"
+    return HasilTarik(jumlah, status, f"halaman produk: {berhasil}, {gagal} gagal")

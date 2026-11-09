@@ -82,6 +82,8 @@ pyarrow, curl_cffi ≥ 0.7, pytest.
 | 1A berat (8 Nov) | ✅ kode + tes (`berat_gram`, `berat_dari_slug`, `pilih_berat`, `jumlah_buah`, `jenis_satuan`, `mangga_manalagi`, `satuan_baris` [A1]), + aturan rentang dua satuan ("900g - 1 Kg" → 950, dari data Tokopedia asli). Bagian di `transform/transform.ipynb`; **menunggu tinjauan pengguna** |
 | 1B (8 Nov) | ✅ kode + tes: `jenis_buah`, `olahan` (tanpa `sale`/`pohon`), `asal_dari_nama`, `terjual_dari_label`, `ember_terjual`, `region` (+ semua kota Jawa yang ada di data), multipack `berat_dikali`. **Menunggu tinjauan pengguna** di notebook |
 | 4 Blibli transform (8 Nov) | ✅ `transform/blibli.py` + 21 tes + fixture asli (8 Nov dengan varian, 6 Nov tanpa). Semua 15 tanggal asli: 24.648 baris, 2,5 detik. Opsi tanpa harga → harga NULL (B). URL tanpa pelacak + `?ds=` [usulan Claude]. **Menunggu tinjauan pengguna** |
+| 5a halaman produk Tokopedia (8 Nov, keputusan 13 #11 = a) | ✅ `extract/tokopedia.py`: `cache_dari_html`, `ambil_produk_http` (sesi baru per percobaan), `tarik_halaman_produk` → `halaman/<id>.json` untuk produk `mangga_manalagi`; 9 tes baru, suite 225 lulus. Uji nyata 8 Nov: 25 produk, 23 berhasil, 2 gagal, 25 dari 48 percobaan halaman kosong, 591 detik, 1,4 MB. **Menunggu keputusan aturan berat halaman vs nama** |
+| 5 Tokopedia transform (8 Nov) | ✅ `transform/tokopedia.py` (22 kolom: + `induk_id`, `opsi_default`, `variant`, `jumlah_buah`, `berat_dikali`), **satu baris per opsi** (keputusan pengguna: opsi lain dari halaman produk Manalagi), berat opsi → halaman (bersyarat) → nama → URL; 17 tes + fixture asli 8 Nov (`tests/fixtures/tokopedia/date=2026-11-08`, halaman dipangkas). Suite 242 lulus. 14 tanggal asli: 77.810 baris, 9 detik; 8 Nov Manalagi 36 baris (opsi 18, nama 16, halaman 2). **Menunggu tinjauan pengguna** |
 | 8–11 | belum, tidak berubah |
 
 **Aturan tinjauan (8 November):** setiap task 1, 4, 5, 6, 7, 8 diakhiri
@@ -717,8 +719,11 @@ spec 5.1, lalu `pl.DataFrame(baris, schema=KOLOM_BLIBLI)`, lalu
 > `sumber_berat`, `jenis_satuan` (berat: `pilih_berat([("nama", nama),
 > ("url", slug)])`, slug lewat `berat_dari_slug`). Tiga hal **menunggu
 > keputusan pengguna** (spec 13 #1–3): arti `harga_asli`, cara mengisi
-> `diskon_persen`, dan salinan laptop vs VPS. Sampai diputuskan:
-> `harga_asli` dan `diskon_persen` disimpan apa adanya, dan `ubah()`
+> `diskon_persen`, dan salinan laptop vs VPS.
+>
+> **Diputuskan 8 Nov:** `harga_asli` disimpan, tidak dipakai di fakta;
+> `diskon_persen` selalu NULL; **hanya salinan laptop**
+> (`data_lake/raw/tokopedia/`), `data_lake_vps/` diabaikan. `ubah()`
 > hanya membaca satu folder yang diberikan.
 
 Pemetaan kolom:

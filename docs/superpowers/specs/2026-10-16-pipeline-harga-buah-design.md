@@ -87,6 +87,7 @@ data_lake/raw/        │          ↓ Pandera ──gagal──►│───�
  date=YYYY-MM-DD/     │        transform/model.py    │           ├─ dim_tanggal
   <kat>_page_NNN.json ◄┤        (bangun dim + fakta)  │           ├─ fakta_harga
   varian/*.json (Blibli)                             │           ├─ v_produk (view)
+  halaman/<id>.json (Tokopedia, Manalagi)            │           │
   _SUKSES                                            └──────────►├─ produk_karantina
  (tidak pernah diubah)                                           └─ pipeline_runs
 data_lake_vps/raw/tokopedia/...  (salinan dari VPS)
@@ -128,10 +129,20 @@ data_lake_vps/raw/tokopedia/...  (salinan dari VPS)
   6.000 baris; ±5.500 produk unik karena halaman tumpang tindih).
 - Query GraphQL hanya meminta 13 field. Berat, stok, dan jumlah terjual
   pasti **tidak ada** di hasil cari.
-- **Halaman produk** (berat, stok, terjual pasti, varian) bisa diambil
-  dengan `curl_cffi` dari laptop dan VPS (diuji 7 Nov, 22/22 dengan coba
-  ulang), tetapi **tidak** masuk penarik harian. Hanya ada di notebook
-  bagian 5 untuk Mangga Manalagi.
+- **Halaman produk Mangga Manalagi (sejak 8 November, keputusan pengguna
+  bagian 13 #11 = a):** setelah hasil cari selesai, setiap produk yang
+  `mangga_manalagi(name)` benar (±40–55 per hari) diambil halamannya:
+  - `GET <url tanpa query>` dengan sesi `curl_cffi` **baru** per percobaan
+    (kunjungi beranda dulu). HTML berisi JSON `window.__cache=`; JSON itu
+    disimpan apa adanya ke `halaman/<id>.json`.
+  - Tokopedia kadang mengirim halaman kosong (±22 KB, tanpa
+    `pdpBasicInfo`; 4 dari 9 percobaan pada uji 8 Nov) → dianggap
+    `KesalahanSementara`, dicoba ulang (aturan 4.3).
+  - Yang dipakai transform: `pdpBasicInfo.weight` + `weightUnit` (berat
+    yang diisi penjual, "Berat Satuan" di halaman) dan
+    `pdpContentSnapshotVariant.isVariant` / `parentID`.
+  - Satu produk gagal → dilewati, log `halaman produk: N, M gagal`.
+    **Semua** gagal → `sebagian` (sama dengan varian Blibli).
 
 ### 4.3 Aturan bersama
 
@@ -157,6 +168,24 @@ data_lake_vps/raw/tokopedia/...  (salinan dari VPS)
   `data_lake_vps/raw/tokopedia/` di laptop.
 
 ## 5. Transform
+
+### 5.0 Blibli vs Tokopedia: yang sama dan yang khas (8 Nov)
+
+Alurnya sama: **hasil cari → (opsi/halaman produk) → JSON mentah per tanggal
+→ transform Polars per platform → parser bersama → fakta**. Yang khas:
+
+| Langkah | Sama di keduanya | Khas Blibli | Khas Tokopedia |
+|---|---|---|---|
+| Hasil cari | jeda 1,5–3 dtk, coba ulang 2/4/8 dtk, simpan apa adanya, `_SUKSES` | REST `GET /backend/search/products`, 2 kategori (lokal/impor) × ≤20 hal × 40 | GraphQL `POST SearchProductV5Query`, 1 kategori × ≤100 hal × 60; perlu `curl_cffi` + cookie beranda |
+| Tahu produk punya opsi? | — | **ya, di kartu** (`hasVariants`) | **tidak**; baru tahu dari halaman produk (`isVariant`) |
+| Opsi diambil untuk | — | **semua** produk bervarian (±174/hari) | **hanya Mangga Manalagi** (±25/hari), karena harus buka halaman tiap produk (±25 dtk/produk) |
+| Sumber data opsi | JSON per produk | API `_summary` (`ps--`, `is--`), 1 berkas per opsi | HTML → `window.__cache` (`pdpProductVariantChildren`: semua opsi + harga dalam 1 berkas); ±50% halaman kosong → coba ulang |
+| Label asal | `asal_dari_nama` | kategori lokal/impor dari Blibli | tidak ada |
+| Berat | `berat_gram` / `pilih_berat` | variant → nama → usp | opsi → halaman (bersyarat) → nama → URL |
+| Harga coret / diskon | harga = harga bayar | `listPrice` + `discount` dipakai | `original` hanya disimpan, `diskon_persen` NULL (13 #1–2) |
+| Voucher, kampanye | — | ada | tidak ada |
+| Terjual | ember dari label | `soldCountTotal` angka + label bulanan | hanya label (`ri_product_credibility`) |
+| Mesin | laptop | laptop (VPS diblokir 403) | laptop (13 #3) |
 
 ### 5.1 Lapisan 1: tabel per platform
 
@@ -225,17 +254,18 @@ Catatan:
 #### `tokopedia_produk`: satu baris per produk per tanggal
 
 `tanggal`, `produk_id`, `nama`, `harga` (`price.number`), `harga_asli`
-(`price.original` → angka, "" → NULL), `diskon_persen`, `toko_id`,
+(`price.original` → angka, "" → NULL; disimpan, tidak dipakai di fakta),
+`diskon_persen` (selalu NULL, keputusan 8 Nov), `toko_id`,
 `nama_toko`, `kota`, `tier_toko`, `rating` ("" → NULL), `terjual_label`
 (label `ri_product_credibility`), `kategori` (`category.breadcrumb`),
 `url` (tanpa query string). Kunci unik: (`produk_id`, `tanggal`).
 
-Tiga hal Tokopedia masih terbuka (bagian 13): arti `harga_asli`, cara
-mengisi `diskon_persen`, dan pilihan salinan laptop vs VPS.
+`harga_asli` dan `diskon_persen` sudah diputuskan 8 Nov (bagian 13 #1–2).
+Salinan: hanya laptop (#3, 8 Nov). Varian (#11, 8 Nov): berat dari halaman produk Mangga Manalagi.
 
 #### Kolom turunan (kedua platform)
 
-`berat_gram`, `sumber_berat` (`nama` / `variant` / `usp` / `url`),
+`berat_gram`, `sumber_berat` (`nama` / `variant` / `usp` / `url` / `halaman` / `opsi`),
 `jenis_satuan` (`berat` / `jumlah` / `kemasan` / `lain`), `jumlah_buah`
 (hanya kalau `jenis_satuan = jumlah`), dan `berat_dikali` (multipack, 8 Nov). Dihitung di
 lapisan 1 karena butuh field mentah yang bukan kolom
@@ -269,7 +299,7 @@ Semua berupa fungsi Python murni, masing-masing dengan unit test.
 |---|---|---|
 | Blibli, produk **beberapa opsi** (`hasVariants`) | **hanya `variant` opsi itu** (berat, lalu jumlah, lalu kemasan). Tidak pernah meminjam dari nama (**keputusan A1, 8 Nov**) | Nama menggambarkan seluruh produk, bukan tiap opsi. "Buy 1 Get 1" pada "HarvestMoon Mangga … Per Kg" akan jadi 65.000/kg kalau meminjam 1 kg dari nama. Pada 8 Nov: 27 dari 516 opsi kena; ±10 akan salah (Buy 1 Get 1, 2pack, LonganHitam50), ±17 kehilangan berat yang mungkin benar (PERU, Ungu) dan jadi `lain`. |
 | Blibli, produk **satu opsi** | `variant` → nama → `uniqueSellingPoint` | `variant` = opsi yang harganya tercatat. "Apel Fuji Super Fresh 1 Kg" dengan variant "500 gr" berharga Rp46.000 = harga 500 gr (dicek di halaman, 5 Nov). Berat dari nama akan membagi dua harga per kg. |
-| Tokopedia | nama → URL | Slug URL dipakai **hanya** kalau nama tanpa berat. Slug ambigu ("1 2 kg" dari 1/2, 1.2, atau 1-2) dilewati. Kecocokan URL vs nama: 98% (4.528/4.616). |
+| Tokopedia | **opsi** → **halaman (bersyarat)** → nama → URL | **8 Nov, usulan pengguna "terjemahkan data opsi":** produk bervarian → berat dari `optionName` anak (`pdpProductVariantChildren`, `productID` = id kartu) lewat `berat_gram`, `sumber_berat = "opsi"`. Uji 8 Nov, 7 produk bervarian: 6690740844 opsi "1 kg" (halaman salah: 0,5 kg); 104038193482 opsi "500 Gram" (nama + halaman salah: 1 kg); 103999725486 "mengkal bermadu, 500 gram". Lalu **keputusan pengguna 1:** berat halaman produk (`pdpBasicInfo.weight`, hanya Mangga Manalagi, bagian 4.2) dipakai **hanya kalau** nama tanpa berat **atau** `isVariant = true`; selain itu nama menang, karena berat halaman = berat kirim yang kadang termasuk kemasan (uji 8 Nov: nama 1 kg → halaman 1.010 / 1.150 / 1.200 g). Slug URL bisa basi: 6690740844 nama "Mangga Manalagi Madu", slug `...-madu-1-kg`, halaman 0,5 kg (opsi). Slug URL dipakai **hanya** kalau nama tanpa berat. Slug ambigu ("1 2 kg" dari 1/2, 1.2, atau 1-2) dilewati. Kecocokan URL vs nama: 98% (4.528/4.616). |
 
 `sumber_berat` mencatat asalnya. Urutan `uniqueSellingPoint` (paling
 akhir) **[usulan Claude]**; usp hanya menambah ±12 nama.
@@ -460,9 +490,9 @@ memakainya dimulai** (misalnya #1–3 di Task 5, #5–6 di Task 1/7).
 
 | # | Hal | Usulan Claude | Data pendukung |
 |---|---|---|---|
-| 1 | **`harga_asli` Tokopedia**: kartu cari menulis Rp25.000, halaman produk tidak menampilkan harga coret sama sekali | Simpan apa adanya di lapisan 1, tapi jangan dipakai sebagai harga coret di fakta sampai dicek di kartu hasil cari | Produk 1256380209 dan 8061245026; sama setiap hari 23 Okt – 7 Nov |
-| 2 | **`diskon_persen` Tokopedia** selalu 0 dari API | Hitung dari `harga_asli` vs `harga` (tergantung #1) | 0 di semua baris |
-| 3 | **Salinan laptop vs VPS** untuk Tokopedia di tanggal yang sama | Pakai salinan VPS; laptop hanya mengisi tanggal yang VPS tidak punya | Keduanya tarik setiap hari sejak 27 Okt |
+| 1 | ✅ **`harga_asli` Tokopedia**: **diputuskan 8 Nov (A): simpan apa adanya di lapisan 1, tidak dipakai di fakta.** Pengguna cek halaman 1256380209: Rp24.750 tanpa coret → strategi pemasaran di kartu cari. `harga` (`price.number`) = harga di halaman, itu yang dipakai. Harga transaksi per pesanan tidak ada di data | — | Mangga Manalagi: 39 dari 41 produk tidak pernah dicoret, 2 selalu dicoret (1% dan 3%). Semua produk: 5.581 tidak pernah, 1.289 selalu, 938 kadang (median 12%, mis. paket 5 kg 7286804348: 12% 23 Okt, 10% 7 Nov). Tinjauan di `transform.ipynb` |
+| 2 | ✅ **`diskon_persen` Tokopedia** selalu 0 dari API: **mengikuti #1, NULL di lapisan 1** (tidak dihitung dari `harga_asli`) | — | 0 di semua 77.799 baris |
+| 3 | ✅ **Salinan laptop vs VPS** untuk Tokopedia di tanggal yang sama: **diputuskan 8 Nov: hanya laptop** (`data_lake/raw/tokopedia/`); `data_lake_vps/` tidak dibaca transform. Pengguna tidak mau bayar VPS bulanan untuk proyek pribadi. Akibat yang diterima: jam tarik laptop berubah-ubah (09:33–13:46), jadi harga sebagian produk bisa naik-turun karena jam, bukan karena pasar | — | Keduanya tarik setiap hari sejak 27 Okt. **Uji 8 Nov:** skrip VPS = laptop (diff kosong), cron VPS 06:00 + 12:00 WIB sama dengan Task Scheduler laptop. Tapi VPS selalu tarik **06:00–06:04**, laptop tarik saat menyala (6 Nov 13:02, 7 Nov 09:33, 8 Nov 13:46). Per tanggal ±190–250 produk harganya beda (Jeruk Dekopon 12426856674: VPS 705.000, laptop 735.000). Tarik **bersamaan** dari laptop + VPS 20:41: 839 produk, **0 beda harga** (Dekopon 735.000 di keduanya) → beda karena **jam tarik**, bukan lokasi/skrip |
 | 4 | **Label Tokopedia yang belum dipakai**: `nett_price`, `promotion_label` ("Harga Diskon"), `ri_ribbon` ("12%"), `ri_product_offer` | Tidak dipakai dulu; tetap ada di data mentah | 614 / 637 / 640 / 4.356 baris pada 7 Nov |
 | 5 | **Olahan** (aturan akhir) dan **batas harga per kg** karantina. *8 Nov: `sale` dan `pohon` dibuang dari daftar olahan (pengguna); sisanya tetap. Kurma/kelapa/lemon tetap `lainnya` (pengguna: bukan fokus)* | Batas 2.000–2.000.000/kg (usulan 4 Nov) supaya anggur Nagano Rp4 jt/kg tidak salah dikarantina | Ditunda pengguna 4 Nov: "filter later" |
 | 6 | ✅ **Multipack** ("8x125GR", "200 gr×12 Pcs"): **diputuskan 8 Nov: dikalikan + dicatat di karantina (cek H)** | Kalikan: 8 × 125 = 1.000 g | Penyebab utama harga per kg yang terlalu tinggi |
@@ -470,4 +500,4 @@ memakainya dimulai** (misalnya #1–3 di Task 5, #5–6 di Task 1/7).
 | 8 | **Arti `tier_toko`** Tokopedia | Tetap `tier_<n>` | Halaman produk menampilkan lencana hijau, artinya belum dicek |
 | 9 | **Dashboard `/admin/pasar` + 4 insight** (usulan 26 Okt) | Menunggu keputusan pengguna | — |
 | 10 | **Batas ketepatan aturan asal** | ≥ 90% terhadap label Blibli | — |
-| 11 | **Varian Tokopedia tidak terlihat di hasil cari** (8 Nov): kartu cari bisa berupa satu opsi dari produk bervarian, tetapi namanya nama induk. Berat dari nama bisa salah untuk opsi itu | Putuskan di Task 5: (a) tarik halaman produk Mangga Manalagi saja (±23/hari) untuk `isVariant` + berat, (b) terima, atau (c) tandai baris yang harga/kg-nya jauh dari produk lain | 103999725486 "Mangga manalagi madu (Arum ) … 1kg isi 3-5 buah": Rp13.000, halaman: `isVariant=True`, berat 0,5 kg → parser 1000 g = 13.000/kg, kemungkinan sebenarnya 26.000/kg |
+| 11 | ✅ **Diputuskan 8 Nov: (a)**, tarik halaman produk Mangga Manalagi setiap hari (bagian 4.2); berat halaman dipakai sebelum berat nama/url. Uji 8 Nov: 8061245026 nama tanpa berat → halaman 0,5 kg; 104132111948 opsi tapi berat halaman = nama (1 kg). **Varian Tokopedia tidak terlihat di hasil cari** (8 Nov): kartu cari bisa berupa satu opsi dari produk bervarian, tetapi namanya nama induk. Berat dari nama bisa salah untuk opsi itu | Putuskan di Task 5: (a) tarik halaman produk Mangga Manalagi saja (±23/hari) untuk `isVariant` + berat, (b) terima, atau (c) tandai baris yang harga/kg-nya jauh dari produk lain | 103999725486 "Mangga manalagi madu (Arum ) … 1kg isi 3-5 buah": Rp13.000, halaman: `isVariant=True`, berat 0,5 kg → parser 1000 g = 13.000/kg, kemungkinan sebenarnya 26.000/kg |
