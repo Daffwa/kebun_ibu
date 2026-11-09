@@ -5,6 +5,10 @@ Contoh:
     python run.py --tahap transform,load --tanggal 2026-11-08
     python run.py --sumber tokopedia
 
+Extract dilewati kalau tanggal itu sudah punya penanda `_SUKSES` (dari
+tarik_harian.py atau run.py sebelumnya), karena siapkan_folder menghapus folder
+tanggal itu sebelum menarik. Tarik ulang paksa: `python tarik_harian.py --ulang <sumber>`.
+
 Arti angka di pipeline_runs:
 - baris_mentah    = baris lapisan 1 (sesudah buang ganda, sebelum validasi);
 - baris_dimuat    = baris yang lolos validasi lapisan 1 dan SkemaFakta (= baris fakta_harga);
@@ -27,6 +31,7 @@ from extract import blibli as tarik_blibli
 from extract import tokopedia as tarik_tokopedia
 from extract.http import HasilTarik
 from load import duckdb_loader
+from tarik_harian import PENANDA, folder_tanggal
 from transform import blibli, model, skema, tokopedia
 
 DASAR = Path(__file__).resolve().parent
@@ -95,11 +100,16 @@ def _satu_sumber(
         "baris_dimuat": 0, "baris_karantina": 0, "status": "berhasil", "pesan_galat": None,
     }
     try:
-        if "extract" in tahap:
+        penanda = folder_tanggal(akar, sumber, tanggal) / PENANDA
+        if "extract" in tahap and penanda.exists():
+            log.info("%s: extract dilewati, %s sudah sukses", sumber, tanggal)
+        elif "extract" in tahap:
             hasil = penarik[sumber](tanggal, akar)
             run["halaman_ditarik"] = hasil.halaman
             log.info("%s: extract %s, %d halaman %s", sumber, hasil.status, hasil.halaman, hasil.pesan or "")
-            if hasil.status != "berhasil":
+            if hasil.status == "berhasil":
+                penanda.touch()
+            else:
                 run["status"], run["pesan_galat"] = hasil.status, hasil.pesan
             if hasil.status == "gagal":
                 raise _ExtractGagal(hasil.pesan)

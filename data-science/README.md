@@ -60,6 +60,12 @@ asal_sumber, olahan   berat_gram, sumber_berat, jenis_satuan,
 
 ## Tabel di `warehouse/harga_buah.duckdb`
 
+Gudang hanya berisi tanggal yang **lengkap**, yaitu yang punya harga semua opsi:
+Blibli mulai **7 Nov 2026**, Tokopedia mulai **8 Nov 2026**. Tanggal sebelumnya
+(27 Sep, 18 Okt – 6/7 Nov) hanya punya harga opsi bawaan, jadi tidak dimuat
+(keputusan pengguna 9 Nov). Data mentahnya tetap di `data_lake/raw/` dan bisa
+dimuat lagi dengan `run.py --tahap transform,load --tanggal <tanggal>`.
+
 | Tabel | Isi |
 |---|---|
 | `blibli_produk`, `tokopedia_produk` | lapisan 1: satu baris per opsi, kolom asli + turunan |
@@ -78,6 +84,7 @@ python -m venv .venv
 
 python tarik_harian.py                    # tarik hari ini (dijadwalkan Task Scheduler)
 python run.py                             # extract + transform + load, kedua sumber, hari ini
+                                          # (extract dilewati kalau hari itu sudah _SUKSES)
 python run.py --tahap transform,load --tanggal 2026-11-08   # proses ulang tanpa menarik
 python run.py --sumber tokopedia
 python evaluasi_asal.py --tanggal 2026-11-08                 # nilai aturan asal (lihat di bawah)
@@ -122,7 +129,10 @@ Ketepatannya di atas ambang 90%, tetapi sekitar 61% produk tidak bisa ditebak
 
 1. **Jangkauan terbatas.** Blibli sekitar 800 produk per kategori, Tokopedia
    sekitar 6.000 dari 85.846. Urutannya urutan bawaan situs, bukan acak, jadi
-   condong ke produk populer.
+   condong ke produk populer. Produk juga bisa hilang dari hasil pencarian
+   pada satu hari (9 Nov: 3 produk Mangga Manalagi Blibli), jadi deret
+   harganya bolong. Data yang sudah ditarik dibiarkan apa adanya sebagai
+   riwayat, tidak ditambal.
 2. **Berat tidak selalu ditulis.** Sekitar 40% produk tidak menyebut berat,
    jadi harga per kg-nya kosong. Produknya tetap disimpan.
 3. **Kolom tidak seragam.** Terjual Tokopedia berupa rentang ("60+

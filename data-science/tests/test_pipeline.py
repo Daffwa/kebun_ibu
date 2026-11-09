@@ -107,6 +107,42 @@ def test_extract_sebagian_tetap_dimuat(akar, db):
     assert fakta(db, "tokopedia") == r["baris_dimuat"] > 0
 
 
+def folder_mentah(akar: Path, sumber: str) -> Path:
+    return akar / "raw" / sumber / f"date={TANGGAL:%Y-%m-%d}"
+
+
+def test_extract_dilewati_kalau_sudah_sukses(akar, db):
+    # siapkan_folder menghapus folder tanggal itu, jadi tarikan yang sudah sukses tidak boleh ditimpa
+    (folder_mentah(akar, "blibli") / "_SUKSES").touch()
+    sebelum = sorted(p.name for p in folder_mentah(akar, "blibli").rglob("*"))
+
+    def tidak_boleh_dipanggil(tanggal, akar):
+        raise AssertionError("penarik dipanggil padahal tanggal ini sudah sukses")
+
+    (r,) = run.jalankan(["blibli"], TANGGAL, {"extract", "transform", "load"}, akar, db,
+                        {"blibli": tidak_boleh_dipanggil})
+
+    assert r["status"] == "berhasil", r["pesan_galat"]
+    assert r["halaman_ditarik"] == 0
+    assert fakta(db, "blibli") == r["baris_dimuat"] > 0
+    assert sorted(p.name for p in folder_mentah(akar, "blibli").rglob("*")) == sebelum
+
+
+def test_extract_berhasil_menulis_penanda(akar, db):
+    penarik = {"tokopedia": penarik_palsu(HasilTarik(100, "berhasil"))}
+    run.jalankan(["tokopedia"], TANGGAL, {"extract", "transform", "load"}, akar, db, penarik)
+
+    assert (folder_mentah(akar, "tokopedia") / "_SUKSES").exists()
+
+
+def test_extract_sebagian_tanpa_penanda(akar, db):
+    # tanpa penanda, tarik_harian.py masih boleh mencoba lagi hari itu
+    penarik = {"tokopedia": penarik_palsu(HasilTarik(2, "sebagian", "halaman 3: diblokir"))}
+    run.jalankan(["tokopedia"], TANGGAL, {"extract", "transform", "load"}, akar, db, penarik)
+
+    assert not (folder_mentah(akar, "tokopedia") / "_SUKSES").exists()
+
+
 def test_penarik_melempar_galat_dicatat_gagal(akar, db):
     def meledak(tanggal, akar):
         raise RuntimeError("koneksi putus")
