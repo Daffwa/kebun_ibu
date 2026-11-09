@@ -1,0 +1,202 @@
+"""Pipeline harga buah: extract -> transform -> load, satu baris pipeline_runs per sumber.
+
+Contoh:
+    python run.py                                   # semua sumber, hari ini, ketiga tahap
+    python run.py --tahap transform,load --tanggal 2026-11-08
+    python run.py --sumber tokopedia
+
+Arti angka di pipeline_runs:
+- baris_mentah    = baris lapisan 1 (sesudah buang ganda, sebelum validasi);
+- baris_dimuat    = baris yang lolos validasi lapisan 1 dan SkemaFakta (= baris fakta_harga);
+- baris_karantina = baris yang ditahan, jadi dimuat + karantina = mentah.
+  Baris cek H (berat_dikali) hanya disalin ke produk_karantina dan tetap dimuat,
+  jadi tidak dihitung di sini.
+"""
+import argparse
+import logging
+import sys
+import uuid
+from datetime import date, datetime
+from pathlib import Path
+from typing import Callable
+
+import duckdb
+import polars as pl
+
+from extract import blibli as tarik_blibli
+from extract import tokopedia as tarik_tokopedia
+from extract.http import HasilTarik
+from load import duckdb_loader
+from transform import blibli, model, skema, tokopedia
+
+DASAR = Path(__file__).resolve().parent
+SUMBER = ["blibli", "tokopedia"]
+TAHAP = ["extract", "transform", "load"]
+
+PENARIK: dict[str, Callable[[date, Path], HasilTarik]] = {
+    "blibli": tarik_blibli.tarik,
+    "tokopedia": tarik_tokopedia.tarik,
+}
+_UBAH = {
+    "blibli": (blibli.ubah, skema.SkemaBlibli),
+    "tokopedia": (tokopedia.ubah, skema.SkemaTokopedia),
+}
+
+log = logging.getLogger("run")
+
+
+class _ExtractGagal(Exception):
+    """Extract berstatus `gagal`: transform/load tidak dijalankan."""
+
+
+def _transform_load(
+    con: duckdb.DuckDBPyConnection, sumber: str, tanggal: date, akar: Path, muat: bool, run: dict
+) -> None:
+    folder = akar / "raw" / sumber / f"date={tanggal:%Y-%m-%d}"
+    if not folder.is_dir():
+        raise FileNotFoundError(f"data mentah tidak ada: {folder}")
+    ubah, skema_lapisan1 = _UBAH[sumber]
+
+    mentah = ubah(folder, tanggal)
+    lolos, karantina = skema.pisahkan(mentah, skema_lapisan1, sumber)
+    if sumber == "blibli":
+        bintang = model.bangun(lolos, None)
+    else:   # induk dari gudang hanya dipakai sampai BATAS_PETA_INDUK
+        bintang = model.bangun(None, lolos, peta_induk=duckdb_loader.peta_induk(con, tanggal))
+    fakta, karantina_fakta = skema.pisahkan(bintang.fakta_harga, skema.SkemaFakta, sumber)
+
+    tahan_lapisan1 = mentah.height - lolos.height
+    tahan_fakta = bintang.fakta_harga.height - fakta.height
+    bintang.fakta_harga = fakta
+    run["baris_mentah"] = mentah.height
+    run["baris_dimuat"] = fakta.height
+    run["baris_karantina"] = tahan_lapisan1 + tahan_fakta
+    log.info("%s: mentah %d, dimuat %d, karantina %d (lapisan 1 %d, fakta %d)", sumber,
+             mentah.height, fakta.height, run["baris_karantina"], tahan_lapisan1, tahan_fakta)
+
+    if muat:
+        semua_karantina = pl.concat([karantina, karantina_fakta])
+        duckdb_loader.muat(con, sumber, tanggal, lolos, semua_karantina, bintang)
+        log.info("%s: dimuat ke gudang", sumber)
+
+
+def _satu_sumber(
+    con: duckdb.DuckDBPyConnection,
+    run_id: str,
+    sumber: str,
+    tanggal: date,
+    tahap: set[str],
+    akar: Path,
+    penarik: dict[str, Callable[[date, Path], HasilTarik]],
+) -> dict:
+    run = {
+        "run_id": run_id, "mulai": datetime.now(), "selesai": None,
+        "sumber": sumber, "tanggal": tanggal, "halaman_ditarik": 0, "baris_mentah": 0,
+        "baris_dimuat": 0, "baris_karantina": 0, "status": "berhasil", "pesan_galat": None,
+    }
+    try:
+        if "extract" in tahap:
+            hasil = penarik[sumber](tanggal, akar)
+            run["halaman_ditarik"] = hasil.halaman
+            log.info("%s: extract %s, %d halaman %s", sumber, hasil.status, hasil.halaman, hasil.pesan or "")
+            if hasil.status != "berhasil":
+                run["status"], run["pesan_galat"] = hasil.status, hasil.pesan
+            if hasil.status == "gagal":
+                raise _ExtractGagal(hasil.pesan)
+        if "transform" in tahap:
+            _transform_load(con, sumber, tanggal, akar, "load" in tahap, run)
+    except _ExtractGagal:
+        pass
+    except Exception as galat:
+        log.exception("%s: galat", sumber)
+        run["status"], run["pesan_galat"] = "gagal", str(galat)
+    run["selesai"] = datetime.now()
+    return run
+
+
+def jalankan(
+    sumber: list[str],
+    tanggal: date,
+    tahap: set[str],
+    akar: Path,
+    db: Path,
+    penarik: dict[str, Callable[[date, Path], HasilTarik]] | None = None,
+    folder_log: Path | None = None,
+) -> list[dict]:
+    """Jalankan pipeline untuk setiap sumber; satu sumber gagal tidak menghentikan yang lain.
+
+    `folder_log`: kalau diisi, setiap run juga ditulis ke `run_<run_id>.log` di sana.
+    """
+    if "load" in tahap and "transform" not in tahap:
+        raise ValueError("tahap load butuh tahap transform")
+    penarik = PENARIK if penarik is None else penarik
+    Path(db).parent.mkdir(parents=True, exist_ok=True)
+    runs = []
+    with duckdb.connect(str(db)) as con:
+        duckdb_loader.siapkan(con)
+        for s in sumber:
+            run_id = str(uuid.uuid4())
+            berkas_log = _pasang_log(folder_log, run_id)
+            try:
+                run = _satu_sumber(con, run_id, s, tanggal, tahap, akar, penarik)
+                log.info("%s: selesai %s run_id=%s", s, run["status"], run_id)
+                duckdb_loader.catat_run(con, run)
+            finally:
+                _lepas_log(berkas_log)
+            runs.append(run)
+    return runs
+
+
+def _pasang_log(folder_log: Path | None, run_id: str) -> logging.Handler | None:
+    if folder_log is None:
+        return None
+    folder_log.mkdir(parents=True, exist_ok=True)
+    handler = logging.FileHandler(folder_log / f"run_{run_id}.log", encoding="utf-8")
+    handler.setFormatter(logging.Formatter("%(asctime)s %(levelname)s %(message)s"))
+    log.addHandler(handler)
+    if log.level == logging.NOTSET:
+        log.setLevel(logging.INFO)
+    return handler
+
+
+def _lepas_log(handler: logging.Handler | None) -> None:
+    if handler is not None:
+        log.removeHandler(handler)
+        handler.close()
+
+
+def _daftar(pilihan: list[str]) -> Callable[[str], list[str]]:
+    def baca(teks: str) -> list[str]:
+        nilai = [t.strip() for t in teks.split(",") if t.strip()]
+        asing = [n for n in nilai if n not in pilihan]
+        if asing or not nilai:
+            raise argparse.ArgumentTypeError(f"pilihan: {','.join(pilihan)} (dapat: {teks!r})")
+        return nilai
+    return baca
+
+
+def baca_argumen(argv: list[str] | None = None) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    parser.add_argument("--sumber", type=_daftar(SUMBER), default=list(SUMBER),
+                        help="dipisah koma (bawaan: blibli,tokopedia)")
+    parser.add_argument("--tanggal", type=date.fromisoformat, default=date.today(),
+                        help="YYYY-MM-DD (bawaan: hari ini)")
+    parser.add_argument("--tahap", type=_daftar(TAHAP), default=list(TAHAP),
+                        help="dipisah koma (bawaan: extract,transform,load)")
+    parser.add_argument("--akar", type=Path, default=DASAR / "data_lake", help="folder data lake")
+    parser.add_argument("--db", type=Path, default=DASAR / "warehouse" / "harga_buah.duckdb",
+                        help="berkas DuckDB")
+    argumen = parser.parse_args(argv)
+    argumen.tahap = set(argumen.tahap)
+    return argumen
+
+
+def main() -> int:
+    a = baca_argumen()
+    logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
+    runs = jalankan(a.sumber, a.tanggal, a.tahap, a.akar, a.db, folder_log=DASAR / "logs")
+    return 1 if any(r["status"] == "gagal" for r in runs) else 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
