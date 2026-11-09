@@ -85,7 +85,7 @@ pyarrow, curl_cffi ≥ 0.7, pytest.
 | 5a halaman produk Tokopedia (8 Nov, keputusan 13 #11 = a) | ✅ `extract/tokopedia.py`: `cache_dari_html`, `ambil_produk_http` (sesi baru per percobaan), `tarik_halaman_produk` → `halaman/<id>.json` untuk produk `mangga_manalagi`; 9 tes baru, suite 225 lulus. Uji nyata 8 Nov: 25 produk, 23 berhasil, 2 gagal, 25 dari 48 percobaan halaman kosong, 591 detik, 1,4 MB. **Menunggu keputusan aturan berat halaman vs nama** |
 | 5 Tokopedia transform (8 Nov) | ✅ `transform/tokopedia.py` (22 kolom: + `induk_id`, `opsi_default`, `variant`, `jumlah_buah`, `berat_dikali`), **satu baris per opsi** (keputusan pengguna: opsi lain dari halaman produk Manalagi), berat opsi → halaman (bersyarat) → nama → URL; 17 tes + fixture asli 8 Nov (`tests/fixtures/tokopedia/date=2026-11-08`, halaman dipangkas). Suite 242 lulus. 14 tanggal asli: 77.810 baris, 9 detik; 8 Nov Manalagi 36 baris (opsi 18, nama 16, halaman 2). **Menunggu tinjauan pengguna** |
 | 6 skema + karantina (9 Nov) | ✅ `transform/skema.py` (`SkemaBlibli` + cek A–G, `SkemaTokopedia`, `SkemaFakta`, `SkemaDimProduk`, `SkemaDimToko`, `pisahkan`, cek H disalin tetapi tetap lolos) + 28 tes; suite 270 lulus. Semua tanggal asli: Blibli 26.535 baris (134 karantina: harga NULL 126, cek F 8; cek H 48 disalin), Tokopedia 83.334 baris (cek H 44 disalin). Cek A, B, D, E, G = 0 gagal, sama dengan spec 6.1. `alasan` cek tingkat tabel = nama cek saja (tanpa "<kolom>: ") **[usulan Claude]**. **Menunggu tinjauan pengguna** |
-| 7 | berikutnya |
+| 7 star schema (9 Nov) | ✅ `transform/model.py` (`kunci`, `Bintang`, `bangun`, `KOLOM_FAKTA`) + 24 tes; suite 294 lulus. **Keputusan 9 Nov:** Tokopedia opsi = satu produk induk (`produk_id` fakta/dim = `induk_id`, induk diisi dari tanggal lain kalau halaman gagal; `item_sku` = id opsi); batas `harga_per_kg` 2.000–2.000.000 (13 #5). Tokopedia `harga_coret` NULL di fakta (mengikuti 13 #1, bukan tabel lama "harga_asli"). Data asli: fakta 109.735 = lapisan 1, dim_produk 10.730, dim_toko 1.599, dim_tanggal 17, 1,5 detik; karantina fakta 128 (9 nama). **Menunggu tinjauan pengguna** |
 | 8–11 | belum, tidak berubah |
 
 **Aturan tinjauan (8 November):** setiap task 1, 4, 5, 6, 7, 8 diakhiri
@@ -792,7 +792,7 @@ Run: `.venv\Scripts\python -m pytest tests/test_transform_tokopedia.py -q`
     - `harga > 0`;
     - `rating` 0–5 atau NULL;
     - `diskon_persen` 0–100 atau NULL;
-    - di fakta, `harga_per_kg` 3.000–500.000 atau NULL;
+    - di fakta, `harga_per_kg` 2.000–2.000.000 (9 Nov) atau NULL;
     - `sumber` ∈ {blibli, tokopedia};
     - `produk_key` unik di `SkemaDimProduk`, `toko_key` unik di
       `SkemaDimToko`.

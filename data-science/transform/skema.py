@@ -103,7 +103,8 @@ class SkemaFakta(pa.DataFrameModel):
     produk_key: str = pa.Field(nullable=False)
     toko_key: str = pa.Field(nullable=False)
     harga: int = pa.Field(gt=0, nullable=False)
-    harga_per_kg: int = pa.Field(in_range={"min_value": 3_000, "max_value": 500_000}, nullable=True)
+    # 13 #5 (9 Nov): 2.000–2.000.000/kg; anggur Nagano, persimmon Korea ±Rp4 jt/kg tetap asli
+    harga_per_kg: int = pa.Field(in_range={"min_value": 2_000, "max_value": 2_000_000}, nullable=True)
 
 
 class SkemaDimProduk(pa.DataFrameModel):

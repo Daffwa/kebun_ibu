@@ -370,7 +370,7 @@ Skema Pandera untuk setiap DataFrame **sebelum dimuat**:
 | `harga > 0` | lapisan 1, fakta |
 | `rating` di antara 0–5, atau kosong | lapisan 1 |
 | `diskon_persen` di antara 0–100 | lapisan 1 |
-| `harga_per_kg` di antara 3.000–500.000, atau kosong (**batas ditinjau ulang**, bagian 13) | fakta |
+| `harga_per_kg` di antara 2.000–2.000.000, atau kosong (diputuskan 9 Nov, 13 #5: 128 baris / 9 nama dikarantina; batas lama 3.000–500.000 mengkarantina 2.665 baris buah premium asli) | fakta |
 | `sumber` ∈ {blibli, tokopedia} | dimensi, fakta |
 | Blibli (`item_sku`, `tanggal`) unik; Tokopedia (`produk_id`, `tanggal`) unik | lapisan 1 |
 | `produk_key` unik di `dim_produk`; `toko_key` unik di `dim_toko` | dimensi |
@@ -494,7 +494,7 @@ memakainya dimulai** (misalnya #1–3 di Task 5, #5–6 di Task 1/7).
 | 2 | ✅ **`diskon_persen` Tokopedia** selalu 0 dari API: **mengikuti #1, NULL di lapisan 1** (tidak dihitung dari `harga_asli`) | — | 0 di semua 77.799 baris |
 | 3 | ✅ **Salinan laptop vs VPS** untuk Tokopedia di tanggal yang sama: **diputuskan 8 Nov: hanya laptop** (`data_lake/raw/tokopedia/`); `data_lake_vps/` tidak dibaca transform. Pengguna tidak mau bayar VPS bulanan untuk proyek pribadi. Akibat yang diterima: jam tarik laptop berubah-ubah (09:33–13:46), jadi harga sebagian produk bisa naik-turun karena jam, bukan karena pasar | — | Keduanya tarik setiap hari sejak 27 Okt. **Uji 8 Nov:** skrip VPS = laptop (diff kosong), cron VPS 06:00 + 12:00 WIB sama dengan Task Scheduler laptop. Tapi VPS selalu tarik **06:00–06:04**, laptop tarik saat menyala (6 Nov 13:02, 7 Nov 09:33, 8 Nov 13:46). Per tanggal ±190–250 produk harganya beda (Jeruk Dekopon 12426856674: VPS 705.000, laptop 735.000). Tarik **bersamaan** dari laptop + VPS 20:41: 839 produk, **0 beda harga** (Dekopon 735.000 di keduanya) → beda karena **jam tarik**, bukan lokasi/skrip |
 | 4 | **Label Tokopedia yang belum dipakai**: `nett_price`, `promotion_label` ("Harga Diskon"), `ri_ribbon` ("12%"), `ri_product_offer` | Tidak dipakai dulu; tetap ada di data mentah | 614 / 637 / 640 / 4.356 baris pada 7 Nov |
-| 5 | **Olahan** (aturan akhir) dan **batas harga per kg** karantina. *8 Nov: `sale` dan `pohon` dibuang dari daftar olahan (pengguna); sisanya tetap. Kurma/kelapa/lemon tetap `lainnya` (pengguna: bukan fokus)* | Batas 2.000–2.000.000/kg (usulan 4 Nov) supaya anggur Nagano Rp4 jt/kg tidak salah dikarantina | Ditunda pengguna 4 Nov: "filter later" |
+| 5 | ✅ **Batas harga per kg diputuskan 9 Nov: 2.000–2.000.000** (usulan diterima). **Olahan** (aturan akhir) dan **batas harga per kg** karantina. *8 Nov: `sale` dan `pohon` dibuang dari daftar olahan (pengguna); sisanya tetap. Kurma/kelapa/lemon tetap `lainnya` (pengguna: bukan fokus)* | Batas 2.000–2.000.000/kg (usulan 4 Nov) supaya anggur Nagano Rp4 jt/kg tidak salah dikarantina | Ditunda pengguna 4 Nov: "filter later" |
 | 6 | ✅ **Multipack** ("8x125GR", "200 gr×12 Pcs"): **diputuskan 8 Nov: dikalikan + dicatat di karantina (cek H)** | Kalikan: 8 × 125 = 1.000 g | Penyebab utama harga per kg yang terlalu tinggi |
 | 7 | **URL gambar pertama Blibli** (diterima 4 Nov untuk ide computer vision) | Tambah kolom `gambar` kalau masih diinginkan; tidak ada di daftar 29 kolom | — |
 | 8 | **Arti `tier_toko`** Tokopedia | Tetap `tier_<n>` | Halaman produk menampilkan lencana hijau, artinya belum dicek |

@@ -239,13 +239,15 @@ def fakta(**nilai):
 
 
 def test_fakta_bagus_lolos():
-    lolos, karantina = pisahkan(pl.concat([fakta(), fakta(harga_per_kg=None)]), SkemaFakta, "tokopedia")
-    assert (lolos.height, karantina.height) == (2, 0)
+    baik = [fakta(), fakta(harga_per_kg=None), fakta(harga_per_kg=2000), fakta(harga_per_kg=2_000_000)]
+    lolos, karantina = pisahkan(pl.concat(baik), SkemaFakta, "tokopedia")
+    assert (lolos.height, karantina.height) == (4, 0)
 
 
 @pytest.mark.parametrize("nilai, kata", [
-    ({"harga_per_kg": 2999}, "harga_per_kg"),
-    ({"harga_per_kg": 500001}, "harga_per_kg"),
+    # batas 2.000–2.000.000 per kg (keputusan 13 #5, 9 Nov)
+    ({"harga_per_kg": 1999}, "harga_per_kg"),
+    ({"harga_per_kg": 2_000_001}, "harga_per_kg"),
     ({"sumber": "shopee"}, "sumber"),
     ({"harga": 0}, "harga"),
 ])
