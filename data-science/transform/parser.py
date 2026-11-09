@@ -284,7 +284,7 @@ _JENIS_BUAH = [
 ]
 _POLA_JENIS = [(jenis, re.compile(rf"\b(?:{pola})", re.I)) for jenis, pola in _JENIS_BUAH]
 
-# Dari kebun-ibu/skrip/bersihkan_blibli.py, tanpa "sale" dan "pohon" (keputusan
+# Dari arsip/skrip/bersihkan_blibli.py, tanpa "sale" dan "pohon" (keputusan
 # pengguna 8 Nov): "flash sale" = promo, "tua pohon" = matang di pohon (buah segar).
 POLA_OLAHAN = re.compile(
     r"\b(keripik|kripik|selai|jus|juice|sirup|manisan|kering|dried|"
