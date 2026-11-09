@@ -6,7 +6,15 @@ import polars as pl
 import pytest
 
 from transform import blibli, tokopedia
-from transform.model import KOLOM_FAKTA, Bintang, bangun, kunci
+from transform.model import (
+    KOLOM_DIM_PRODUK,
+    KOLOM_DIM_TANGGAL,
+    KOLOM_DIM_TOKO,
+    KOLOM_FAKTA,
+    Bintang,
+    bangun,
+    kunci,
+)
 from transform.skema import SkemaDimProduk, SkemaDimToko, SkemaFakta, pisahkan
 
 FIXTURE = Path(__file__).parent / "fixtures"
@@ -51,10 +59,16 @@ def test_kolom_keluaran(bintang):
     assert isinstance(bintang, Bintang)
     assert bintang.fakta_harga.schema == pl.Schema(KOLOM_FAKTA)
     assert bintang.dim_produk.columns == ["produk_key", "sumber", "produk_id", "nama", "jenis_buah",
-                                          "asal", "asal_sumber", "olahan"]
+                                          "asal", "asal_sumber", "olahan", "tanggal_terakhir"]
     assert bintang.dim_toko.columns == ["toko_key", "sumber", "toko_id", "nama_toko", "kota",
-                                        "region", "jenis_toko"]
+                                        "region", "jenis_toko", "tanggal_terakhir"]
     assert bintang.dim_tanggal.columns == ["tanggal", "tahun", "bulan", "minggu", "hari"]
+
+
+def test_tipe_kolom_dimensi(bintang):
+    assert bintang.dim_produk.schema == pl.Schema(KOLOM_DIM_PRODUK)
+    assert bintang.dim_toko.schema == pl.Schema(KOLOM_DIM_TOKO)
+    assert bintang.dim_tanggal.schema == pl.Schema(KOLOM_DIM_TANGGAL)
 
 
 def test_jumlah_fakta_sama_dengan_baris_lapisan_1(bintang, df_blibli, df_tokped):
@@ -163,6 +177,23 @@ def test_induk_diisi_dari_tanggal_lain(df_tokped):
     assert f["produk_key"].to_list() == [kunci("tokopedia", "103388173219")]
 
 
+def test_induk_dari_peta_luar(df_tokped):
+    # tanggal lama tanpa halaman produk: induk diambil dari peta (dibaca dari gudang)
+    lama = df_tokped.filter(pl.col("opsi_default")).with_columns(
+        tanggal=pl.lit(date(2026, 11, 7)), induk_id=pl.lit(None, pl.Utf8))
+    peta = pl.DataFrame({"produk_id": ["103999725486"], "induk_id": ["103388173219"]})
+    tanpa = fakta_item(bangun(None, lama), "103999725486")
+    dengan = fakta_item(bangun(None, lama, peta_induk=peta), "103999725486")
+    assert tanpa["produk_key"] == kunci("tokopedia", "103999725486")
+    assert dengan["produk_key"] == kunci("tokopedia", "103388173219")
+
+
+def test_induk_baris_sendiri_menang_atas_peta_luar(df_tokped):
+    peta = pl.DataFrame({"produk_id": ["103999725486"], "induk_id": ["999"]})
+    f = fakta_item(bangun(None, df_tokped, peta_induk=peta), "103999725486")
+    assert f["produk_key"] == kunci("tokopedia", "103388173219")
+
+
 def test_tokopedia_tanpa_harga_coret_dan_diskon(bintang):
     # keputusan 13 #1–2: harga_asli tidak dipakai di fakta, diskon NULL
     t = bintang.fakta_harga.filter(pl.col("sumber") == "tokopedia")
@@ -215,3 +246,5 @@ def test_dimensi_yang_terakhir_menang(df_tokped):
     b = bangun(None, pl.concat([df_tokped, besok]))
     assert set(b.dim_toko["nama_toko"]) == {"Toko Baru"}
     assert b.dim_tanggal.height == 2
+    assert set(b.dim_toko["tanggal_terakhir"]) == {date(2026, 11, 9)}
+    assert set(b.dim_produk["tanggal_terakhir"]) == {date(2026, 11, 9)}

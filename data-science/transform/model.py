@@ -42,6 +42,37 @@ KOLOM_FAKTA: dict[str, pl.DataType] = {
     "terjual_min": pl.Int64,
 }
 
+KOLOM_DIM_PRODUK: dict[str, pl.DataType] = {
+    "produk_key": pl.Utf8,
+    "sumber": pl.Utf8,
+    "produk_id": pl.Utf8,
+    "nama": pl.Utf8,
+    "jenis_buah": pl.Utf8,
+    "asal": pl.Utf8,
+    "asal_sumber": pl.Utf8,
+    "olahan": pl.Boolean,
+    "tanggal_terakhir": pl.Date,   # tanggal asal isi baris ini (loader: yang lebih baru menang)
+}
+
+KOLOM_DIM_TOKO: dict[str, pl.DataType] = {
+    "toko_key": pl.Utf8,
+    "sumber": pl.Utf8,
+    "toko_id": pl.Utf8,
+    "nama_toko": pl.Utf8,
+    "kota": pl.Utf8,
+    "region": pl.Utf8,
+    "jenis_toko": pl.Utf8,
+    "tanggal_terakhir": pl.Date,
+}
+
+KOLOM_DIM_TANGGAL: dict[str, pl.DataType] = {
+    "tanggal": pl.Date,
+    "tahun": pl.Int32,
+    "bulan": pl.Int8,
+    "minggu": pl.Int8,
+    "hari": pl.Utf8,
+}
+
 _HARI = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu"]   # weekday() 1..7
 
 
@@ -96,12 +127,15 @@ def _seragam_blibli(df: pl.DataFrame) -> pl.DataFrame:
     )
 
 
-def _seragam_tokopedia(df: pl.DataFrame) -> pl.DataFrame:
-    # induk dari tanggal lain untuk kartu yang halaman produknya gagal ditarik
+def _seragam_tokopedia(df: pl.DataFrame, peta_luar: pl.DataFrame | None = None) -> pl.DataFrame:
+    # induk dari baris lain (tanggal lain di `df`, lalu `peta_luar`) untuk kartu yang
+    # halaman produknya gagal ditarik; induk di baris itu sendiri selalu menang
+    sendiri = df.filter(pl.col("induk_id").is_not_null()).select("produk_id", "induk_id")
+    bagian = [] if peta_luar is None else [peta_luar.select("produk_id", "induk_id")]
     peta_induk = (
-        df.filter(pl.col("induk_id").is_not_null())
-        .select("produk_id", induk_lain=pl.col("induk_id"))
+        pl.concat([*bagian, sendiri])
         .unique("produk_id", keep="last", maintain_order=True)
+        .rename({"induk_id": "induk_lain"})
     )
     return df.join(peta_induk, on="produk_id", how="left", maintain_order="left").select(
         *[c for c in _BERSAMA if c != "item_sku"],
@@ -133,7 +167,8 @@ def _dim_produk(semua: pl.DataFrame) -> pl.DataFrame:
         asal=pl.coalesce("asal", _per_baris(asal_dari_nama, "nama", pl.Utf8)),
         asal_sumber=pl.col("asal_sumber"),
         olahan=_per_baris(olahan, "nama", pl.Boolean),
-    )
+        tanggal_terakhir=pl.col("tanggal"),
+    ).cast(KOLOM_DIM_PRODUK)
 
 
 def _dim_toko(semua: pl.DataFrame) -> pl.DataFrame:
@@ -141,7 +176,8 @@ def _dim_toko(semua: pl.DataFrame) -> pl.DataFrame:
         "toko_key", "sumber", "toko_id", "nama_toko", "kota",
         region=_per_baris(region, "kota", pl.Utf8),
         jenis_toko=pl.col("jenis_toko"),
-    )
+        tanggal_terakhir=pl.col("tanggal"),
+    ).cast(KOLOM_DIM_TOKO)
 
 
 def _dim_tanggal(semua: pl.DataFrame) -> pl.DataFrame:
@@ -152,7 +188,7 @@ def _dim_tanggal(semua: pl.DataFrame) -> pl.DataFrame:
         bulan=tgl.dt.month(),
         minggu=tgl.dt.week(),
         hari=tgl.dt.weekday().replace_strict(list(range(1, 8)), _HARI, return_dtype=pl.Utf8),
-    )
+    ).cast(KOLOM_DIM_TANGGAL)
 
 
 def _fakta(semua: pl.DataFrame) -> pl.DataFrame:
@@ -165,13 +201,21 @@ def _fakta(semua: pl.DataFrame) -> pl.DataFrame:
     ).select(pl.col(k).cast(t) for k, t in KOLOM_FAKTA.items())
 
 
-def bangun(blibli: pl.DataFrame | None, tokopedia: pl.DataFrame | None) -> Bintang:
-    """Lapisan 1 (sudah lolos `pisahkan`) dari satu atau dua sumber → star schema."""
+def bangun(
+    blibli: pl.DataFrame | None,
+    tokopedia: pl.DataFrame | None,
+    peta_induk: pl.DataFrame | None = None,
+) -> Bintang:
+    """Lapisan 1 (sudah lolos `pisahkan`) dari satu atau dua sumber → star schema.
+
+    `peta_induk` (`produk_id`, `induk_id`): induk Tokopedia yang sudah diketahui dari
+    tanggal lain, dipakai hanya kalau baris itu sendiri tidak punya induk.
+    """
     bagian = []
     if blibli is not None:
         bagian.append(_seragam_blibli(blibli))
     if tokopedia is not None:
-        bagian.append(_seragam_tokopedia(tokopedia))
+        bagian.append(_seragam_tokopedia(tokopedia, peta_induk))
     if not bagian:
         raise ValueError("bangun() butuh minimal satu sumber")
     semua = pl.concat(bagian, how="diagonal_relaxed").with_columns(
