@@ -83,6 +83,7 @@ python -m venv .venv
 .venv\Scripts\pip install -r requirements.txt
 
 python tarik_harian.py                    # tarik hari ini (dijadwalkan Task Scheduler)
+                                          # lalu Task Scheduler juga menjalankan run.py --tahap transform,load
 python run.py                             # extract + transform + load, kedua sumber, hari ini
                                           # (extract dilewati kalau hari itu sudah _SUKSES)
 python run.py --tahap transform,load --tanggal 2026-11-08   # proses ulang tanpa menarik
@@ -91,6 +92,10 @@ python evaluasi_asal.py --tanggal 2026-11-08                 # nilai aturan asal
 
 .venv\Scripts\python -m pytest -q         # semua tes, tanpa internet
 ```
+
+Gudang DuckDB hanya bisa ditulis kalau tidak ada program lain yang membukanya
+(notebook, DBeaver, Python lain, bahkan yang `read_only`). Tutup koneksi sesudah
+membaca, supaya muat terjadwal 06:00/12:00 tidak gagal.
 
 `run.py` keluar dengan kode 1 kalau ada sumber yang `gagal`. Satu sumber gagal
 tidak menghentikan sumber lain.
