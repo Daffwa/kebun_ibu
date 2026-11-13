@@ -86,6 +86,9 @@ python tarik_harian.py                    # tarik hari ini (dijadwalkan Task Sch
                                           # lalu Task Scheduler juga menjalankan run.py --tahap transform,load
 python run.py                             # extract + transform + load, kedua sumber, hari ini
                                           # (extract dilewati kalau hari itu sudah _SUKSES)
+                                          # tanpa --tanggal: juga menyusulkan tanggal tertinggal
+                                          # (folder _SUKSES belum dimuat; salinan VPS dipakai kalau
+                                          # tarikan laptop gagal, status `sebagian` tanpa halaman varian)
 python run.py --tahap transform,load --tanggal 2026-11-08   # proses ulang tanpa menarik
 python run.py --sumber tokopedia
 python evaluasi_asal.py --tanggal 2026-11-08                 # nilai aturan asal (lihat di bawah)

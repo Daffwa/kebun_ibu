@@ -3,7 +3,7 @@ import json
 import shutil
 import subprocess
 import sys
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from pathlib import Path
 
 import duckdb
@@ -234,7 +234,7 @@ def test_baca_argumen_bawaan():
     a = run.baca_argumen([])
 
     assert a.sumber == KEDUANYA
-    assert a.tanggal == date.today()
+    assert a.tanggal is None                            # None = hari ini + tanggal tertinggal
     assert a.tahap == {"extract", "transform", "load"}
 
 
@@ -251,3 +251,76 @@ def test_cli_bantuan():
 
     assert hasil.returncode == 0
     assert "--tahap" in hasil.stdout
+
+
+# --- 11 Nov 2026: folder kosong tercatat berhasil, cadangan VPS tidak pernah dimuat ---
+
+def salin_ke_vps(tmp_path: Path, sumber: str, tanpa_varian: bool = False) -> Path:
+    """Salinan fixture di data_lake_vps/, bertanda _SUKSES seperti hasil sinkron_vps.py."""
+    akar_vps = tmp_path / "data_lake_vps"
+    tujuan = akar_vps / "raw" / sumber / f"date={TANGGAL:%Y-%m-%d}"
+    shutil.copytree(FIXTURE / sumber / f"date={TANGGAL:%Y-%m-%d}", tujuan)
+    if tanpa_varian:
+        shutil.rmtree(tujuan / run.SUB_VARIAN[sumber])
+    (tujuan / "_SUKSES").touch()
+    return akar_vps
+
+
+def test_mentah_kosong_dicatat_gagal(akar, db):
+    # 11 Nov: tarikan Blibli gagal (DNS) setelah folder dibuat → folder kosong, dulu tercatat "berhasil"
+    shutil.rmtree(folder_mentah(akar, "blibli"))
+    folder_mentah(akar, "blibli").mkdir()
+
+    (r,) = run.jalankan(["blibli"], TANGGAL, TL, akar, db)
+
+    assert r["status"] == "gagal"
+    assert "kosong" in r["pesan_galat"]
+    assert fakta(db, "blibli") == 0
+
+
+def test_cadangan_vps_dipakai_kalau_laptop_tidak_sukses(akar, db, tmp_path):
+    shutil.rmtree(folder_mentah(akar, "tokopedia"))     # tarikan laptop gagal sebelum folder dibuat
+    akar_vps = salin_ke_vps(tmp_path, "tokopedia", tanpa_varian=True)
+
+    (r,) = run.jalankan(["tokopedia"], TANGGAL, TL, akar, db, akar_vps=akar_vps)
+
+    assert r["status"] == "sebagian"                    # VPS tidak menarik halaman varian
+    assert "data_lake_vps" in r["pesan_galat"]
+    assert fakta(db, "tokopedia") == r["baris_dimuat"] > 0
+
+
+def test_laptop_sukses_didahulukan_atas_vps(akar, db, tmp_path):
+    (folder_mentah(akar, "tokopedia") / "_SUKSES").touch()
+    akar_vps = salin_ke_vps(tmp_path, "tokopedia", tanpa_varian=True)
+
+    (r,) = run.jalankan(["tokopedia"], TANGGAL, TL, akar, db, akar_vps=akar_vps)
+
+    assert r["status"] == "berhasil"
+    assert r["pesan_galat"] is None
+
+
+def test_harian_memuat_tanggal_tertinggal(akar, db, tmp_path):
+    # tokopedia TANGGAL hanya ada di VPS dan belum pernah dimuat; besoknya run terjadwal harus menyusulkannya
+    shutil.rmtree(folder_mentah(akar, "tokopedia"))
+    (folder_mentah(akar, "blibli") / "_SUKSES").touch()
+    akar_vps = salin_ke_vps(tmp_path, "tokopedia")
+    besok = TANGGAL + timedelta(days=1)
+    mulai = {"blibli": TANGGAL, "tokopedia": TANGGAL}
+
+    assert run.tanggal_tertinggal(db, KEDUANYA, besok, akar, akar_vps, mulai) == [
+        (TANGGAL, "blibli"), (TANGGAL, "tokopedia")]
+
+    runs = run.jalankan_harian(KEDUANYA, besok, TL, akar, db, akar_vps=akar_vps, mulai=mulai)
+
+    dimuat = {(r["tanggal"], r["sumber"]) for r in runs if r["baris_dimuat"] > 0}
+    assert dimuat == {(TANGGAL, "blibli"), (TANGGAL, "tokopedia")}
+    assert {(r["tanggal"], r["status"]) for r in runs if r["tanggal"] == besok} == {(besok, "gagal")}
+    assert run.tanggal_tertinggal(db, KEDUANYA, besok, akar, akar_vps, mulai) == []
+
+
+def test_tanggal_tertinggal_tidak_sebelum_mulai_gudang(akar, db, tmp_path):
+    # tanggal sebelum batas gudang (keputusan 9 Nov: hanya tanggal lengkap) tidak boleh disusulkan
+    (folder_mentah(akar, "blibli") / "_SUKSES").touch()
+    mulai = {"blibli": TANGGAL + timedelta(days=1), "tokopedia": TANGGAL}
+
+    assert run.tanggal_tertinggal(db, ["blibli"], TANGGAL + timedelta(days=3), akar, None, mulai) == []
