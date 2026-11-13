@@ -6,3 +6,4 @@ curl_cffi>=0.7
 pytest>=8
 matplotlib>=3.8
 seaborn>=0.13
+ipywidgets>=8.1
