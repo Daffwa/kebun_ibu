@@ -5,6 +5,7 @@ import {
   bacaFilter,
   geserIndeks,
   histogram,
+  kerapatan,
   labelSumbu,
   tanggalPanjang,
   ringkasTren,
@@ -141,9 +142,15 @@ test("geserIndeks: ujung kanan = median hari terakhir yang punya keduanya", () =
   expect(ringkasTren([null, 33000], ["a", "b"])).toBeNull();
 });
 
-test("labelSumbu: hari/minggu '14 Nov', bulan 'Nov 2027'", () => {
+test("kerapatan: ≤90 hari per hari, lebih panjang per bulan (tidak ada minggu)", () => {
+  expect(kerapatan("2026-11-01", "2026-11-30")).toBe("hari");
+  expect(kerapatan("2026-01-01", "2026-03-31")).toBe("hari"); // 90 hari
+  expect(kerapatan("2026-01-01", "2026-04-01")).toBe("bulan"); // 91 hari
+  expect(kerapatan("2026-01-01", "2026-12-31")).toBe("bulan");
+});
+
+test("labelSumbu: hari '14 Nov', bulan 'Nov 2027'", () => {
   expect(labelSumbu("2026-11-14", "hari")).toBe("14 Nov");
-  expect(labelSumbu("2027-01-03", "minggu")).toBe("3 Jan");
   expect(labelSumbu("2027-11-01", "bulan")).toBe("Nov 2027");
   expect(labelSumbu("2027-08-01", "bulan")).toBe("Agu 2027");
 });

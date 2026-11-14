@@ -17,7 +17,7 @@ export const AMBANG_PASAR = 0.05;
 export type Pasar = "semua" | "blibli" | "tokopedia";
 export type Preset = "30h" | "1t" | "5t";
 export type Rentang = Preset | "semua" | "kustom";
-export type Satuan = "hari" | "minggu" | "bulan";
+export type Satuan = "hari" | "bulan";
 
 /** Satu baris tabel `pasar_manalagi_harian`. */
 export type HarianBaris = {
@@ -32,7 +32,7 @@ export type HarianBaris = {
   turun: number;
 };
 
-/** Satu titik grafik tren: satu hari, minggu, atau bulan. null = tidak ada data. */
+/** Satu titik grafik tren: satu hari atau satu bulan. null = tidak ada data. */
 export type Titik = {
   tanggal: string;
   jumlah_produk: number | null;
@@ -164,10 +164,9 @@ export function pilihRentang(
 
 // ---------------------------------------------------------------- kerapatan dan deret
 
+/** ≤ 90 hari: satu titik per hari; lebih panjang: per bulan (1 tahun = 12 titik). */
 export function kerapatan(mulai: string, akhir: string): Satuan {
-  if (selisihHari(mulai, akhir) + 1 <= 90) return "hari";
-  if (tambahTahun(mulai, 2) > akhir) return "minggu";
-  return "bulan";
+  return selisihHari(mulai, akhir) + 1 <= 90 ? "hari" : "bulan";
 }
 
 function median(nilai: number[]): number | null {
@@ -177,15 +176,12 @@ function median(nilai: number[]): number | null {
   return urut.length % 2 ? urut[tengah] : (urut[tengah - 1] + urut[tengah]) / 2;
 }
 
-/** Label periode: Minggu penutup minggunya (pandas "W") atau tanggal 1 bulannya (pandas "MS"). */
-function labelPeriode(t: string, satuan: Exclude<Satuan, "hari">): string {
-  if (satuan === "bulan") return `${t.slice(0, 7)}-01`;
-  const hari = new Date(ms(t)).getUTCDay(); // 0 = Minggu
-  return tambahHari(t, (7 - hari) % 7);
+/** Label periode: tanggal 1 bulannya (pandas "MS"). */
+function labelPeriode(t: string): string {
+  return `${t.slice(0, 7)}-01`;
 }
 
-function langkahPeriode(t: string, satuan: Exclude<Satuan, "hari">): string {
-  if (satuan === "minggu") return tambahHari(t, 7);
+function langkahPeriode(t: string): string {
   const [y, m] = urai(t);
   return tulis(Date.UTC(y, m, 1));
 }
@@ -243,9 +239,9 @@ export function deret(harian: HarianBaris[], mulai: string, akhir: string): { ti
   if (satuan === "hari") return { titik: hari, satuan };
 
   const kelompok = new Map<string, Titik[]>();
-  const akhirLabel = labelPeriode(akhir, satuan);
-  for (let l = labelPeriode(mulai, satuan); l <= akhirLabel; l = langkahPeriode(l, satuan)) kelompok.set(l, []);
-  for (const t of hari) kelompok.get(labelPeriode(t.tanggal, satuan))!.push(t);
+  const akhirLabel = labelPeriode(akhir);
+  for (let l = labelPeriode(mulai); l <= akhirLabel; l = langkahPeriode(l)) kelompok.set(l, []);
+  for (const t of hari) kelompok.get(labelPeriode(t.tanggal))!.push(t);
   return { titik: [...kelompok].map(([l, isi]) => gabung(l, isi)), satuan };
 }
 
@@ -360,7 +356,7 @@ export function ringkasTren(
 
 const BULAN = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
 
-/** Label sumbu x: "14 Nov" per hari/minggu, "Nov 2027" per bulan. Dibaca dari teks, bukan jam lokal. */
+/** Label sumbu x: "14 Nov" per hari, "Nov 2027" per bulan. Dibaca dari teks, bukan jam lokal. */
 export function labelSumbu(tanggal: string, satuan: Satuan): string {
   const [y, m, d] = urai(tanggal);
   return satuan === "bulan" ? `${BULAN[m - 1]} ${y}` : `${d} ${BULAN[m - 1]}`;
