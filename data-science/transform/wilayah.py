@@ -37,7 +37,8 @@ KATA_KUNCI_PROVINSI: dict[str, str] = {
     "52": "ntb", "53": "ntt", "19": "babel", "21": "kepri",
 }
 
-_AWALAN = re.compile(r"^(kabupaten administrasi|kota administrasi|kabupaten|kab\.|kota)\s*")
+# Awalan hanya kalau berdiri sebagai kata: "Kotamobagu", "Kotabaru" bukan "Kota" + nama.
+_AWALAN = re.compile(r"^(kabupaten administrasi\b|kota administrasi\b|kabupaten\b|kab\.|kab\b|kota\b)\s*")
 
 
 def kunci_nama(nama: str) -> str:
@@ -48,9 +49,9 @@ def kunci_nama(nama: str) -> str:
 
 def _jenis_masukan(nama: str) -> str | None:
     n = nama.strip().lower()
-    if n.startswith("kota"):
+    if re.match(r"kota\b", n):
         return "kota"
-    if n.startswith(("kab.", "kabupaten")):
+    if re.match(r"kab\.|kab\b|kabupaten\b", n):
         return "kabupaten"
     return None
 

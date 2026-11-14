@@ -17,6 +17,12 @@ from transform.wilayah import ALIAS_KOTA, KELOMPOK, anggota, cocokkan, kabkota, 
     (None, (None, None)),
     ("  ", (None, None)),
     ("Jakarta Timur", ("31.75", "31")),            # resmi: Kota Administrasi Jakarta Timur
+    # nama yang diawali "Kota" bukan awalan (tinjauan akhir 14 Nov)
+    ("Kotamobagu", ("71.74", "71")), ("Kota Kotamobagu", ("71.74", "71")),
+    ("Kotabaru", ("63.02", "63")), ("Kab. Kotabaru", ("63.02", "63")),
+    ("Kotawaringin Barat", ("62.01", "62")),
+    ("Kab Bandung", ("32.04", "32")),              # "Kab" tanpa titik
+    ("Kab Bima", ("52.06", "52")), ("Bima", ("52.72", "52")),
 ])
 def test_cocokkan(kota, hasil):
     assert cocokkan(kota) == hasil
