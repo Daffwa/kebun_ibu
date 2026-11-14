@@ -260,6 +260,24 @@ def test_siapkan_menambah_kolom_baru_ke_gudang_lama(mentah_blibli):
     lama.close()
 
 
+def test_v_produk_kode_wilayah(con, mentah_blibli):
+    muat_paket(con, paket(mentah_blibli.with_columns(lokasi=pl.lit("Kota Surabaya")), "blibli"))
+    kode = con.execute("SELECT DISTINCT kabkota_kode, provinsi_kode FROM v_produk").fetchall()
+    assert kode == [("35.78", "35")]
+
+
+def test_gudang_lama_tanpa_kode_wilayah(mentah_blibli):
+    lama = duckdb.connect(":memory:")
+    lama.execute(_buat_tabel("fakta_harga").replace("    kabkota_kode VARCHAR,\n", "")
+                 .replace("    provinsi_kode VARCHAR,\n", ""))
+    assert "kabkota_kode" not in [r[0] for r in lama.execute("DESCRIBE fakta_harga").fetchall()]
+    siapkan(lama)
+    muat_paket(lama, paket(mentah_blibli.with_columns(lokasi=pl.lit("Kota Surabaya")), "blibli"))
+    kode = lama.execute("SELECT DISTINCT kabkota_kode, provinsi_kode FROM v_produk").fetchall()
+    assert kode == [("35.78", "35")]
+    lama.close()
+
+
 def test_v_opsi_berubah(con, mentah_blibli):
     muat_paket(con, paket(mentah_blibli, "blibli"))
     besok = ganti_tanggal(mentah_blibli, BESOK).with_columns(

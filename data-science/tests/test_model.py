@@ -153,6 +153,17 @@ def test_kota_per_baris_fakta(df_blibli):
     assert set(f.filter(pl.col("item_sku") != sku)["kota"]) == {"Kota Bekasi"}
 
 
+def test_fakta_kode_wilayah(df_blibli):
+    sku = "NAS-70965-00407-00002"
+    df = df_blibli.with_columns(
+        lokasi=pl.when(pl.col("item_sku") == sku).then(pl.lit("Kota Surabaya"))
+        .otherwise(pl.lit("Kota Antah")))
+    f = bangun(df, None).fakta_harga
+    kode = ["kabkota_kode", "provinsi_kode"]
+    assert f.filter(pl.col("item_sku") == sku).select(kode).rows() == [("35.78", "35")]
+    assert set(f.filter(pl.col("item_sku") != sku).select(kode).rows()) == {(None, None)}
+
+
 def test_harga_coret_dan_terjual_blibli(bintang, df_blibli):
     baris = df_blibli.filter(pl.col("item_sku") == "NAS-70965-00407-00002").row(0, named=True)
     f = fakta_item(bintang, "NAS-70965-00407-00002")

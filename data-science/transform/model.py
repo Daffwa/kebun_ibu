@@ -21,6 +21,7 @@ from transform.parser import (
     region,
     terjual_dari_label,
 )
+from transform.wilayah import cocokkan
 
 KOLOM_FAKTA: dict[str, pl.DataType] = {
     "tanggal": pl.Date,
@@ -29,6 +30,9 @@ KOLOM_FAKTA: dict[str, pl.DataType] = {
     # Kota per baris, bukan hanya di dim_toko: di Blibli lokasi milik produk (gudang pengirim),
     # satu toko bisa punya produk dari beberapa kota di hari yang sama (14 Nov).
     "kota": pl.Utf8,
+    # Kode Kepmendagri 2025 dari `kota` (transform/wilayah.py); kosong = kota kosong/tak dikenal
+    "kabkota_kode": pl.Utf8,
+    "provinsi_kode": pl.Utf8,
     "sumber": pl.Utf8,
     "item_sku": pl.Utf8,
     "opsi_default": pl.Boolean,
@@ -196,7 +200,12 @@ def _dim_tanggal(semua: pl.DataFrame) -> pl.DataFrame:
 
 def _fakta(semua: pl.DataFrame) -> pl.DataFrame:
     harga, berat, jumlah = pl.col("harga"), pl.col("berat_gram"), pl.col("jumlah_buah")
-    return semua.with_columns(
+    # setiap nama kota unik dicocokkan sekali, bukan per baris
+    peta = {k: cocokkan(k) for k in semua["kota"].drop_nulls().unique().to_list()}
+    kode = [pl.col("kota").replace_strict({k: v[i] for k, v in peta.items()}, default=None,
+                                          return_dtype=pl.Utf8).alias(nama)
+            for i, nama in enumerate(("kabkota_kode", "provinsi_kode"))]
+    return semua.with_columns(*kode).with_columns(
         harga_per_kg=pl.when((pl.col("jenis_satuan") == "berat") & (berat > 0))
         .then((harga * 1000 / berat).round(0)),
         harga_per_buah=pl.when((pl.col("jenis_satuan") == "jumlah") & (jumlah > 0))

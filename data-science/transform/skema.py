@@ -3,6 +3,8 @@
 `pisahkan(df, Skema, sumber)` → `(lolos, karantina)`:
 - baris yang gagal cek tingkat baris → karantina (tidak masuk `lolos`);
 - baris `berat_dikali = true` (cek H) → **disalin** ke karantina, tetap lolos;
+- fakta dengan `kota` terisi tetapi `kabkota_kode` kosong (cek I, kota tidak dikenal di daftar
+  Kepmendagri) → **disalin** ke karantina, tetap lolos; `kota` kosong tidak dicek;
 - kegagalan tingkat skema (kolom hilang, tipe salah) → `SchemaErrors` dilempar,
   karena itu tanda kode atau bentuk data berubah, bukan baris yang buruk.
 
@@ -24,6 +26,7 @@ KOLOM_KARANTINA: dict[str, pl.DataType] = {
 }
 
 CEK_H = "cek_H_berat_dikali"
+CEK_I = "cek_I_kota_tidak_dikenal"
 
 
 def _lewati_null(syarat: pl.Expr) -> pl.Expr:
@@ -156,6 +159,10 @@ def pisahkan(
     if "berat_dikali" in df.columns:
         dikali = baris.filter(pl.col("berat_dikali").fill_null(False))
         alasan = pl.concat([alasan, dikali.select(_BARIS, pl.lit(CEK_H).alias("alasan"))])
+    if {"kota", "kabkota_kode"} <= set(df.columns):
+        terisi = pl.col("kota").str.strip_chars().str.len_chars().fill_null(0) > 0
+        asing = baris.filter(terisi & pl.col("kabkota_kode").is_null())
+        alasan = pl.concat([alasan, asing.select(_BARIS, pl.lit(CEK_I).alias("alasan"))])
 
     karantina = (
         alasan.group_by(_BARIS, maintain_order=True)

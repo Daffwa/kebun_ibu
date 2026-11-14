@@ -55,6 +55,21 @@ def default_pertama(df):
     return df.filter(pl.col("opsi_default"))["item_sku"][0]
 
 
+def test_cek_I_disalin_tetap_lolos(df_blibli):
+    # kota terisi tetapi tidak dikenal: disalin ke karantina, tetap dimuat; kota kosong: tidak dicek
+    from transform.model import bangun
+    bagus, _ = pisahkan(bangun(df_blibli, None).fakta_harga, SkemaFakta, "blibli")
+    f = bagus.head(3).with_columns(
+        kota=pl.Series(["Kota Antah", "Kota Surabaya", None], dtype=pl.Utf8),
+        kabkota_kode=pl.Series([None, "35.78", None], dtype=pl.Utf8),
+        provinsi_kode=pl.Series([None, "35", None], dtype=pl.Utf8))
+    lolos, karantina = pisahkan(f, SkemaFakta, "blibli")
+    assert lolos.height == 3
+    k = satu_karantina(karantina)
+    assert k["alasan"] == "cek_I_kota_tidak_dikenal"
+    assert json.loads(k["data"])["kota"] == "Kota Antah"
+
+
 # --- dasar ---------------------------------------------------------------
 
 def test_baris_bagus_lolos_semua(df_blibli, df_tokped):
