@@ -141,6 +141,18 @@ def test_toko_blibli(bintang, df_blibli):
     assert toko["jenis_toko"] == ("resmi" if baris["resmi"] else "biasa")
 
 
+def test_kota_per_baris_fakta(df_blibli):
+    # Blibli: lokasi milik produk (gudang pengirim), bukan toko. Ranch Market punya produk dari
+    # Surabaya dan Jakarta di hari yang sama (14 Nov), jadi kota disimpan per baris fakta.
+    sku = "NAS-70965-00407-00002"
+    df = df_blibli.with_columns(
+        lokasi=pl.when(pl.col("item_sku") == sku).then(pl.lit("Kota Surabaya"))
+        .otherwise(pl.lit("Kota Bekasi")))
+    f = bangun(df, None).fakta_harga
+    assert f.filter(pl.col("item_sku") == sku)["kota"].to_list() == ["Kota Surabaya"]
+    assert set(f.filter(pl.col("item_sku") != sku)["kota"]) == {"Kota Bekasi"}
+
+
 def test_harga_coret_dan_terjual_blibli(bintang, df_blibli):
     baris = df_blibli.filter(pl.col("item_sku") == "NAS-70965-00407-00002").row(0, named=True)
     f = fakta_item(bintang, "NAS-70965-00407-00002")

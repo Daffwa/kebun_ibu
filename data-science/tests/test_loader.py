@@ -6,7 +6,8 @@ import duckdb
 import polars as pl
 import pytest
 
-from load.duckdb_loader import BATAS_PETA_INDUK, TABEL, catat_run, muat, peta_induk, siapkan
+from load.duckdb_loader import (BATAS_PETA_INDUK, TABEL, _buat_tabel, catat_run, muat,
+                                 peta_induk, siapkan)
 from transform import blibli, tokopedia
 from transform.model import bangun
 from transform.skema import SkemaBlibli, SkemaTokopedia, pisahkan
@@ -226,6 +227,37 @@ def test_v_produk_satu_baris_per_fakta(con, mentah_blibli, mentah_tokped):
     assert {"nama", "jenis_buah", "asal", "nama_toko", "region", "hari"} <= set(v.columns)
     baris = v.filter(pl.col("item_sku") == SKU_LAIN).row(0, named=True)
     assert (baris["harga_per_kg"], baris["sumber"], baris["hari"]) == (84900, "blibli", "Minggu")
+
+
+def kota_v_produk(con, item_sku: str) -> list[tuple]:
+    return con.execute("SELECT tanggal, kota FROM v_produk WHERE item_sku = ? ORDER BY tanggal",
+                       [item_sku]).fetchall()
+
+
+def test_v_produk_kota_per_hari(con, mentah_blibli):
+    # kota tanggal lama tidak ikut berubah saat lokasi berubah di tanggal baru
+    muat_paket(con, paket(mentah_blibli.with_columns(lokasi=pl.lit("Kota Surabaya")), "blibli"))
+    muat_paket(con, paket(ganti_tanggal(mentah_blibli, BESOK)
+                          .with_columns(lokasi=pl.lit("Kota Bekasi")), "blibli"))
+    assert kota_v_produk(con, SKU_LAIN) == [(TANGGAL, "Kota Surabaya"), (BESOK, "Kota Bekasi")]
+
+
+def test_v_produk_kota_kosong_pakai_dim_toko(con, mentah_blibli):
+    # baris yang dimuat sebelum fakta punya kolom kota: pakai kota toko
+    muat_paket(con, paket(mentah_blibli.with_columns(lokasi=pl.lit("Kota Bekasi")), "blibli"))
+    con.execute("UPDATE fakta_harga SET kota = NULL")
+    assert kota_v_produk(con, SKU_LAIN) == [(TANGGAL, "Kota Bekasi")]
+
+
+def test_siapkan_menambah_kolom_baru_ke_gudang_lama(mentah_blibli):
+    # gudang sebelum 14 Nov: fakta_harga tanpa kolom kota (DROP COLUMN ditolak karena primary key)
+    lama = duckdb.connect(":memory:")
+    lama.execute(_buat_tabel("fakta_harga").replace("    kota VARCHAR,\n", ""))
+    assert "kota" not in [r[0] for r in lama.execute("DESCRIBE fakta_harga").fetchall()]
+    siapkan(lama)
+    muat_paket(lama, paket(mentah_blibli.with_columns(lokasi=pl.lit("Kota Malang")), "blibli"))
+    assert kota_v_produk(lama, SKU_LAIN) == [(TANGGAL, "Kota Malang")]
+    lama.close()
 
 
 def test_v_opsi_berubah(con, mentah_blibli):

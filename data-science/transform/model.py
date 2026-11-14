@@ -26,6 +26,9 @@ KOLOM_FAKTA: dict[str, pl.DataType] = {
     "tanggal": pl.Date,
     "produk_key": pl.Utf8,
     "toko_key": pl.Utf8,
+    # Kota per baris, bukan hanya di dim_toko: di Blibli lokasi milik produk (gudang pengirim),
+    # satu toko bisa punya produk dari beberapa kota di hari yang sama (14 Nov).
+    "kota": pl.Utf8,
     "sumber": pl.Utf8,
     "item_sku": pl.Utf8,
     "opsi_default": pl.Boolean,

@@ -46,15 +46,18 @@ data_lake/raw/                    ↓ Pandera ── gagal ───┼───
                           │
 dim_produk ──────── fakta_harga ──────── dim_tanggal
 produk_key, sumber,   tanggal, produk_key, toko_key,   tanggal, tahun,
-produk_id, nama,      item_sku, opsi_default, variant,  bulan, minggu, hari
-jenis_buah, asal,     harga, harga_coret, diskon_persen,
-asal_sumber, olahan   berat_gram, sumber_berat, jenis_satuan,
+produk_id, nama,      kota, item_sku, opsi_default,     bulan, minggu, hari
+jenis_buah, asal,     variant, harga, harga_coret,
+asal_sumber, olahan   diskon_persen, berat_gram, sumber_berat, jenis_satuan,
                       harga_per_kg, harga_per_buah, rating, terjual_min
 ```
 
 - **Grain `fakta_harga`**: satu **opsi** produk di satu marketplace pada satu
   tanggal. Untuk "satu harga per produk", filter `opsi_default = true`.
 - Kunci pengganti: `md5(sumber || '|' || id)`. Dimensi SCD tipe 1.
+- `kota` ada di `fakta_harga` (per hari) dan di `dim_toko` (terakhir). Di Blibli lokasi
+  milik produk, bukan toko: Ranch Market menjual dari Surabaya dan Jakarta di hari
+  yang sama. `v_produk.kota` diambil dari fakta. `region` masih dari kota terakhir toko.
 - `harga_per_kg` hanya terisi kalau berat diketahui; `harga_per_buah` hanya
   kalau jumlah buah diketahui.
 

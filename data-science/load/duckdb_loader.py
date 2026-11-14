@@ -86,11 +86,20 @@ def _kolom_deskriptif(nama: str) -> list[str]:
 
 
 def _view_produk() -> str:
-    pilih = ["f.*"]
+    """Fakta + kolom deskriptif dimensi. Kolom yang ada di fakta dan dimensi (kota) diambil dari
+    fakta; kalau kosong (baris dimuat sebelum 14 Nov), dari dimensi."""
+    fakta = _SKEMA["fakta_harga"][0]
+    pilih, ganda = [], []
     for alias, nama in (("p", "dim_produk"), ("t", "dim_toko"), ("d", "dim_tanggal")):
-        pilih += [f"{alias}.{k}" for k in _kolom_deskriptif(nama)]
+        for k in _kolom_deskriptif(nama):
+            if k in fakta:
+                ganda.append(k)
+                pilih.append(f"COALESCE(f.{k}, {alias}.{k}) AS {k}")
+            else:
+                pilih.append(f"{alias}.{k}")
+    semua_fakta = f"f.* EXCLUDE ({', '.join(ganda)})" if ganda else "f.*"
     return f"""CREATE OR REPLACE VIEW v_produk AS
-SELECT {', '.join(pilih)}
+SELECT {', '.join([semua_fakta, *pilih])}
 FROM fakta_harga f
 LEFT JOIN dim_produk p USING (produk_key)
 LEFT JOIN dim_toko t USING (toko_key)
@@ -114,10 +123,20 @@ LEFT JOIN dim_produk p USING (produk_key)
 WHERE u.item_sku_sebelumnya IS NOT NULL AND u.item_sku <> u.item_sku_sebelumnya"""
 
 
+def _tambah_kolom_baru(con: duckdb.DuckDBPyConnection, nama: str) -> None:
+    """Tabel dari gudang versi lama: kolom yang belum ada ditambahkan, isinya NULL sampai dimuat ulang."""
+    ada = {r[0] for r in con.execute(
+        "SELECT column_name FROM information_schema.columns WHERE table_name = ?", [nama]).fetchall()}
+    for k, t in _SKEMA[nama][0].items():
+        if k not in ada:
+            con.execute(f"ALTER TABLE {nama} ADD COLUMN {k} {_tipe_sql(t)}")
+
+
 def siapkan(con: duckdb.DuckDBPyConnection) -> None:
     """Buat semua tabel (kalau belum ada) dan view. Aman dipanggil berkali-kali."""
     for nama in TABEL:
         con.execute(_buat_tabel(nama))
+        _tambah_kolom_baru(con, nama)
     con.execute(_view_produk())
     con.execute(_VIEW_OPSI_BERUBAH)
 
