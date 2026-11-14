@@ -3,6 +3,11 @@ begin;
 create extension if not exists pgtap with schema extensions;
 select plan(14);
 
+-- Mulai dari tabel kosong: Supabase lokal bisa berisi data uji kirim_supabase.py.
+-- Dihapus di dalam transaksi ini saja (rollback di akhir).
+delete from public.pasar_manalagi;
+delete from public.pasar_manalagi_harian;
+
 insert into auth.users (id, email) values
   ('00000000-0000-0000-0000-0000000000a1', 'ibu@contoh.test'),
   ('00000000-0000-0000-0000-0000000000b2', 'orang@asing.test');
