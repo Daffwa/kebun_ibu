@@ -109,12 +109,13 @@ def data_tanggal(n: int, harga: int = 10_000):
     tanggal = [j(1) + timedelta(days=i) for i in range(n)]
     baris = pl.DataFrame({
         "tanggal": tanggal, "sumber": ["tokopedia"] * n, "produk_key": ["a"] * n,
-        "nama_toko": ["Toko"] * n, "kota": ["Jakarta"] * n, "harga_per_kg": [harga] * n,
+        "nama_toko": ["Toko"] * n, "kota": ["Jakarta"] * n,
+        "kabkota_kode": ["31.75"] * n, "provinsi_kode": ["31"] * n, "harga_per_kg": [harga] * n,
         "terjual_min": [None] * n, "median_jendela": [None] * n, "rasio_jendela": [None] * n,
         "lonjak_toko": [False] * n,
     }, schema_overrides={"terjual_min": pl.Int64, "median_jendela": pl.Float64, "rasio_jendela": pl.Float64})
     harian = pl.DataFrame({
-        "tanggal": tanggal, "pasar": ["semua"] * n, "jumlah_produk": [1] * n,
+        "tanggal": tanggal, "pasar": ["semua"] * n, "wilayah": ["semua"] * n, "jumlah_produk": [1] * n,
         "median": [float(harga)] * n, "indeks_berantai": [float(harga)] * n, "median_rasio": [None] * n,
         "lonjak_pasar": [False] * n, "naik": [0] * n, "turun": [0] * n,
     }, schema_overrides={"median_rasio": pl.Float64})
@@ -272,3 +273,52 @@ def test_baca_kunci_url_env_tanpa_kunci_env_ditolak(tmp_path):
 
     with pytest.raises(RuntimeError, match="SUPABASE_SERVICE_ROLE_KEY"):
         baca_kunci(env, {"NEXT_PUBLIC_SUPABASE_URL": "http://127.0.0.1:54321"})
+
+
+# ---------- filter wilayah ----------
+from kirim_supabase import kirim_daftar_wilayah  # noqa: E402
+
+
+def test_saklar_mati_hanya_semua(buat_gudang):
+    con = buat_gudang([{"tanggal": j(h), "produk_key": "a", "harga_per_kg": 10_000,
+                        "kabkota_kode": "35.78", "provinsi_kode": "35"} for h in (1, 2)])
+    hasil = hitung(con, MULAI_TES)
+    assert set(untuk_dikirim(*hasil, per_wilayah=False)[1]["wilayah"]) == {"semua"}
+    assert {"semua", "35", "35.78"} <= set(untuk_dikirim(*hasil, per_wilayah=True)[1]["wilayah"])
+
+
+def test_kolom_baru_terkirim(buat_gudang):
+    m = muatan([j(1)], data_dari(buat_gudang, datar("a", (1, 2))))
+    assert {"kabkota_kode", "provinsi_kode"} <= m["p_baris"][0].keys()
+    assert {h["wilayah"] for h in m["p_harian"]} == {"semua"}
+
+
+def test_pengirim_fungsi_lain():
+    panggilan = []
+
+    class Jawaban:
+        status_code, text = 204, ""
+
+    def post(url, **kw):
+        panggilan.append(url)
+        return Jawaban()
+
+    buat_pengirim("https://x.supabase.co", "k", post=post, fungsi="ganti_pasar_wilayah")({"p_baris": []})
+    assert panggilan == ["https://x.supabase.co/rest/v1/rpc/ganti_pasar_wilayah"]
+
+
+def test_kirim_daftar_wilayah():
+    daftar = pl.DataFrame({"wilayah": ["35", "35.78", "jabodetabek"], "pasar": ["semua"] * 3,
+                           "jumlah_toko": [2, 1, 5]})
+    kirim = PengirimPalsu()
+    assert kirim_daftar_wilayah(daftar, kirim) == 3
+    assert len(kirim.muatan) == 1 and len(kirim.muatan[0]["p_baris"]) == 3
+
+
+def test_salinan_kolom_lama_kirim_semua(tmp_path):
+    # salinan produksi sebelum filter wilayah: tanpa kabkota_kode/provinsi_kode/wilayah
+    baris, harian = data_tanggal(3)
+    baris.drop("kabkota_kode", "provinsi_kode").write_parquet(tmp_path / "pasar_manalagi.parquet")
+    harian.drop("wilayah").write_parquet(tmp_path / "pasar_manalagi_harian.parquet")
+    assert baca_terkirim(tmp_path) is None
+    assert jalankan(data_tanggal(3), tmp_path, PengirimPalsu()) == 3

@@ -28,7 +28,7 @@ import duckdb
 import polars as pl
 from curl_cffi import requests
 
-from dashboard_manalagi import hitung
+from dashboard_manalagi import daftar_wilayah, hitung
 
 DASAR = Path(__file__).resolve().parent
 GUDANG = DASAR / "warehouse" / "harga_buah.duckdb"
@@ -39,19 +39,31 @@ NAMA_URL, NAMA_KUNCI = "NEXT_PUBLIC_SUPABASE_URL", "SUPABASE_SERVICE_ROLE_KEY"
 
 log = logging.getLogger("kirim_supabase")
 
-# Kolom yang disetujui 13 Nov (spec "Tabel Supabase"); sisanya langkah antara, tetap di laptop.
-KOLOM_BARIS = ["tanggal", "sumber", "produk_key", "nama_toko", "kota", "harga_per_kg",
-               "terjual_min", "median_jendela", "rasio_jendela", "lonjak_toko"]
-KOLOM_HARIAN = ["tanggal", "pasar", "jumlah_produk", "median", "indeks_berantai",
+# Baris harian per wilayah (selain `semua`) dan daftar wilayah baru dikirim kalau True. Nyalakan
+# HANYA sesudah web membaca `.eq("wilayah", "semua")`, lalu jalankan `--semua` sekali
+# (docs/superpowers/specs/2026-11-14-filter-wilayah-design.md, "Urutan supaya tidak ada yang rusak").
+KIRIM_PER_WILAYAH = False
+
+# Kolom yang disetujui 13 Nov (spec "Tabel Supabase") + kode wilayah 14 Nov; sisanya langkah
+# antara, tetap di laptop. Kolom yang belum ada di Supabase diabaikan jsonb_populate_recordset.
+KOLOM_BARIS = ["tanggal", "sumber", "produk_key", "nama_toko", "kota", "kabkota_kode",
+               "provinsi_kode", "harga_per_kg", "terjual_min", "median_jendela", "rasio_jendela",
+               "lonjak_toko"]
+KOLOM_HARIAN = ["tanggal", "pasar", "wilayah", "jumlah_produk", "median", "indeks_berantai",
                 "median_rasio", "lonjak_pasar", "naik", "turun"]
-KUNCI = (["tanggal", "produk_key"], ["tanggal", "pasar"])   # primary key kedua tabel Supabase
+KUNCI = (["tanggal", "produk_key"], ["tanggal", "pasar", "wilayah"])   # primary key tabel Supabase
 BERKAS = ("pasar_manalagi.parquet", "pasar_manalagi_harian.parquet")
 
 Data = tuple[pl.DataFrame, pl.DataFrame]   # (baris, harian)
 
 
-def untuk_dikirim(baris: pl.DataFrame, harian: pl.DataFrame) -> Data:
-    """Hanya kolom yang dikirim, urut kunci; float dibulatkan 6 desimal supaya pembandingan stabil."""
+def untuk_dikirim(baris: pl.DataFrame, harian: pl.DataFrame, per_wilayah: bool | None = None) -> Data:
+    """Hanya kolom yang dikirim, urut kunci; float dibulatkan 6 desimal supaya pembandingan stabil.
+
+    `per_wilayah` None = ikut `KIRIM_PER_WILAYAH`; False = hanya baris harian `wilayah = 'semua'`.
+    """
+    if not (KIRIM_PER_WILAYAH if per_wilayah is None else per_wilayah):
+        harian = harian.filter(pl.col("wilayah") == "semua")
     return tuple(df.select(kolom).with_columns(pl.col(pl.Float64).round(6)).sort(kunci)
                  for df, kolom, kunci in zip((baris, harian), (KOLOM_BARIS, KOLOM_HARIAN), KUNCI))
 
@@ -99,7 +111,11 @@ def baca_terkirim(folder: Path) -> Data | None:
     jalur = [Path(folder) / b for b in BERKAS]
     if not all(p.exists() for p in jalur):
         return None
-    return pl.read_parquet(jalur[0]), pl.read_parquet(jalur[1])
+    salinan = pl.read_parquet(jalur[0]), pl.read_parquet(jalur[1])
+    if any(not set(kolom) <= set(df.columns) for df, kolom in zip(salinan, (KOLOM_BARIS, KOLOM_HARIAN))):
+        log.info("salinan terkirim berkolom lama: kirim semua")
+        return None
+    return salinan
 
 
 def simpan_terkirim(folder: Path, lama: Data | None, baru: Data, tanggal: list[date]) -> Data:
@@ -149,9 +165,10 @@ def baca_kunci(env: Path, lingkungan: Mapping[str, str] = os.environ) -> tuple[s
     return hasil[0], hasil[1]
 
 
-def buat_pengirim(url: str, kunci: str, post: Callable = requests.post) -> Callable[[dict], None]:
-    """Fungsi yang memanggil ganti_pasar_manalagi lewat PostgREST; status bukan 2xx → RuntimeError."""
-    alamat = f"{url.rstrip('/')}/rest/v1/rpc/ganti_pasar_manalagi"
+def buat_pengirim(url: str, kunci: str, post: Callable = requests.post,
+                  fungsi: str = "ganti_pasar_manalagi") -> Callable[[dict], None]:
+    """Fungsi yang memanggil fungsi Postgres `fungsi` lewat PostgREST; status bukan 2xx → RuntimeError."""
+    alamat = f"{url.rstrip('/')}/rest/v1/rpc/{fungsi}"
     kepala = {"apikey": kunci, "Authorization": f"Bearer {kunci}", "Content-Type": "application/json"}
 
     def kirim(isi: dict) -> None:
@@ -186,6 +203,12 @@ def jalankan(data: Data, folder: Path, kirim: Callable[[dict], None],
     return len(berubah)
 
 
+def kirim_daftar_wilayah(daftar: pl.DataFrame, kirim: Callable[[dict], None]) -> int:
+    """Ganti seluruh isi `pasar_wilayah` (fungsi ganti_pasar_wilayah); mengembalikan jumlah baris."""
+    kirim({"p_baris": daftar.to_dicts()})
+    return daftar.height
+
+
 def baca_argumen(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--semua", action="store_true", help="kirim ulang semua tanggal, abaikan salinan terkirim")
@@ -203,12 +226,17 @@ def main(argv: list[str] | None = None) -> int:
     )
     try:
         with duckdb.connect(str(GUDANG), read_only=True) as con:
-            data = untuk_dikirim(*hitung(con))
+            baris, harian = hitung(con)
+        data = untuk_dikirim(baris, harian)
         url, kunci = baca_kunci(ENV)
         tujuan = folder_terkirim(TERKIRIM, url)
         log.info("tujuan: %s", urlparse(url).netloc)   # host saja, kunci tidak pernah ditulis
         kirim = (lambda _: None) if arg.coba else buat_pengirim(url, kunci)
         jumlah = jalankan(data, tujuan, kirim, semua=arg.semua, coba=arg.coba)
+        if KIRIM_PER_WILAYAH and not arg.coba:
+            n = kirim_daftar_wilayah(daftar_wilayah(baris),
+                                     buat_pengirim(url, kunci, fungsi="ganti_pasar_wilayah"))
+            log.info("daftar wilayah: %d baris", n)
     except Exception:
         log.exception("gagal mengirim ke Supabase")
         return 1
