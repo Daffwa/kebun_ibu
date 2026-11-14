@@ -90,7 +90,9 @@ def sintetis() -> pd.DataFrame:
 def asli() -> pd.DataFrame:
     with duckdb.connect(str(FOLDER / "warehouse" / "harga_buah.duckdb"), read_only=True) as con:
         _, harian = hitung(con)
+    # fixture web memakai deret tanpa wilayah (filter wilayah diuji terpisah)
     harian = harian.to_pandas()
+    harian = harian[harian["wilayah"] == "semua"].drop(columns="wilayah")
     harian["tanggal"] = pd.to_datetime(harian["tanggal"])
     return harian
 

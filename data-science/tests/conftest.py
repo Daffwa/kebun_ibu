@@ -9,11 +9,13 @@ _KOLOM_V_PRODUK = {
     "nama_toko": "VARCHAR", "kota": "VARCHAR", "harga": "BIGINT", "berat_gram": "BIGINT",
     "harga_per_kg": "BIGINT", "terjual_min": "BIGINT", "jenis_buah": "VARCHAR",
     "opsi_default": "BOOLEAN", "olahan": "BOOLEAN",
+    "kabkota_kode": "VARCHAR", "provinsi_kode": "VARCHAR",
 }
 _BAWAAN = {
     "sumber": "tokopedia", "nama": "Mangga Manalagi 1 kg", "nama_toko": "Toko", "kota": "Jakarta",
     "harga": None, "berat_gram": 1000, "terjual_min": None, "jenis_buah": "mangga",
     "opsi_default": True, "olahan": False,
+    "kabkota_kode": None, "provinsi_kode": None,
 }
 MULAI_TES = {"blibli": date(2026, 1, 1), "tokopedia": date(2026, 1, 1)}
 
