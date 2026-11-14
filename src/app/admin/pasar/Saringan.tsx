@@ -11,6 +11,8 @@ import {
   type Preset,
   type Rentang,
 } from "@/lib/pasar";
+import type { Wilayah } from "@/lib/wilayah";
+import KotakWilayah from "./KotakWilayah";
 
 const PASAR: Pasar[] = ["semua", "tokopedia", "blibli"];
 const PRESET: Preset[] = ["30h", "1t", "5t"];
@@ -18,8 +20,9 @@ const PRESET: Preset[] = ["30h", "1t", "5t"];
 const KOTAK =
   "min-h-11 w-full appearance-none rounded-full border-2 border-daun-tua bg-putih pr-8 pl-3 text-base font-semibold text-daun-tua";
 
-function alamat(q: { pasar: Pasar; rentang: Rentang; dari?: string; sampai?: string }): string {
+function alamat(q: { pasar: Pasar; rentang: Rentang; wilayah: string; dari?: string; sampai?: string }): string {
   const p = new URLSearchParams({ pasar: q.pasar, rentang: q.rentang });
+  if (q.wilayah !== "semua") p.set("wilayah", q.wilayah);
   if (q.rentang === "kustom" && q.dari && q.sampai) {
     p.set("dari", q.dari);
     p.set("sampai", q.sampai);
@@ -41,7 +44,7 @@ function Pilihan({ label, children, ...props }: React.SelectHTMLAttributes<HTMLS
 }
 
 /**
- * Saringan di atas semua grafik: dua menu pilihan. Preset yang terkunci tampil abu-abu di dalam
+ * Saringan di atas semua grafik: dua menu pilihan dan kotak cari wilayah. Preset yang terkunci tampil abu-abu di dalam
  * menu; satu baris pendek di bawahnya menyebut kapan preset berikutnya terbuka. Tanggal Dari–Sampai
  * hanya muncul kalau "Kustom…" dipilih. Halaman memberi `key` dari rentang yang tampil, jadi
  * keadaan di sini (dan isi tanggal) selalu ikut halaman sesudah berpindah.
@@ -53,9 +56,13 @@ export default function Saringan({
   akhir,
   batas,
   status,
+  wilayah,
+  daftarWilayah,
 }: {
   pasar: Pasar;
   rentang: Rentang;
+  wilayah: Wilayah | null;
+  daftarWilayah: Wilayah[];
   mulai?: string;
   akhir?: string;
   batas: { awal: string; akhir: string } | null;
@@ -65,15 +72,16 @@ export default function Saringan({
   const [memuat, mulaiTransisi] = useTransition();
   const [kustom, setKustom] = useState(rentang === "kustom");
   const pergi = (url: string) => mulaiTransisi(() => router.push(url));
+  const kodeWilayah = wilayah?.wilayah ?? "semua";
   const terkunciBerikut = status ? PRESET.find((p) => !status[p].terbuka) : undefined;
 
   return (
     <div className={`mb-5 space-y-2 transition-opacity ${memuat ? "opacity-60" : ""}`}>
-      <div className="grid max-w-md grid-cols-2 gap-2">
+      <div className="grid max-w-2xl grid-cols-2 gap-2 sm:grid-cols-3">
         <Pilihan
           label="Marketplace"
           value={pasar}
-          onChange={(e) => pergi(alamat({ pasar: e.target.value as Pasar, rentang, dari: mulai, sampai: akhir }))}
+          onChange={(e) => pergi(alamat({ pasar: e.target.value as Pasar, rentang, wilayah: kodeWilayah, dari: mulai, sampai: akhir }))}
         >
           {PASAR.map((p) => (
             <option key={p} value={p}>
@@ -90,7 +98,7 @@ export default function Saringan({
               const r = e.target.value as Rentang;
               if (r === "kustom") return setKustom(true);
               setKustom(false);
-              pergi(alamat({ pasar, rentang: r }));
+              pergi(alamat({ pasar, rentang: r, wilayah: kodeWilayah }));
             }}
           >
             {PRESET.map((p) => (
@@ -102,6 +110,17 @@ export default function Saringan({
             <option value="semua">Semua waktu</option>
             <option value="kustom">{kustom ? "Kustom" : "Kustom…"}</option>
           </Pilihan>
+        )}
+
+        {daftarWilayah.length > 0 && (
+          <div className="col-span-2 sm:col-span-1">
+            <KotakWilayah
+              daftar={daftarWilayah}
+              terpilih={wilayah}
+              kelas={KOTAK.replace("pr-8", "pr-11")}
+              onPilih={(w) => pergi(alamat({ pasar, rentang, wilayah: w, dari: mulai, sampai: akhir }))}
+            />
+          </div>
         )}
       </div>
 
@@ -115,6 +134,7 @@ export default function Saringan({
         <form method="get" action="/admin/pasar" className="flex flex-wrap items-end gap-2 pt-1">
           <input type="hidden" name="pasar" value={pasar} />
           <input type="hidden" name="rentang" value="kustom" />
+          {wilayah && <input type="hidden" name="wilayah" value={wilayah.wilayah} />}
           {(
             [
               ["dari", "Dari", mulai ?? batas.awal],

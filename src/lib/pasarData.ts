@@ -7,8 +7,11 @@
  */
 import type { supabaseServer } from "./supabase/server";
 import type { HarianBaris, Pasar, Produk } from "./pasar";
+import type { Wilayah, saringanProduk } from "./wilayah";
 
 type SupabaseClient = Awaited<ReturnType<typeof supabaseServer>>;
+/** Hasil `saringanProduk`; null/tidak diisi = semua wilayah. */
+type SaringanProduk = ReturnType<typeof saringanProduk>;
 
 export const UKURAN_HALAMAN = 1000;
 
@@ -44,6 +47,7 @@ export type Lonjakan = {
 
 const KOLOM_HARIAN = "tanggal, pasar, jumlah_produk, median, indeks_berantai, median_rasio, lonjak_pasar, naik, turun";
 const KOLOM_PRODUK = "tanggal, produk_key, sumber, nama_toko, harga_per_kg, terjual_min";
+const KOLOM_WILAYAH = "wilayah, nama, tingkat, provinsi_kode, kata_kunci, jumlah_toko";
 const KOLOM_LONJAKAN = "tanggal, nama_toko, sumber, kota, median_jendela, harga_per_kg, rasio_jendela";
 
 function periksa<T>({ data, error }: { data: unknown; error: { message: string } | null }): T {
@@ -97,11 +101,31 @@ export async function ambilHarian(
   );
 }
 
+/** Daftar wilayah kotak cari untuk pasar ini (±200 baris, tetap dibaca per halaman). */
+export async function ambilDaftarWilayah(sb: SupabaseClient, pasar: Pasar): Promise<Wilayah[]> {
+  return ambilSemua<Wilayah>((dari, sampai) =>
+    sb
+      .from("pasar_wilayah")
+      .select(KOLOM_WILAYAH)
+      .eq("pasar", pasar)
+      .order("wilayah")
+      .range(dari, sampai)
+      .overrideTypes<Wilayah[], { merge: false }>(),
+  );
+}
+
 /** Semua baris produk dalam rentang (grafik 1 dan 2; diringkas dengan `ringkasProduk`). */
-export async function ambilProdukRentang(sb: SupabaseClient, pasar: Pasar, mulai: string, akhir: string): Promise<Produk[]> {
+export async function ambilProdukRentang(
+  sb: SupabaseClient,
+  pasar: Pasar,
+  mulai: string,
+  akhir: string,
+  wilayah?: SaringanProduk,
+): Promise<Produk[]> {
   return ambilSemua<Produk>((dari, sampai) => {
     let q = sb.from("pasar_manalagi").select(KOLOM_PRODUK).gte("tanggal", mulai).lte("tanggal", akhir);
     if (pasar !== "semua") q = q.eq("sumber", pasar);
+    if (wilayah) q = q.in(wilayah.kolom, wilayah.kode);
     return q.order("tanggal").order("produk_key").range(dari, sampai).overrideTypes<Produk[], { merge: false }>();
   });
 }
@@ -112,6 +136,7 @@ export async function ambilLonjakan(
   pasar: Pasar,
   mulai: string,
   akhir: string,
+  wilayah?: SaringanProduk,
 ): Promise<{ daftar: Lonjakan[]; jumlah: number }> {
   let q = sb
     .from("pasar_manalagi")
@@ -120,6 +145,7 @@ export async function ambilLonjakan(
     .gte("tanggal", mulai)
     .lte("tanggal", akhir);
   if (pasar !== "semua") q = q.eq("sumber", pasar);
+  if (wilayah) q = q.in(wilayah.kolom, wilayah.kode);
   const hasil = await q.order("tanggal", { ascending: false }).order("produk_key").limit(20);
   const daftar = periksa<Lonjakan[]>(hasil);
   return { daftar, jumlah: hasil.count ?? daftar.length };

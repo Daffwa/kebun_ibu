@@ -125,6 +125,17 @@ Satu migrasi baru (dijalankan di dashboard supabase.com, bukan Studio lokal):
     `kabkota_kode in (anggota)`.
 - Kunci rentang dan baris cakupan dihitung dari deret wilayah terpilih.
 
+**Dibangun 14 Nov** (`src/lib/wilayah.ts`, `src/app/admin/pasar/KotakWilayah.tsx`). Keputusan saya:
+
+- Anggota kelompok tidak ada di Supabase, jadi web menyalin `KELOMPOK` dari `transform/wilayah.py`.
+  Uji `wilayah.test.ts` membaca berkas Python itu dan gagal kalau keduanya berbeda. Kelompok baru
+  yang belum disalin = halaman galat, bukan grafik diam-diam kosong.
+- Saringan `pasar_manalagi` selalu `.in(kolom, kode)`, juga untuk satu kode.
+- Wilayah sah = ada di `pasar_wilayah` untuk pasar terpilih. Ganti ke pasar yang tidak punya wilayah
+  itu: halaman jatuh ke Semua wilayah (URL tetap membawa `wilayah`).
+- Tata letak: HP = kotak cari selebar baris di bawah dua menu; layar lebar = tiga sejajar. Tingkat
+  kab/kota ditulis "kab/kota".
+
 ## Urutan supaya tidak ada yang rusak
 
 1. **Migrasi** di produksi. Baris harian yang sudah ada otomatis `wilayah = 'semua'`, jadi web yang

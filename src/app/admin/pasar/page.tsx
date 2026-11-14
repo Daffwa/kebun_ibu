@@ -15,7 +15,8 @@ import {
   statusPreset,
   tanggalPanjang,
 } from "@/lib/pasar";
-import { ambilBatas, ambilHarian, ambilLonjakan, ambilProdukRentang } from "@/lib/pasarData";
+import { ambilBatas, ambilDaftarWilayah, ambilHarian, ambilLonjakan, ambilProdukRentang } from "@/lib/pasarData";
+import { pilihWilayah, saringanProduk } from "@/lib/wilayah";
 import { rupiah } from "@/lib/format";
 import AngkaUtama from "./AngkaUtama";
 import GrafikHistogram from "./GrafikHistogram";
@@ -52,9 +53,17 @@ export default async function Pasar({
 }: {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
-  const filter = bacaFilter(await searchParams);
+  const sp = await searchParams;
+  const filter = bacaFilter(sp);
   const sb = await supabaseServer();
-  const batas = await ambilBatas(sb, filter.pasar);
+  // Wilayah dari URL hanya sah kalau ada di daftar pasar ini; lainnya = semua wilayah.
+  const daftarWilayah = await ambilDaftarWilayah(sb, filter.pasar);
+  const wilayah = pilihWilayah(sp.wilayah, daftarWilayah);
+  const kodeWilayah = wilayah?.wilayah ?? "semua";
+  const saringWilayah = saringanProduk(wilayah);
+  const namaData = `${NAMA_PASAR[filter.pasar]}${wilayah ? ` di ${wilayah.nama}` : ""}`;
+  const batas = await ambilBatas(sb, filter.pasar, kodeWilayah);
+  const saringan = { pasar: filter.pasar, wilayah, daftarWilayah };
 
   const kepala = (
     <div className="mb-5">
@@ -67,8 +76,8 @@ export default async function Pasar({
     return (
       <>
         {kepala}
-        <Saringan pasar={filter.pasar} rentang={filter.rentang} batas={null} status={null} />
-        <Kosong judul={`Belum ada data harga Manalagi untuk ${NAMA_PASAR[filter.pasar]}.`} isi="Data dikirim laptop setiap hari sesudah penarikan harga." />
+        <Saringan {...saringan} rentang={filter.rentang} batas={null} status={null} />
+        <Kosong judul={`Belum ada data harga Manalagi untuk ${namaData}.`} isi="Data dikirim laptop setiap hari sesudah penarikan harga." />
       </>
     );
   }
@@ -80,13 +89,13 @@ export default async function Pasar({
     return (
       <>
         {kepala}
-        <Saringan pasar={filter.pasar} rentang="kustom" batas={batas} status={status} />
+        <Saringan {...saringan} rentang="kustom" batas={batas} status={status} />
         {pilih.kosong === "terbalik" ? (
           <Kosong judul="Rentang kosong." isi="Tanggal Dari sesudah tanggal Sampai. Pilih ulang tanggalnya." />
         ) : (
           <Kosong
-            judul={`Tidak ada data ${NAMA_PASAR[filter.pasar]} di rentang ini.`}
-            isi={`Data ${NAMA_PASAR[filter.pasar]} ada dari ${tanggalPanjang(batas.awal)} sampai ${tanggalPanjang(batas.akhir)}.`}
+            judul={`Tidak ada data ${namaData} di rentang ini.`}
+            isi={`Data ${namaData} ada dari ${tanggalPanjang(batas.awal)} sampai ${tanggalPanjang(batas.akhir)}.`}
           />
         )}
       </>
@@ -94,12 +103,12 @@ export default async function Pasar({
   }
 
   const { mulai, akhir } = pilih;
-  const harian = await ambilHarian(sb, filter.pasar, mulai, akhir);
+  const harian = await ambilHarian(sb, filter.pasar, mulai, akhir, kodeWilayah);
   const { titik, satuan } = deret(harian, mulai, akhir);
   // Grafik 1 dan 2: seluruh rentang, setiap produk sekali (median harganya di rentang).
   const [barisProduk, lonjakan] = await Promise.all([
-    ambilProdukRentang(sb, filter.pasar, mulai, akhir),
-    ambilLonjakan(sb, filter.pasar, mulai, akhir),
+    ambilProdukRentang(sb, filter.pasar, mulai, akhir, saringWilayah),
+    ambilLonjakan(sb, filter.pasar, mulai, akhir, saringWilayah),
   ]);
   const produk = ringkasProduk(barisProduk);
 
@@ -112,8 +121,8 @@ export default async function Pasar({
     <>
       {kepala}
       <Saringan
-        key={`${filter.pasar}-${pilih.rentang}-${mulai}-${akhir}`}
-        pasar={filter.pasar}
+        key={`${filter.pasar}-${kodeWilayah}-${pilih.rentang}-${mulai}-${akhir}`}
+        {...saringan}
         rentang={pilih.rentang}
         mulai={mulai}
         akhir={akhir}

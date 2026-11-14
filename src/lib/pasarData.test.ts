@@ -1,5 +1,5 @@
 import { expect, test } from "vitest";
-import { ambilBatas, ambilHarian, ambilSemua } from "./pasarData";
+import { ambilBatas, ambilDaftarWilayah, ambilHarian, ambilLonjakan, ambilProdukRentang, ambilSemua } from "./pasarData";
 
 /** Tabel palsu berisi `total` angka 0..total-1; `gagalDi` = nomor panggilan (mulai 0) yang galat. */
 const palsu = (total: number, gagalDi = -1, batasServer = Infinity) => {
@@ -80,4 +80,37 @@ test("bacaan harian memakai wilayah terpilih", async () => {
   await ambilBatas(sb, "blibli", "35");
   await ambilHarian(sb, "blibli", "2026-11-07", "2026-11-14", "35");
   for (const q of catatan) expect(eqWilayah(q)).toEqual(["35"]);
+});
+
+const panggil = (q: { panggilan: [string, unknown[]][] }, nama: string) =>
+  q.panggilan.filter(([n]) => n === nama).map(([, a]) => a);
+
+test("bacaan produk dan lonjakan tanpa wilayah: tanpa saringan kode", async () => {
+  const { sb, catatan } = klienPalsu();
+  await ambilProdukRentang(sb, "semua", "2026-11-07", "2026-11-14");
+  await ambilLonjakan(sb, "semua", "2026-11-07", "2026-11-14");
+  for (const q of catatan) {
+    expect(panggil(q, "in")).toEqual([]);
+    expect(panggil(q, "eq").filter((a) => String(a[0]).endsWith("_kode"))).toEqual([]);
+  }
+});
+
+test("bacaan produk dan lonjakan ikut wilayah: provinsi_kode atau kabkota_kode in kode", async () => {
+  const { sb, catatan } = klienPalsu();
+  const prov = { kolom: "provinsi_kode" as const, kode: ["35"] };
+  const kel = { kolom: "kabkota_kode" as const, kode: ["31.71", "32.76"] };
+  await ambilProdukRentang(sb, "blibli", "2026-11-07", "2026-11-14", prov);
+  await ambilLonjakan(sb, "blibli", "2026-11-07", "2026-11-14", prov);
+  await ambilProdukRentang(sb, "semua", "2026-11-07", "2026-11-14", kel);
+  await ambilLonjakan(sb, "semua", "2026-11-07", "2026-11-14", kel);
+  expect(catatan.map((q) => q.tabel)).toEqual(Array(4).fill("pasar_manalagi"));
+  for (const q of catatan.slice(0, 2)) expect(panggil(q, "in")).toEqual([["provinsi_kode", ["35"]]]);
+  for (const q of catatan.slice(2)) expect(panggil(q, "in")).toEqual([["kabkota_kode", ["31.71", "32.76"]]]);
+});
+
+test("ambilDaftarWilayah: pasar_wilayah untuk pasar terpilih", async () => {
+  const { sb, catatan } = klienPalsu();
+  await ambilDaftarWilayah(sb, "tokopedia");
+  expect(catatan[0].tabel).toBe("pasar_wilayah");
+  expect(panggil(catatan[0], "eq")).toEqual([["pasar", "tokopedia"]]);
 });
