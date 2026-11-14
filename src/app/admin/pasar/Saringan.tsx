@@ -1,5 +1,6 @@
 "use client";
 
+import Form from "next/form";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import {
@@ -144,7 +145,8 @@ export default function Saringan({
       )}
 
       {batas && kustom && (
-        <form method="get" action="/admin/pasar" className="flex flex-wrap items-end gap-2 pt-1">
+        // next/form: navigasi di sisi klien (bukan muat ulang dokumen); form tabel tidak melompat ke atas.
+        <Form action="/admin/pasar" scroll={awalan === ""} prefetch={false} className="flex flex-wrap items-end gap-2 pt-1">
           <input type="hidden" name={`${awalan}pasar`} value={pasar} />
           <input type="hidden" name={`${awalan}rentang`} value="kustom" />
           {wilayah && <input type="hidden" name={`${awalan}wilayah`} value={wilayah.wilayah} />}
@@ -172,7 +174,7 @@ export default function Saringan({
           <button className="inline-flex min-h-11 items-center rounded-full bg-daun-tua px-5 font-semibold text-putih">
             Terapkan
           </button>
-        </form>
+        </Form>
       )}
     </div>
   );
