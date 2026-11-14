@@ -170,14 +170,20 @@ Kunci: (`tanggal`, `pasar`).
 Tetap di laptop (hanya langkah antara): `harga_sebelumnya`, `faktor`, `jumlah_jendela`,
 `faktor_median`, `dinilai`, `rata_rata`, `tertimbang`.
 
+### Cara mengirim (diputuskan 13 Nov)
+
+Indeks berantai dan jendela 7 hari bergantung pada hari-hari sebelumnya, jadi tanggal yang dimuat
+terlambat (misalnya 11 Nov lewat cadangan VPS) mengubah baris sesudahnya. Keputusan pengguna:
+**kirim tanggal yang berubah saja**. `kirim_supabase.py` membandingkan hasil hitungan dengan
+salinan lokal yang terakhir terkirim (`warehouse/terkirim/<host>/`) dan mengganti tanggal yang berbeda
+lewat fungsi `ganti_pasar_manalagi` (satu transaksi per kelompok ≤ 31 tanggal). Salinan hilang =
+semua tanggal dikirim sekali. Tabel Supabase dikosongkan = jalankan `kirim_supabase.py --semua`.
+Rencana: `docs/superpowers/plans/2026-11-13-kirim-supabase-manalagi.md`.
+
 ## Belum diputuskan
 
 1. **Harga Ibuk**: sekarang angka contoh `HARGA_IBUK = 30_000`. Perlu harga asli, dan untuk
    bertahun-tahun perlu **riwayat** harganya (mungkin sudah ada di database website).
-2. **Cara mengirim ulang**: indeks berantai dan jendela 7 hari bergantung pada hari-hari
-   sebelumnya, jadi tanggal yang dimuat terlambat (misalnya 11 Nov lewat cadangan VPS)
-   mengubah baris sesudahnya. Pilihan untuk rencana: kirim ulang N hari terakhir setiap hari,
-   atau kirim ulang semua (Manalagi kecil).
-3. **Tren wilayah**: ditunda (lihat tabel "Tidak dipakai").
-4. **Penjualan Blibli per minggu/bulan**: bisa dari selisih `blibli_produk.total_terjual`,
+2. **Tren wilayah**: ditunda (lihat tabel "Tidak dipakai").
+3. **Penjualan Blibli per minggu/bulan**: bisa dari selisih `blibli_produk.total_terjual`,
    layak dilihat lagi setelah ±3 bulan data.

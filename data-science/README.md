@@ -92,6 +92,10 @@ python run.py                             # extract + transform + load, kedua su
 python run.py --tahap transform,load --tanggal 2026-11-08   # proses ulang tanpa menarik
 python run.py --sumber tokopedia
 python evaluasi_asal.py --tanggal 2026-11-08                 # nilai aturan asal (lihat di bawah)
+python kirim_supabase.py                  # kirim data dashboard Manalagi yang berubah ke Supabase
+                                          # (Task Scheduler: langkah ke-4, sesudah run.py)
+python kirim_supabase.py --coba           # hanya tampilkan tanggal yang akan dikirim
+python kirim_supabase.py --semua          # kirim ulang semua (kalau tabel Supabase dikosongkan)
 
 .venv\Scripts\python -m pytest -q         # semua tes, tanpa internet
 ```
@@ -106,6 +110,17 @@ tidak menghentikan sumber lain.
 Tempat meninjau setiap langkah: `transform/transform.ipynb` (kode fungsi +
 hasilnya pada data asli).
 
+### Kirim ke Supabase (dashboard Mangga Manalagi)
+
+`kirim_supabase.py` menghitung data dashboard dengan `dashboard_manalagi.py` (SQL yang sama
+dengan `dashboard_contoh.ipynb`), lalu mengirim **hanya tanggal yang berubah** ke tabel
+`pasar_manalagi` dan `pasar_manalagi_harian`. Pembandingnya salinan lokal yang terakhir
+terkirim di `warehouse/terkirim/<host Supabase>/` (terpisah untuk Supabase lokal dan produksi);
+tanpa salinan itu semua tanggal dikirim. Tanggal yang dimuat
+terlambat ikut mengubah tanggal sesudahnya (indeks berantai, jendela 7 hari), jadi tanggal itu
+juga terkirim. Kunci diambil dari `../.env.local` (Supabase **produksi**); untuk Supabase lokal
+isi env var `NEXT_PUBLIC_SUPABASE_URL` dan `SUPABASE_SERVICE_ROLE_KEY`. Log: `logs/kirim_supabase.log`.
+
 ## Susunan folder
 
 | Folder / berkas | Isi |
@@ -114,6 +129,8 @@ hasilnya pada data asli).
 | `transform/` | JSON mentah → lapisan 1, parser bersama, skema Pandera, star schema |
 | `load/duckdb_loader.py` | tabel, view, dan muat idempoten |
 | `run.py` | merangkai extract → transform → load |
+| `dashboard_manalagi.py` | SQL hitungan dashboard Manalagi (satu salinan) |
+| `kirim_supabase.py` | kirim tanggal yang berubah ke Supabase |
 | `evaluasi_asal.py` | ketepatan aturan asal lokal/impor |
 | `tests/` | pytest; `tests/fixtures/` berisi JSON asli kecil |
 | `data_lake/`, `warehouse/`, `logs/` | data lokal, **tidak masuk git** |
