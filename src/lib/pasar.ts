@@ -105,14 +105,17 @@ const min = (a: string, b: string) => (a < b ? a : b);
 
 // ---------------------------------------------------------------- saringan dan rentang
 
-export function bacaFilter(sp: Record<string, string | string[] | undefined>): Filter {
-  const pasar = sp.pasar;
-  const rentang = sp.rentang;
+/** Saringan dari URL. `awalan` "t_" membaca kelompok tabel lonjakan (`t_pasar`, `t_rentang`, ...). */
+export function bacaFilter(sp: Record<string, string | string[] | undefined>, awalan: "" | "t_" = ""): Filter {
+  const pasar = sp[`${awalan}pasar`];
+  const rentang = sp[`${awalan}rentang`];
+  const dari = sp[`${awalan}dari`];
+  const sampai = sp[`${awalan}sampai`];
   return {
     pasar: pasar === "blibli" || pasar === "tokopedia" ? pasar : "semua",
     rentang: typeof rentang === "string" && rentang in NAMA_RENTANG ? (rentang as Rentang) : "semua",
-    dari: tanggalSah(sp.dari) ? sp.dari : null,
-    sampai: tanggalSah(sp.sampai) ? sp.sampai : null,
+    dari: tanggalSah(dari) ? dari : null,
+    sampai: tanggalSah(sampai) ? sampai : null,
   };
 }
 
