@@ -361,3 +361,18 @@ export function rupiahRingkas(v: number): string {
   if (Math.abs(v) >= 1_000) return `${satu(v / 1_000)} rb`;
   return String(v);
 }
+
+/** Hari data terakhir paling awal yang membuka preset `p` (data mulai `awal`). */
+export function tanggalTerbuka(awal: string, p: Preset): string {
+  return tambahHari(geserPreset(awal, p, 1), -1);
+}
+
+/** "7 – 14 Nov 2026", "7 Nov – 3 Des 2026", "7 Nov 2026 – 2 Jan 2027". */
+export function rentangTeks(mulai: string, akhir: string): string {
+  if (mulai === akhir) return tanggalPanjang(mulai);
+  const [y1, m1, d1] = urai(mulai);
+  const [y2, m2] = urai(akhir);
+  if (y1 !== y2) return `${tanggalPanjang(mulai)} – ${tanggalPanjang(akhir)}`;
+  if (m1 !== m2) return `${d1} ${BULAN[m1 - 1]} – ${tanggalPanjang(akhir)}`;
+  return `${d1} – ${tanggalPanjang(akhir)}`;
+}

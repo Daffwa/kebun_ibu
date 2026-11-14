@@ -8,6 +8,7 @@ import {
   geserIndeks,
   histogram,
   pilihRentang,
+  rentangTeks,
   ringkasTren,
   rupiahRingkas,
   selisihHari,
@@ -109,11 +110,18 @@ export default async function Pasar({
   return (
     <>
       {kepala}
-      <Saringan pasar={filter.pasar} rentang={pilih.rentang} mulai={mulai} akhir={akhir} batas={batas} status={status} />
+      <Saringan
+        key={`${filter.pasar}-${pilih.rentang}-${mulai}-${akhir}`}
+        pasar={filter.pasar}
+        rentang={pilih.rentang}
+        mulai={mulai}
+        akhir={akhir}
+        batas={batas}
+        status={status}
+      />
 
       <p className="mb-4 text-sm text-daun">
-        {NAMA_PASAR[filter.pasar]} · {tanggalPanjang(mulai)} – {tanggalPanjang(akhir)} · {selisihHari(mulai, akhir) + 1} hari,{" "}
-        {harian.length} berdata · satu titik = 1 {satuan}
+        {rentangTeks(mulai, akhir)} · {selisihHari(mulai, akhir) + 1} hari, {harian.length} berdata · titik per {satuan}
       </p>
 
       {hariPotret && hist ? (

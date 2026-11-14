@@ -50,13 +50,18 @@ const persen = (v: number) => `${v > 0 ? "+" : ""}${v.toLocaleString("id-ID", { 
  * Kedua grafik berbagi sumbu x dan tooltip (`syncId`).
  */
 export default function GrafikLonjakan({ titik, satuan }: { titik: Titik[]; satuan: Satuan }) {
-  const data = titik.map((t) => ({
-    tanggal: t.tanggal,
-    ubah: t.median_rasio === null ? null : (t.median_rasio - 1) * 100,
-    lonjak: t.lonjak_pasar === 1,
-    naik: t.naik,
-    turun: t.turun === null ? null : -t.turun,
-  }));
+  const data = titik.map((t) => {
+    const ubah = t.median_rasio === null ? null : (t.median_rasio - 1) * 100;
+    const lonjak = t.lonjak_pasar === 1;
+    return {
+      tanggal: t.tanggal,
+      ubah,
+      lonjak,
+      labelLonjak: lonjak && ubah !== null ? `Lonjakan ${persen(ubah)}` : null,
+      naik: t.naik,
+      turun: t.turun === null ? null : -t.turun,
+    };
+  });
   type Baris = (typeof data)[number];
 
   const ambang = AMBANG_PASAR * 100;
@@ -122,12 +127,15 @@ export default function GrafikLonjakan({ titik, satuan }: { titik: Titik[]; satu
           connectNulls={false}
           isAnimationActive={false}
         >
+          {/* Teks label ada di datanya sendiri (`labelLonjak`), bukan dicari lewat `index`: saat
+              berpindah halaman Recharts sempat memberi indeks dari data lama (8 titik → 7) dan
+              `data[index]` menjadi undefined. */}
           <LabelList
-            dataKey="ubah"
-            content={({ x, y, index, value }) =>
-              index !== undefined && data[index].lonjak && typeof value === "number" ? (
+            dataKey="labelLonjak"
+            content={({ x, y, value }) =>
+              typeof value === "string" ? (
                 <text x={Number(x)} y={Number(y) - 10} textAnchor="middle" fontSize={13} fontWeight={700} fill={WARNA.tinta}>
-                  Lonjakan {persen(value)}
+                  {value}
                 </text>
               ) : null
             }

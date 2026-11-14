@@ -12,6 +12,8 @@ import {
   deret,
   pilihRentang,
   rentangPreset,
+  rentangTeks,
+  tanggalTerbuka,
   rupiahRingkas,
   selisihHari,
   statusPreset,
@@ -157,4 +159,19 @@ test("pilihRentang: kustom di luar data pasar ini = 'diluar', bukan 'terbalik'",
   expect(pilihRentang(f, "2026-11-08", "2026-11-14")).toEqual({ rentang: "kustom", kosong: "diluar" });
   expect(pilihRentang({ ...f, dari: "2027-01-01", sampai: "2027-02-01" }, "2026-11-08", "2026-11-14"))
     .toEqual({ rentang: "kustom", kosong: "diluar" });
+});
+
+test("tanggalTerbuka: hari data terakhir yang membuka preset", () => {
+  expect(tanggalTerbuka("2026-11-07", "30h")).toBe("2026-12-06");     // 30 hari data: 7 Nov s/d 6 Des
+  expect(tanggalTerbuka("2026-11-07", "1t")).toBe("2027-11-06");
+  // cocok dengan statusPreset: sehari sebelumnya terkunci, pada harinya terbuka
+  expect(statusPreset("2026-11-07", "2026-12-05")["30h"].terbuka).toBe(false);
+  expect(statusPreset("2026-11-07", "2026-12-06")["30h"].terbuka).toBe(true);
+});
+
+test("rentangTeks: bulan/tahun yang sama tidak diulang", () => {
+  expect(rentangTeks("2026-11-07", "2026-11-14")).toBe("7 – 14 Nov 2026");
+  expect(rentangTeks("2026-11-07", "2026-12-03")).toBe("7 Nov – 3 Des 2026");
+  expect(rentangTeks("2026-11-07", "2027-01-02")).toBe("7 Nov 2026 – 2 Jan 2027");
+  expect(rentangTeks("2026-11-07", "2026-11-07")).toBe("7 Nov 2026");
 });

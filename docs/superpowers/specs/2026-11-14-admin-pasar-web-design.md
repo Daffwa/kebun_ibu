@@ -25,8 +25,11 @@ satu hari karena zona waktu; halaman diam-diam memotong data di 1000 baris.
 ## Alur
 
 1. **Filter di URL** (`?pasar=semua|tokopedia|blibli&rentang=30h|1t|5t|semua|kustom&dari=&sampai=`),
-   seperti saringan Kotak masuk. Tombol preset = tautan; Kustom = form GET dengan dua
-   `<input type="date">` (min/maks = tanggal data). Jalan tanpa JavaScript.
+   seperti saringan Kotak masuk. **Diubah 14 Nov (pilihan pengguna: "C. dua menu pilihan")**: dua
+   `<select>` (Marketplace: Semua pasar/Tokopedia/Blibli; Rentang: 30 hari/1 tahun/5 tahun/Semua
+   waktu/Kustom…). Preset terkunci = pilihan abu-abu "🔒" di dalam menu, plus satu baris
+   "🔒 30 hari terbuka mulai 6 Des 2026". Kotak tanggal Dari–Sampai (form GET) hanya muncul
+   sesudah memilih Kustom…. Menu butuh JavaScript (pindah halaman lewat `router.push`).
 2. **Server Component** `src/app/admin/pasar/page.tsx` membaca Supabase lewat `supabaseServer()`
    (sesi pengguna, RLS `is_pengelola()`), menghitung, lalu mengirim angka siap gambar ke komponen
    grafik.
@@ -64,10 +67,9 @@ Port dari notebook: `statusPreset`, `rentangPreset`, `kerapatan`, `deret`, `angk
 ```
 Pasar
 Harga Mangga Manalagi di Blibli dan Tokopedia.
-[Semua][Tokopedia][Blibli]
-[30 hari][1 tahun][5 tahun][Semua][Kustom]   ← terkunci = abu-abu + alasan di bawahnya
-Terkunci · 30 hari: terbuka setelah 30 hari data (sekarang 8/30)
-Semua marketplace · 7 Nov – 14 Nov 2026 · 8 hari, 8 berdata · satu titik = 1 hari
+[Semua pasar ▾] [Semua waktu ▾]
+🔒 30 hari terbuka mulai 6 Des 2026
+7 – 14 Nov 2026 · 8 hari, 8 berdata · titik per hari
 
 ┌ 14 Nov 2026 · 27 produk, 21 toko ────────────┐
 │ Median Rp32.000  Rata-rata …  Tertimbang …   │  grafik 1 (kotak angka, HTML)
@@ -95,7 +97,7 @@ Semua marketplace · 7 Nov – 14 Nov 2026 · 8 hari, 8 berdata · satu titik = 
 ## Keputusan saya (bisa dikoreksi)
 
 1. Grafik 3 dan 6 tidak punya tabel data terpisah; tooltip + tabel lonjakan dianggap cukup.
-2. Pesan kunci ditulis di bawah tombol (HP tidak punya hover untuk tooltip tombol).
+2. Pesan kunci: satu baris pendek di bawah menu (HP tidak punya hover untuk tooltip).
 3. Recharts dipasang dengan versi pasti `3.10.1`.
 
 ## Diserahkan ke pembuat
