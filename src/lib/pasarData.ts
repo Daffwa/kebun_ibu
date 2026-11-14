@@ -43,7 +43,7 @@ export type Lonjakan = {
 };
 
 const KOLOM_HARIAN = "tanggal, pasar, jumlah_produk, median, indeks_berantai, median_rasio, lonjak_pasar, naik, turun";
-const KOLOM_PRODUK = "tanggal, sumber, produk_key, nama_toko, kota, harga_per_kg, terjual_min";
+const KOLOM_PRODUK = "tanggal, produk_key, sumber, nama_toko, harga_per_kg, terjual_min";
 const KOLOM_LONJAKAN = "tanggal, nama_toko, sumber, kota, median_jendela, harga_per_kg, rasio_jendela";
 
 function periksa<T>({ data, error }: { data: unknown; error: { message: string } | null }): T {
@@ -76,12 +76,12 @@ export async function ambilHarian(sb: SupabaseClient, pasar: Pasar, mulai: strin
   );
 }
 
-/** Semua produk pada satu tanggal (grafik 1 dan 2). */
-export async function ambilPotret(sb: SupabaseClient, pasar: Pasar, tanggal: string): Promise<Produk[]> {
+/** Semua baris produk dalam rentang (grafik 1 dan 2; diringkas dengan `ringkasProduk`). */
+export async function ambilProdukRentang(sb: SupabaseClient, pasar: Pasar, mulai: string, akhir: string): Promise<Produk[]> {
   return ambilSemua<Produk>((dari, sampai) => {
-    let q = sb.from("pasar_manalagi").select(KOLOM_PRODUK).eq("tanggal", tanggal);
+    let q = sb.from("pasar_manalagi").select(KOLOM_PRODUK).gte("tanggal", mulai).lte("tanggal", akhir);
     if (pasar !== "semua") q = q.eq("sumber", pasar);
-    return q.order("produk_key").range(dari, sampai).overrideTypes<Produk[], { merge: false }>();
+    return q.order("tanggal").order("produk_key").range(dari, sampai).overrideTypes<Produk[], { merge: false }>();
   });
 }
 

@@ -44,7 +44,7 @@ satu pasar ≈ 1.826 baris. Maka:
 |---|---|---|
 | batas data | `tanggal` pertama dan terakhir di `pasar_manalagi_harian` untuk pasar terpilih | 2 × 1 baris |
 | deret | `pasar_manalagi_harian` pasar terpilih dalam rentang | dibaca per 1000 sampai habis |
-| potret | `pasar_manalagi` pada hari berdata terakhir dalam rentang (+ `sumber` kalau bukan Semua) | ±30 baris hari ini; dibaca per 1000 juga (fungsi paging yang sama), karena setiap toko baru menambah baris per hari |
+| produk rentang (grafik 1, 2) | `pasar_manalagi` **seluruh rentang** (+ `sumber` kalau bukan Semua), kolom `tanggal, produk_key, sumber, nama_toko, harga_per_kg, terjual_min`, urut `tanggal, produk_key`; diringkas `ringkasProduk` (satu produk sekali, median harganya, terjual hari terakhirnya). Diubah 14 Nov; dulu hanya hari terakhir | ±27 baris × jumlah hari; dibaca per 1000 (`ambilSemua`) |
 | tabel lonjakan | `pasar_manalagi` `lonjak_toko` dalam rentang, terbaru dulu, 20 baris + jumlah total | ≤ 20 baris |
 
 Tidak perlu migrasi baru.
@@ -71,7 +71,7 @@ Harga Mangga Manalagi di Blibli dan Tokopedia.
 🔒 30 hari terbuka mulai 6 Des 2026
 7 – 14 Nov 2026 · 8 hari, 8 berdata · titik per hari
 
-┌ 14 Nov 2026 · 27 produk, 21 toko ────────────┐
+┌ 7 Nov – 14 Nov 2026 · 39 produk, 32 toko ────┐
 │ Median Rp32.000  Rata-rata …  Tertimbang …   │  grafik 1 (kotak angka, HTML)
 └──────────────────────────────────────────────┘
 ┌ Sebaran harga per kg ────────────────────────┐  grafik 2

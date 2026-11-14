@@ -1,9 +1,16 @@
 import { rupiah } from "@/lib/format";
-import { angkaUtama, tanggalPanjang, type Produk } from "@/lib/pasar";
+import { angkaUtama, labelSumbu, tanggalPanjang, type Produk } from "@/lib/pasar";
 
-/** Grafik 1: tiga angka utama hari potret. */
-export default function AngkaUtama({ snap, tanggal }: { snap: Produk[]; tanggal: string }) {
-  const a = angkaUtama(snap);
+/** "7 Nov – 14 Nov 2026"; satu hari: "14 Nov 2026"; beda tahun: tanggal lengkap keduanya. */
+function judulRentang(mulai: string, akhir: string): string {
+  if (mulai === akhir) return tanggalPanjang(akhir);
+  if (mulai.slice(0, 4) === akhir.slice(0, 4)) return `${labelSumbu(mulai, "hari")} – ${tanggalPanjang(akhir)}`;
+  return `${tanggalPanjang(mulai)} – ${tanggalPanjang(akhir)}`;
+}
+
+/** Grafik 1: tiga angka utama atas seluruh rentang. `produk` = hasil `ringkasProduk`. */
+export default function AngkaUtama({ produk, mulai, akhir }: { produk: Produk[]; mulai: string; akhir: string }) {
+  const a = angkaUtama(produk);
   const angka = [
     { judul: "Median per kg", nilai: a.median, catatan: "harga tengah pasar" },
     { judul: "Rata-rata per kg", nilai: a.rataRata, catatan: "terseret harga ekstrem" },
@@ -13,7 +20,7 @@ export default function AngkaUtama({ snap, tanggal }: { snap: Produk[]; tanggal:
   return (
     <section className="mb-4 rounded-[10px] bg-putih p-4">
       <p className="mb-3 text-sm text-daun">
-        {tanggalPanjang(tanggal)} · {a.jumlahProduk} produk, {a.jumlahToko} toko
+        {judulRentang(mulai, akhir)} · {a.jumlahProduk} produk, {a.jumlahToko} toko
       </p>
       <dl className="grid gap-4 sm:grid-cols-3">
         {angka.map((x) => (

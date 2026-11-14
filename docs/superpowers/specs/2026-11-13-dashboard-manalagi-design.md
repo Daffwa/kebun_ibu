@@ -82,11 +82,27 @@ Perhitungan yang butuh riwayat (jendela 7 hari lonjakan, indeks berantai) dihitu
 
 ## Aturan grafik potret (1 dan 2)
 
-- Memakai **hari terakhir** rentang yang dipilih, bukan seluruh rentang. Alasan: dalam 30 hari
-  satu toko yang muncul setiap hari akan terhitung 30 kali, toko lain sekali; satu hari = satu
-  toko satu hitungan.
-- Kalau hari itu tidak ada data untuk marketplace terpilih: pakai tanggal terakhir yang ada di
-  dalam rentang, dan tampilkan tanggalnya.
+**Diubah 14 Nov 2026 (keputusan pengguna):** grafik 1 dan 2 memakai **seluruh rentang** yang
+dipilih, bukan hari terakhirnya. Grafik 3 tidak berubah.
+
+- **Setiap produk dihitung sekali** (`produk_key` berbeda), dengan harga = **median
+  `harga_per_kg`** selama hari-hari produk itu muncul di rentang. Jadi toko yang muncul 30 hari
+  tetap satu hitungan, sama seperti toko yang muncul sehari.
+- **Grafik 1**: median dan rata-rata harga per produk itu. **Tertimbang** berbobot `terjual_min`
+  produk pada **hari terakhirnya di rentang**; null dan 0 dilewati. Produk = `produk_key` berbeda;
+  toko = `nama_toko` berbeda.
+- **Grafik 2**: histogram harga per produk; garis median = median yang sama dengan grafik 1.
+- Judul: tanggal rentang, misalnya "7 Nov – 14 Nov 2026 · 39 produk, 32 toko".
+- Data asli 7–14 Nov 2026 (cek web = Python):
+
+  | Pasar | Produk | Toko | Median | Rata-rata | Tertimbang |
+  |---|---|---|---|---|---|
+  | Semua | 39 | 32 | 28.571 | 31.474 | 24.273 |
+  | Blibli | 6 | 6 | 25.850 | 28.614,5* | 28.293 |
+  | Tokopedia | 33 | 26 | 28.571 | 31.994 | 24.197 |
+
+  \* tepat x,5: Python `round()` → 28.614 (genap), web (`Intl`) → 28.615. Keduanya benar.
+- Notebook `dashboard_contoh.ipynb` masih memakai hari terakhir (belum diubah).
 
 ## Rumus
 

@@ -8,13 +8,14 @@ import {
   histogram,
   pilihRentang,
   rentangTeks,
+  ringkasProduk,
   ringkasTren,
   rupiahRingkas,
   selisihHari,
   statusPreset,
   tanggalPanjang,
 } from "@/lib/pasar";
-import { ambilBatas, ambilHarian, ambilLonjakan, ambilPotret } from "@/lib/pasarData";
+import { ambilBatas, ambilHarian, ambilLonjakan, ambilProdukRentang } from "@/lib/pasarData";
 import { rupiah } from "@/lib/format";
 import AngkaUtama from "./AngkaUtama";
 import GrafikHistogram from "./GrafikHistogram";
@@ -95,16 +96,17 @@ export default async function Pasar({
   const { mulai, akhir } = pilih;
   const harian = await ambilHarian(sb, filter.pasar, mulai, akhir);
   const { titik, satuan } = deret(harian, mulai, akhir);
-  const hariPotret = harian.at(-1)?.tanggal; // hari berdata terakhir dalam rentang
-  const [snap, lonjakan] = await Promise.all([
-    hariPotret ? ambilPotret(sb, filter.pasar, hariPotret) : Promise.resolve([]),
+  // Grafik 1 dan 2: seluruh rentang, setiap produk sekali (median harganya di rentang).
+  const [barisProduk, lonjakan] = await Promise.all([
+    ambilProdukRentang(sb, filter.pasar, mulai, akhir),
     ambilLonjakan(sb, filter.pasar, mulai, akhir),
   ]);
+  const produk = ringkasProduk(barisProduk);
 
   const indeks = geserIndeks(titik);
   const tren = ringkasTren(indeks, titik.map((t) => t.tanggal));
   const nLonjak = titik.filter((t) => t.lonjak_pasar === 1).length;
-  const hist = snap.length ? histogram(snap.map((p) => p.harga_per_kg)) : null;
+  const hist = produk.length ? histogram(produk.map((p) => p.harga_per_kg)) : null;
 
   return (
     <>
@@ -123,10 +125,10 @@ export default async function Pasar({
         {rentangTeks(mulai, akhir)} · {selisihHari(mulai, akhir) + 1} hari, {harian.length} berdata · titik per {satuan}
       </p>
 
-      {hariPotret && hist ? (
+      {hist ? (
         <>
-          <AngkaUtama snap={snap} tanggal={hariPotret} />
-          <Kartu judul={`Sebaran harga per kg, ${tanggalPanjang(hariPotret)}`}>
+          <AngkaUtama produk={produk} mulai={mulai} akhir={akhir} />
+          <Kartu judul="Sebaran harga per kg (satu produk dihitung sekali)">
             <GrafikHistogram {...hist} />
           </Kartu>
         </>

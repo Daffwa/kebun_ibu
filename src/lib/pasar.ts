@@ -251,34 +251,56 @@ export function deret(harian: HarianBaris[], mulai: string, akhir: string): { ti
 
 // ---------------------------------------------------------------- potret (grafik 1 dan 2)
 
-/** Satu baris tabel `pasar_manalagi` (kolom yang dibaca grafik potret). */
+/** Satu baris tabel `pasar_manalagi` (kolom yang dibaca grafik 1 dan 2). */
 export type Produk = {
   tanggal: string;
   sumber: "blibli" | "tokopedia";
   produk_key: string;
   nama_toko: string | null;
-  kota: string | null;
   harga_per_kg: number;
   terjual_min: number | null;
 };
 
-/** Grafik 1. `tertimbang` berbobot `terjual_min` (hanya produk yang pernah laku); null kalau tidak ada. */
-export function angkaUtama(snap: Produk[]): {
+/**
+ * Grafik 1 dan 2 memakai SELURUH rentang: setiap produk dihitung sekali, dengan harga = median
+ * `harga_per_kg` selama hari-hari ia muncul di rentang, dan `terjual_min` + `nama_toko` dari hari
+ * terakhirnya di rentang (boleh null; null/0 tidak ikut rata-rata tertimbang).
+ * `tanggal` hasil = hari terakhir produk itu. Urut `produk_key`.
+ */
+export function ringkasProduk(baris: Produk[]): Produk[] {
+  const perProduk = new Map<string, Produk[]>();
+  for (const b of baris) {
+    const daftar = perProduk.get(b.produk_key);
+    if (daftar) daftar.push(b);
+    else perProduk.set(b.produk_key, [b]);
+  }
+  return [...perProduk.keys()].sort().map((k) => {
+    const hari = perProduk.get(k)!;
+    const terakhir = hari.reduce((a, b) => (b.tanggal > a.tanggal ? b : a));
+    return { ...terakhir, harga_per_kg: median(hari.map((h) => h.harga_per_kg))! };
+  });
+}
+
+/**
+ * Grafik 1, di atas hasil `ringkasProduk`. `tertimbang` berbobot `terjual_min` (null dan 0 dilewati);
+ * null kalau tidak ada produk laku. Produk = `produk_key` berbeda; toko = `nama_toko` berbeda.
+ */
+export function angkaUtama(produk: Produk[]): {
   median: number;
   rataRata: number;
   tertimbang: number | null;
   jumlahProduk: number;
   jumlahToko: number;
 } {
-  const harga = snap.map((p) => p.harga_per_kg);
-  const laku = snap.filter((p) => (p.terjual_min ?? 0) > 0);
+  const harga = produk.map((p) => p.harga_per_kg);
+  const laku = produk.filter((p) => (p.terjual_min ?? 0) > 0);
   const bobot = laku.reduce((a, p) => a + p.terjual_min!, 0);
   return {
     median: median(harga) ?? NaN,
     rataRata: harga.reduce((a, b) => a + b, 0) / harga.length,
     tertimbang: laku.length ? laku.reduce((a, p) => a + p.harga_per_kg * p.terjual_min!, 0) / bobot : null,
-    jumlahProduk: snap.length,
-    jumlahToko: new Set(snap.map((p) => p.nama_toko).filter((t) => t !== null)).size,
+    jumlahProduk: produk.length,
+    jumlahToko: new Set(produk.map((p) => p.nama_toko).filter((t) => t !== null)).size,
   };
 }
 

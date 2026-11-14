@@ -12,6 +12,7 @@ import {
   deret,
   pilihRentang,
   rentangPreset,
+  ringkasProduk,
   rentangTeks,
   tanggalTerbuka,
   rupiahRingkas,
@@ -107,7 +108,7 @@ describe.each(["asli", "sintetis"] as const)("sama dengan notebook (%s)", (nama)
 });
 
 const p = (harga: number, terjual: number | null = null, toko = "A") =>
-  ({ tanggal: "2026-11-14", sumber: "blibli", produk_key: `${toko}${harga}`, nama_toko: toko, kota: null,
+  ({ tanggal: "2026-11-14", sumber: "blibli", produk_key: `${toko}${harga}`, nama_toko: toko,
      harga_per_kg: harga, terjual_min: terjual }) as Produk;
 
 test("angkaUtama: tertimbang hanya produk laku", () => {
@@ -177,4 +178,21 @@ test("rentangTeks: bulan/tahun yang sama tidak diulang", () => {
   expect(rentangTeks("2026-11-07", "2026-12-03")).toBe("7 Nov – 3 Des 2026");
   expect(rentangTeks("2026-11-07", "2027-01-02")).toBe("7 Nov 2026 – 2 Jan 2027");
   expect(rentangTeks("2026-11-07", "2026-11-07")).toBe("7 Nov 2026");
+});
+
+test("ringkasProduk: produk 3 hari dihitung sekali, harga = median, terjual dari hari terakhirnya", () => {
+  const b = (produk_key: string, tanggal: string, harga: number, terjual: number | null, nama_toko = "Toko A") =>
+    ({ tanggal, sumber: "tokopedia", produk_key, nama_toko, harga_per_kg: harga, terjual_min: terjual }) as Produk;
+  const hasil = ringkasProduk([
+    b("a", "2026-11-09", 36000, 20),
+    b("b", "2026-11-08", 25000, 5, "Toko B"),
+    b("a", "2026-11-07", 30000, 10),
+    b("a", "2026-11-10", 31000, null), // hari terakhir "a": terjual kosong, bukan 20
+  ]);
+  expect(hasil).toEqual([
+    { tanggal: "2026-11-10", sumber: "tokopedia", produk_key: "a", nama_toko: "Toko A", harga_per_kg: 31000, terjual_min: null },
+    { tanggal: "2026-11-08", sumber: "tokopedia", produk_key: "b", nama_toko: "Toko B", harga_per_kg: 25000, terjual_min: 5 },
+  ]);
+  // grafik 1 di atas hasil ini: "a" tidak ikut tertimbang (terjual hari terakhir kosong)
+  expect(angkaUtama(hasil)).toEqual({ median: 28000, rataRata: 28000, tertimbang: 25000, jumlahProduk: 2, jumlahToko: 2 });
 });
