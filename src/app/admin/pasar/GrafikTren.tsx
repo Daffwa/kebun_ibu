@@ -40,7 +40,12 @@ export default function GrafikTren({ titik, satuan }: { titik: TitikTren[]; satu
           );
         }}
       />
-      <Legend iconType="plainline" verticalAlign="bottom" wrapperStyle={{ color: WARNA.tinta2, fontSize: 14 }} />
+      <Legend
+        iconType="plainline"
+        verticalAlign="bottom"
+        wrapperStyle={{ fontSize: 14 }}
+        formatter={(nama) => <span style={{ color: WARNA.tinta2 }}>{nama}</span>}
+      />
       {SERI.map((s) => (
         <Line
           key={s.kunci}

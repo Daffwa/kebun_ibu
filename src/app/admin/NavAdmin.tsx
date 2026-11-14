@@ -7,6 +7,7 @@ const MENU = [
   { href: "/admin", label: "Kotak masuk" },
   { href: "/admin/listing", label: "Barang" },
   { href: "/admin/riwayat", label: "Riwayat" },
+  { href: "/admin/pasar", label: "Pasar" },
   { href: "/admin/pengaturan", label: "Pengaturan" },
 ];
 
