@@ -1,6 +1,5 @@
 import { supabaseServer } from "@/lib/supabase/server";
 import {
-  HARGA_IBUK,
   JENDELA_HARI,
   NAMA_PASAR,
   bacaFilter,
@@ -105,7 +104,7 @@ export default async function Pasar({
   const indeks = geserIndeks(titik);
   const tren = ringkasTren(indeks, titik.map((t) => t.tanggal));
   const nLonjak = titik.filter((t) => t.lonjak_pasar === 1).length;
-  const hist = snap.length ? histogram(snap.map((p) => p.harga_per_kg), HARGA_IBUK) : null;
+  const hist = snap.length ? histogram(snap.map((p) => p.harga_per_kg)) : null;
 
   return (
     <>
@@ -128,7 +127,7 @@ export default async function Pasar({
         <>
           <AngkaUtama snap={snap} tanggal={hariPotret} />
           <Kartu judul={`Sebaran harga per kg, ${tanggalPanjang(hariPotret)}`}>
-            <GrafikHistogram {...hist} hargaIbuk={HARGA_IBUK} />
+            <GrafikHistogram {...hist} />
           </Kartu>
         </>
       ) : (

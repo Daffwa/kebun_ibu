@@ -117,15 +117,18 @@ test("angkaUtama: tertimbang hanya produk laku", () => {
 });
 
 test("histogram: kelompok Rp5.000, kelompok terakhir menutup kanan", () => {
-  const h = histogram([20000, 22000, 34999, 40000], 30000);
-  expect(h.kelompok).toEqual([
-    { dari: 20000, sampai: 25000, jumlah: 2 }, { dari: 25000, sampai: 30000, jumlah: 0 },
-    { dari: 30000, sampai: 35000, jumlah: 1 }, { dari: 35000, sampai: 40000, jumlah: 1 }]);
-  expect([h.median, h.lebihMurah, h.total]).toEqual([28499.5, 2, 4]);
+  // Tanpa harga Ibuk (14 Nov): Ibuk bisa menjual lebih dari satu produk Manalagi.
+  expect(histogram([20000, 22000, 34999, 40000])).toEqual({
+    kelompok: [
+      { dari: 20000, sampai: 25000, jumlah: 2 }, { dari: 25000, sampai: 30000, jumlah: 0 },
+      { dari: 30000, sampai: 35000, jumlah: 1 }, { dari: 35000, sampai: 40000, jumlah: 1 }],
+    median: 28499.5,
+    total: 4,
+  });
 });
 
 test("histogram: satu harga saja tetap satu kelompok", () => {
-  expect(histogram([30000, 30000], 30000).kelompok).toEqual([{ dari: 30000, sampai: 35000, jumlah: 2 }]);
+  expect(histogram([30000, 30000]).kelompok).toEqual([{ dari: 30000, sampai: 35000, jumlah: 2 }]);
 });
 
 test("geserIndeks: ujung kanan = median hari terakhir yang punya keduanya", () => {

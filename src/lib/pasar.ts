@@ -8,8 +8,6 @@
  * (WIB, WITA, UTC di Vercel) tidak pernah menggeser hari.
  */
 
-export const HARGA_IBUK = 30_000; // CONTOH: ganti dengan harga jual Ibuk per kg
-
 // Parameter detektor lonjakan; hitungannya di laptop (data-science/dashboard_manalagi.py).
 // Di sini hanya untuk teks dan pita grafik, jadi samakan kalau di sana diubah.
 export const JENDELA_HARI = 7;
@@ -292,8 +290,7 @@ const LEBAR_KELOMPOK = 5_000;
  */
 export function histogram(
   harga: number[],
-  hargaIbuk: number,
-): { kelompok: { dari: number; sampai: number; jumlah: number }[]; median: number; lebihMurah: number; total: number } {
+): { kelompok: { dari: number; sampai: number; jumlah: number }[]; median: number; total: number } {
   const terkecil = Math.min(...harga);
   const terbesar = Math.max(...harga);
   const batas: number[] = [];
@@ -309,7 +306,6 @@ export function histogram(
   return {
     kelompok,
     median: median(harga) ?? NaN,
-    lebihMurah: harga.filter((h) => h < hargaIbuk).length,
     total: harga.length,
   };
 }

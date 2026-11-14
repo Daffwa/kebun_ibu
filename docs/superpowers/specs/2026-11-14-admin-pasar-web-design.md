@@ -85,8 +85,10 @@ Harga Mangga Manalagi di Blibli dan Tokopedia.
 - Warna = palet notebook (biru `#2a78d6`, oranye `#eb6834`, merah `#e34948`); lolos validator
   dataviz di mode terang. Teks memakai warna tinta situs, bukan warna seri.
 - Tooltip saat disentuh/diarahkan di semua grafik. Label langsung hanya yang ada di notebook: garis
-  median dan harga Ibuk (grafik 2), "Lonjakan pasar +x%" (grafik 6), jumlah naik/turun kalau ≤ 31 titik.
-- `HARGA_IBUK = 30_000` di `src/lib/pasar.ts` dengan catatan "CONTOH" (keputusan 14 Nov).
+  median (grafik 2), "Lonjakan pasar +x%" (grafik 6), jumlah naik/turun kalau ≤ 31 titik.
+- **Tanpa harga Ibuk di grafik 2** (diubah 14 Nov, keputusan pengguna): tidak ada garis hitam,
+  label, maupun "X dari N produk lebih murah", dan tidak ada `HARGA_IBUK`. Alasan: Ibuk bisa
+  menjual lebih dari satu produk Manalagi, jadi satu garis harga akan menyesatkan. Garis median tetap.
 
 ## Keadaan kosong
 
