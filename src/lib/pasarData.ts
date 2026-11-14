@@ -51,10 +51,24 @@ function periksa<T>({ data, error }: { data: unknown; error: { message: string }
   return data as T;
 }
 
-/** Tanggal pertama dan terakhir yang berdata untuk pasar ini; null kalau belum ada data. */
-export async function ambilBatas(sb: SupabaseClient, pasar: Pasar): Promise<{ awal: string; akhir: string } | null> {
+/**
+ * Tanggal pertama dan terakhir yang berdata untuk pasar dan wilayah ini; null kalau belum ada data.
+ * Setiap bacaan `pasar_manalagi_harian` wajib menyaring `wilayah`: tabel itu menyimpan satu deret
+ * per wilayah, jadi tanpa saringan deret semua wilayah tercampur.
+ */
+export async function ambilBatas(
+  sb: SupabaseClient,
+  pasar: Pasar,
+  wilayah = "semua",
+): Promise<{ awal: string; akhir: string } | null> {
   const ujung = (naik: boolean) =>
-    sb.from("pasar_manalagi_harian").select("tanggal").eq("pasar", pasar).order("tanggal", { ascending: naik }).limit(1);
+    sb
+      .from("pasar_manalagi_harian")
+      .select("tanggal")
+      .eq("pasar", pasar)
+      .eq("wilayah", wilayah)
+      .order("tanggal", { ascending: naik })
+      .limit(1);
   const [awal, akhir] = (await Promise.all([ujung(true), ujung(false)])).map((r) =>
     periksa<{ tanggal: string }[]>(r),
   );
@@ -62,12 +76,19 @@ export async function ambilBatas(sb: SupabaseClient, pasar: Pasar): Promise<{ aw
   return { awal: awal[0].tanggal, akhir: akhir[0].tanggal };
 }
 
-export async function ambilHarian(sb: SupabaseClient, pasar: Pasar, mulai: string, akhir: string): Promise<HarianBaris[]> {
+export async function ambilHarian(
+  sb: SupabaseClient,
+  pasar: Pasar,
+  mulai: string,
+  akhir: string,
+  wilayah = "semua",
+): Promise<HarianBaris[]> {
   return ambilSemua<HarianBaris>((dari, sampai) =>
     sb
       .from("pasar_manalagi_harian")
       .select(KOLOM_HARIAN)
       .eq("pasar", pasar)
+      .eq("wilayah", wilayah)
       .gte("tanggal", mulai)
       .lte("tanggal", akhir)
       .order("tanggal")
