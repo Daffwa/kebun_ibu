@@ -7,6 +7,7 @@
  */
 import type { supabaseServer } from "./supabase/server";
 import type { HarianBaris, Pasar, Produk } from "./pasar";
+import type { Urut } from "./tabelLonjakan";
 import type { Wilayah, saringanProduk } from "./wilayah";
 
 type SupabaseClient = Awaited<ReturnType<typeof supabaseServer>>;
@@ -130,23 +131,32 @@ export async function ambilProdukRentang(
   });
 }
 
-/** 20 lonjakan toko terbaru dalam rentang + jumlah seluruhnya. */
-export async function ambilLonjakan(
+/**
+ * Satu halaman tabel lonjakan toko. Dihitung dulu (`head`), lalu halaman dijepit ke halaman
+ * terakhir: PostgREST menjawab offset di luar data dengan galat 416 (PGRST103), bukan daftar kosong.
+ * Urutan stabil: urutan pilihan, lalu tanggal terbaru, lalu `produk_key` (kunci utama = tanggal, produk_key).
+ */
+export async function ambilLonjakanHalaman(
   sb: SupabaseClient,
-  pasar: Pasar,
-  mulai: string,
-  akhir: string,
-  wilayah?: SaringanProduk,
-): Promise<{ daftar: Lonjakan[]; jumlah: number }> {
-  let q = sb
-    .from("pasar_manalagi")
-    .select(KOLOM_LONJAKAN, { count: "exact" })
-    .eq("lonjak_toko", true)
-    .gte("tanggal", mulai)
-    .lte("tanggal", akhir);
-  if (pasar !== "semua") q = q.eq("sumber", pasar);
-  if (wilayah) q = q.in(wilayah.kolom, wilayah.kode);
-  const hasil = await q.order("tanggal", { ascending: false }).order("produk_key").limit(20);
-  const daftar = periksa<Lonjakan[]>(hasil);
-  return { daftar, jumlah: hasil.count ?? daftar.length };
+  q: { pasar: Pasar; mulai: string; akhir: string; wilayah?: SaringanProduk; urut: Urut; baris: number; hal: number },
+): Promise<{ daftar: Lonjakan[]; jumlah: number; hal: number }> {
+  const saring = (kolom: string, opsi?: { count: "exact"; head: true }) => {
+    let b = sb.from("pasar_manalagi").select(kolom, opsi).eq("lonjak_toko", true).gte("tanggal", q.mulai).lte("tanggal", q.akhir);
+    if (q.pasar !== "semua") b = b.eq("sumber", q.pasar);
+    if (q.wilayah) b = b.in(q.wilayah.kolom, q.wilayah.kode);
+    return b;
+  };
+  const hitung = await saring("tanggal", { count: "exact", head: true });
+  if (hitung.error) throw new Error(hitung.error.message);
+  const jumlah = hitung.count ?? 0;
+  const hal = Math.min(Math.max(q.hal, 1), Math.max(1, Math.ceil(jumlah / q.baris)));
+  if (jumlah === 0) return { daftar: [], jumlah, hal };
+
+  let b = saring(KOLOM_LONJAKAN);
+  if (q.urut !== "baru") b = b.order("rasio_jendela", { ascending: q.urut === "turun", nullsFirst: false });
+  const hasil = await b
+    .order("tanggal", { ascending: false })
+    .order("produk_key", { ascending: true })
+    .range((hal - 1) * q.baris, hal * q.baris - 1);
+  return { daftar: periksa<Lonjakan[]>(hasil), jumlah, hal };
 }
