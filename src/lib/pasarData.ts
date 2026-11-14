@@ -14,18 +14,21 @@ export const UKURAN_HALAMAN = 1000;
 
 /**
  * Memanggil `halaman(dari, sampai)` (indeks baris, inklusif, seperti `.range()`) sampai halaman
- * yang kembali kurang dari penuh. Query di dalamnya harus berurutan stabil (`order`).
+ * kosong. Maju sebanyak baris yang benar-benar diterima, bukan 1000, dan berhenti hanya pada
+ * halaman kosong: kalau `max_rows` server suatu hari diturunkan di bawah 1000, tidak ada baris
+ * yang terlewat (biayanya satu permintaan tambahan). Query di dalamnya harus berurutan stabil.
  * Galat di halaman mana pun dilempar: lebih baik halaman error daripada grafik setengah data.
  */
 export async function ambilSemua<T>(
   halaman: (dari: number, sampai: number) => PromiseLike<{ data: T[] | null; error: { message: string } | null }>,
 ): Promise<T[]> {
   const semua: T[] = [];
-  for (let dari = 0; ; dari += UKURAN_HALAMAN) {
+  for (;;) {
+    const dari = semua.length;
     const { data, error } = await halaman(dari, dari + UKURAN_HALAMAN - 1);
     if (error) throw new Error(error.message);
-    semua.push(...(data ?? []));
-    if (!data || data.length < UKURAN_HALAMAN) return semua;
+    if (!data || data.length === 0) return semua;
+    semua.push(...data);
   }
 }
 

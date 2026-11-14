@@ -72,7 +72,7 @@ test("pilihRentang: preset terkunci jatuh ke semua; Dari > Sampai kosong; kustom
   expect(pilihRentang(f({ rentang: "1t" }), "2026-11-07", "2026-11-14"))
     .toEqual({ rentang: "semua", mulai: "2026-11-07", akhir: "2026-11-14" });
   expect(pilihRentang(f({ rentang: "kustom", dari: "2026-11-12", sampai: "2026-11-09" }), "2026-11-07", "2026-11-14"))
-    .toEqual({ rentang: "kustom", kosong: true });
+    .toEqual({ rentang: "kustom", kosong: "terbalik" });
   expect(pilihRentang(f({ rentang: "kustom", dari: "2026-01-01", sampai: null }), "2026-11-07", "2026-11-14"))
     .toEqual({ rentang: "kustom", mulai: "2026-11-07", akhir: "2026-11-14" });
 });
@@ -149,4 +149,12 @@ test("tanggalPanjang", () => {
 test("rupiahRingkas: sumbu ringkas", () => {
   expect([rupiahRingkas(0), rupiahRingkas(500), rupiahRingkas(30000), rupiahRingkas(32500), rupiahRingkas(1_250_000)])
     .toEqual(["0", "500", "30 rb", "32,5 rb", "1,3 jt"]);
+});
+
+test("pilihRentang: kustom di luar data pasar ini = 'diluar', bukan 'terbalik'", () => {
+  // Blibli 7–7 Nov, lalu pindah ke Tokopedia yang mulai 8 Nov
+  const f: Filter = { pasar: "tokopedia", rentang: "kustom", dari: "2026-11-07", sampai: "2026-11-07" };
+  expect(pilihRentang(f, "2026-11-08", "2026-11-14")).toEqual({ rentang: "kustom", kosong: "diluar" });
+  expect(pilihRentang({ ...f, dari: "2027-01-01", sampai: "2027-02-01" }, "2026-11-08", "2026-11-14"))
+    .toEqual({ rentang: "kustom", kosong: "diluar" });
 });

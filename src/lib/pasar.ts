@@ -149,11 +149,14 @@ export function pilihRentang(
   f: Filter,
   awal: string,
   akhir: string,
-): { rentang: Rentang; mulai: string; akhir: string } | { rentang: "kustom"; kosong: true } {
+): { rentang: Rentang; mulai: string; akhir: string } | { rentang: "kustom"; kosong: "terbalik" | "diluar" } {
   if (f.rentang === "kustom") {
+    // "terbalik" = pengguna memilih Dari sesudah Sampai; "diluar" = rentangnya tidak menyentuh data
+    // pasar ini (misalnya pindah dari Blibli ke Tokopedia yang mulai sehari kemudian).
+    if (f.dari && f.sampai && f.dari > f.sampai) return { rentang: "kustom", kosong: "terbalik" };
     const mulai = maks(f.dari ?? awal, awal);
     const sampai = min(f.sampai ?? akhir, akhir);
-    if (mulai > sampai) return { rentang: "kustom", kosong: true };
+    if (mulai > sampai) return { rentang: "kustom", kosong: "diluar" };
     return { rentang: "kustom", mulai, akhir: sampai };
   }
   const rentang = f.rentang !== "semua" && !statusPreset(awal, akhir)[f.rentang].terbuka ? "semua" : f.rentang;

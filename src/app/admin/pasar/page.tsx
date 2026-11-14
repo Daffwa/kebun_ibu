@@ -80,7 +80,14 @@ export default async function Pasar({
       <>
         {kepala}
         <Saringan pasar={filter.pasar} rentang="kustom" batas={batas} status={status} />
-        <Kosong judul="Rentang kosong." isi="Tanggal Dari sesudah tanggal Sampai. Pilih ulang tanggalnya." />
+        {pilih.kosong === "terbalik" ? (
+          <Kosong judul="Rentang kosong." isi="Tanggal Dari sesudah tanggal Sampai. Pilih ulang tanggalnya." />
+        ) : (
+          <Kosong
+            judul={`Tidak ada data ${NAMA_PASAR[filter.pasar]} di rentang ini.`}
+            isi={`Data ${NAMA_PASAR[filter.pasar]} ada dari ${tanggalPanjang(batas.awal)} sampai ${tanggalPanjang(batas.akhir)}.`}
+          />
+        )}
       </>
     );
   }
