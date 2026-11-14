@@ -98,3 +98,42 @@ The 16:15 push on 14 Nov resent 7 dates instead of 1. Only `kota` had changed (1
   `dim_toko`. Fix it before any analysis by region. The planned region filter
   (`docs/superpowers/specs/2026-11-14-filter-wilayah-design.md`) uses province and city codes
   instead.
+
+---
+
+# Change — 14 Nov 2026: region codes (filter wilayah, data side)
+
+**Result:** every price row has an official kabupaten/kota and province code (Kepmendagri 2025).
+147 of 147 city names in the warehouse match; 0 rows quarantined by the new check I. The
+dashboard's daily table is now computed per region (21 regions so far); its `semua` rows are
+identical to what production holds (22 of 22). Design:
+`docs/superpowers/specs/2026-11-14-filter-wilayah-design.md`.
+
+## What changed
+
+1. `referensi/wilayah_kabkota.csv` (514 kab/kota, 38 provinces, from cahyadsn/wilayah, MIT) and
+   `transform/wilayah.py` (name matching, Jabodetabek group, search keywords).
+2. `fakta_harga.kabkota_kode`, `fakta_harga.provinsi_kode`; check I copies an unknown city to
+   `produk_karantina` and still loads the row.
+3. `dashboard_manalagi.hitung()`: `harian` per (wilayah, pasar); `daftar_wilayah()` for the web's
+   search box.
+4. `kirim_supabase.py`: new columns, the `KIRIM_PER_WILAYAH` switch (**off**), and an old-column
+   snapshot now means "send everything" instead of a crash.
+5. Supabase migration `20261115000000_wilayah_pasar.sql` (applied locally; **not yet in
+   production**).
+
+## How it was applied
+
+1. Backup: `warehouse/harga_buah.sebelum-wilayah-2026-11-14.duckdb`.
+2. Reloaded 7–14 Nov: 0 failed runs, row counts unchanged (13,108 Blibli, 39,134 Tokopedia).
+3. Local Supabase: migration + pgTAP 50/50; push with the switch on → 8 dates, 318 daily rows,
+   49 region-list rows. Production: `--coba` only.
+
+## Still to do (in this order)
+
+1. Run the migration in the **supabase.com** dashboard.
+2. Web: read `.eq("wilayah", "semua")` by default, add the search box; deploy.
+3. Set `KIRIM_PER_WILAYAH = True`, commit, run `python kirim_supabase.py --semua` once.
+
+Until step 3 the scheduled run resends all dates once (the production snapshot has the old
+columns); the new columns are ignored by production until step 1.

@@ -34,7 +34,10 @@ data_lake/raw/                    ↓ Pandera ── gagal ───┼───
 - **Muat aman diulang**: dalam satu transaksi, data (sumber, tanggal) yang
   lama dihapus lalu diganti. Jalan dua kali = hasil sama.
 - **Baris gagal validasi dikarantina, tidak dibuang**, lengkap dengan
-  alasannya.
+  alasannya. Dua cek hanya **menyalin** baris ke karantina dan tetap memuatnya:
+  cek H (berat dikali) dan cek I (`kota` terisi tetapi tidak ada di daftar
+  Kepmendagri 2025, `referensi/wilayah_kabkota.csv`). Nama yang tertahan cek I
+  diperbaiki lewat `ALIAS_KOTA` di `transform/wilayah.py`, lalu tanggalnya dimuat ulang.
 - **Setiap run tercatat** di `pipeline_runs` dan di `logs/run_<run_id>.log`.
 
 ## Star schema
@@ -46,7 +49,8 @@ data_lake/raw/                    ↓ Pandera ── gagal ───┼───
                           │
 dim_produk ──────── fakta_harga ──────── dim_tanggal
 produk_key, sumber,   tanggal, produk_key, toko_key,   tanggal, tahun,
-produk_id, nama,      kota, item_sku, opsi_default,     bulan, minggu, hari
+produk_id, nama,      kota, kabkota_kode, provinsi_kode, bulan, minggu, hari
+                      item_sku, opsi_default,
 jenis_buah, asal,     variant, harga, harga_coret,
 asal_sumber, olahan   diskon_persen, berat_gram, sumber_berat, jenis_satuan,
                       harga_per_kg, harga_per_buah, rating, terjual_min
