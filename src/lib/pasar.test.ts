@@ -1,7 +1,12 @@
 import { describe, expect, test } from "vitest";
 import fixture from "./pasar.fixture.json";
 import {
+  angkaUtama,
   bacaFilter,
+  geserIndeks,
+  histogram,
+  ringkasTren,
+  type Produk,
   deret,
   pilihRentang,
   rentangPreset,
@@ -94,4 +99,35 @@ describe.each(["asli", "sintetis"] as const)("sama dengan notebook (%s)", (nama)
     expect(hasil.titik.map((t) => t.tanggal)).toEqual(k.titik.map((t) => t.tanggal));
     hasil.titik.forEach((t, i) => expectTitikDekat(t, k.titik[i]));
   });
+});
+
+const p = (harga: number, terjual: number | null = null, toko = "A") =>
+  ({ tanggal: "2026-11-14", sumber: "blibli", produk_key: `${toko}${harga}`, nama_toko: toko, kota: null,
+     harga_per_kg: harga, terjual_min: terjual }) as Produk;
+
+test("angkaUtama: tertimbang hanya produk laku", () => {
+  expect(angkaUtama([p(20000, 10, "A"), p(30000, 30, "B"), p(40000, null, "B")]))
+    .toEqual({ median: 30000, rataRata: 30000, tertimbang: 27500, jumlahProduk: 3, jumlahToko: 2 });
+  expect(angkaUtama([p(20000, 0)]).tertimbang).toBeNull();
+});
+
+test("histogram: kelompok Rp5.000, kelompok terakhir menutup kanan", () => {
+  const h = histogram([20000, 22000, 34999, 40000], 30000);
+  expect(h.kelompok).toEqual([
+    { dari: 20000, sampai: 25000, jumlah: 2 }, { dari: 25000, sampai: 30000, jumlah: 0 },
+    { dari: 30000, sampai: 35000, jumlah: 1 }, { dari: 35000, sampai: 40000, jumlah: 1 }]);
+  expect([h.median, h.lebihMurah, h.total]).toEqual([28499.5, 2, 4]);
+});
+
+test("histogram: satu harga saja tetap satu kelompok", () => {
+  expect(histogram([30000, 30000], 30000).kelompok).toEqual([{ dari: 30000, sampai: 35000, jumlah: 2 }]);
+});
+
+test("geserIndeks: ujung kanan = median hari terakhir yang punya keduanya", () => {
+  const t = (indeks: number | null, median: number | null) => ({ indeks_berantai: indeks, median }) as Titik;
+  expect(geserIndeks([t(100, 30000), t(110, 33000), t(null, null)])).toEqual([30000, 33000, null]);
+  const r = ringkasTren([30000, 33000, null], ["2026-11-07", "2026-11-08", "2026-11-09"])!;
+  expect([r.akhir, r.sejak]).toEqual([33000, "2026-11-07"]);
+  expect(r.ubah).toBeCloseTo(0.1, 10);
+  expect(ringkasTren([null, 33000], ["a", "b"])).toBeNull();
 });

@@ -247,3 +247,90 @@ export function deret(harian: HarianBaris[], mulai: string, akhir: string): { ti
   for (const t of hari) kelompok.get(labelPeriode(t.tanggal, satuan))!.push(t);
   return { titik: [...kelompok].map(([l, isi]) => gabung(l, isi)), satuan };
 }
+
+// ---------------------------------------------------------------- potret (grafik 1 dan 2)
+
+/** Satu baris tabel `pasar_manalagi` (kolom yang dibaca grafik potret). */
+export type Produk = {
+  tanggal: string;
+  sumber: "blibli" | "tokopedia";
+  produk_key: string;
+  nama_toko: string | null;
+  kota: string | null;
+  harga_per_kg: number;
+  terjual_min: number | null;
+};
+
+/** Grafik 1. `tertimbang` berbobot `terjual_min` (hanya produk yang pernah laku); null kalau tidak ada. */
+export function angkaUtama(snap: Produk[]): {
+  median: number;
+  rataRata: number;
+  tertimbang: number | null;
+  jumlahProduk: number;
+  jumlahToko: number;
+} {
+  const harga = snap.map((p) => p.harga_per_kg);
+  const laku = snap.filter((p) => (p.terjual_min ?? 0) > 0);
+  const bobot = laku.reduce((a, p) => a + p.terjual_min!, 0);
+  return {
+    median: median(harga) ?? NaN,
+    rataRata: harga.reduce((a, b) => a + b, 0) / harga.length,
+    tertimbang: laku.length ? laku.reduce((a, p) => a + p.harga_per_kg * p.terjual_min!, 0) / bobot : null,
+    jumlahProduk: snap.length,
+    jumlahToko: new Set(snap.map((p) => p.nama_toko).filter((t) => t !== null)).size,
+  };
+}
+
+const LEBAR_KELOMPOK = 5_000;
+
+/**
+ * Grafik 2. Batas kelompok seperti `np.arange(floor(min/5000)*5000, max+5000, 5000)` lalu
+ * `np.histogram`: kelompok [dari, sampai), kecuali yang terakhir juga memuat `sampai`.
+ */
+export function histogram(
+  harga: number[],
+  hargaIbuk: number,
+): { kelompok: { dari: number; sampai: number; jumlah: number }[]; median: number; lebihMurah: number; total: number } {
+  const terkecil = Math.min(...harga);
+  const terbesar = Math.max(...harga);
+  const batas: number[] = [];
+  for (let b = Math.floor(terkecil / LEBAR_KELOMPOK) * LEBAR_KELOMPOK; b < terbesar + LEBAR_KELOMPOK; b += LEBAR_KELOMPOK) {
+    batas.push(b);
+  }
+  if (batas.length < 2) batas.push(batas[0] + LEBAR_KELOMPOK); // semua harga sama: satu kelompok
+  const kelompok = batas.slice(0, -1).map((dari, i) => ({ dari, sampai: batas[i + 1], jumlah: 0 }));
+  for (const h of harga) {
+    const i = Math.min(Math.floor((h - batas[0]) / LEBAR_KELOMPOK), kelompok.length - 1);
+    kelompok[i].jumlah += 1;
+  }
+  return {
+    kelompok,
+    median: median(harga) ?? NaN,
+    lebihMurah: harga.filter((h) => h < hargaIbuk).length,
+    total: harga.length,
+  };
+}
+
+// ---------------------------------------------------------------- tren (grafik 3)
+
+/**
+ * Indeks berantai digeser supaya ujung kanannya = median hari terakhir yang punya keduanya:
+ * garis = "harga pasar sekarang, mundur hanya mengikuti perubahan harga produk yang sama".
+ */
+export function geserIndeks(titik: Titik[]): (number | null)[] {
+  const jangkar = titik.findLastIndex((t) => t.indeks_berantai !== null && t.median !== null);
+  if (jangkar < 0) return titik.map(() => null);
+  const faktor = titik[jangkar].median! / titik[jangkar].indeks_berantai!;
+  return titik.map((t) => (t.indeks_berantai === null ? null : t.indeks_berantai * faktor));
+}
+
+/** Judul grafik 3: nilai terakhir dan perubahan sejak titik berdata pertama; null kalau < 2 titik. */
+export function ringkasTren(
+  nilai: (number | null)[],
+  tanggal: string[],
+): { akhir: number; ubah: number; sejak: string } | null {
+  const ada = nilai.flatMap((v, i) => (v === null ? [] : [{ v, t: tanggal[i] }]));
+  if (ada.length < 2) return null;
+  const akhir = ada[ada.length - 1].v;
+  return { akhir, ubah: akhir / ada[0].v - 1, sejak: ada[0].t };
+}
