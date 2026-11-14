@@ -55,3 +55,46 @@ start dates. `test_baca_argumen_bawaan` now expects `tanggal is None` (= today +
 - **No retry after a failed run.** If the one run of the day fails (no internet), nothing
   tries again until tomorrow. A third trigger (for example 18:00) would give a second chance.
 - **The VPS runs old code** (no variant pages). Updating it would make VPS backups complete.
+
+---
+
+# Pipeline fix — 14 Nov 2026: city per day
+
+**Result:** each price row now keeps its own day's city. Ranch Market's Manalagi shows
+Surabaya (was Jakarta Selatan), and Segari's and BlibliFresh's show Bekasi (were Jakarta Utara).
+Prices, medians and indexes did not change. 376 of 376 tests pass. Commit `21fdf47`.
+
+## What went wrong
+
+The 16:15 push on 14 Nov resent 7 dates instead of 1. Only `kota` had changed (16 rows).
+
+| Cause | Detail |
+|---|---|
+| City was stored per **shop** | `dim_toko` keeps one row per shop with the latest value (SCD type 1), and `v_produk` took `kota` from it. |
+| On Blibli the location belongs to the **product** | It is the warehouse the item ships from. Ranch Market lists items from Surabaya, Jakarta Pusat, Jakarta Selatan and Malang on the same day. |
+| So the city flipped | The shop's city became whichever of its items happened to come last that day. Every flip rewrote all past dates of that shop and resent them to Supabase. |
+
+## What changed
+
+1. **`fakta_harga.kota`** (`transform/model.py`): the city is stored on every price row.
+2. **Old warehouses get the column automatically** (`load/duckdb_loader.py`, `_tambah_kolom_baru`
+   in `siapkan`). It stays empty until a date is reloaded.
+3. **`v_produk.kota` = the row's own city**, or the shop's city when the row is still empty
+   (rows loaded before this fix).
+4. 4 new tests: city per row in the model, per-day city in `v_produk`, fallback for empty
+   rows, and adding the column to an old warehouse.
+
+## How it was applied
+
+1. Backup: `warehouse/harga_buah.sebelum-kota-2026-11-14.duckdb`.
+2. Reloaded 7–14 Nov (14 runs, 0 failed, row counts unchanged: 13,108 Blibli,
+   39,134 Tokopedia). 11 Nov Tokopedia came from the VPS copy again (`sebagian`).
+3. `kirim_supabase.py --coba` → 7 dates; push → 192 rows, 22 daily rows; the next `--coba` → 0 dates.
+4. Read back from production: Ranch Market Surabaya 7/7, Segari Bekasi 6/6.
+
+## Not fixed
+
+- **`region`** (jabodetabek / jawa_lain / luar_jawa) still comes from the shop's latest city in
+  `dim_toko`. Fix it before any analysis by region. The planned region filter
+  (`docs/superpowers/specs/2026-11-14-filter-wilayah-design.md`) uses province and city codes
+  instead.
