@@ -169,3 +169,9 @@ def test_daftar_wilayah(buat_gudang):
     assert (prov["tingkat"], prov["nama"]) == ("provinsi", "Jawa Timur")
     assert "jatim" in prov["kata_kunci"]
     assert "semua" not in d["wilayah"].to_list()
+
+
+def test_nama_provinsi_dki_pendek():
+    from dashboard_manalagi import _nama_wilayah
+    n = _nama_wilayah()
+    assert n.filter(wilayah="31")["nama"].to_list() == ["DKI Jakarta"]

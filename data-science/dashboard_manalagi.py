@@ -130,6 +130,9 @@ def hitung(con: duckdb.DuckDBPyConnection,
     return baris, harian
 
 
+# Nama tampil yang lebih pendek dari nama resmi Kepmendagri (pilihan pengguna 14 Nov)
+NAMA_PROVINSI_PENDEK = {"Daerah Khusus Ibukota Jakarta": "DKI Jakarta"}
+
 KOLOM_DAFTAR = ["wilayah", "pasar", "nama", "tingkat", "provinsi_kode", "kata_kunci", "jumlah_toko"]
 
 
@@ -140,7 +143,8 @@ def _nama_wilayah() -> pl.DataFrame:
     kabkota = k.select(wilayah="kode", nama="nama", tingkat=pl.lit("kabkota"),
                        provinsi_kode="provinsi_kode", kata_kunci=pl.lit(None, teks))
     provinsi = (k.select(wilayah="provinsi_kode", nama="provinsi").unique("wilayah")
-                .with_columns(tingkat=pl.lit("provinsi"), provinsi_kode=pl.lit(None, teks),
+                .with_columns(nama=pl.col("nama").replace(NAMA_PROVINSI_PENDEK),
+                              tingkat=pl.lit("provinsi"), provinsi_kode=pl.lit(None, teks),
                               kata_kunci=pl.col("wilayah").replace_strict(
                                   wilayah.KATA_KUNCI_PROVINSI, default=None, return_dtype=teks)))
     kelompok = pl.DataFrame(
