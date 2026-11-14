@@ -5,11 +5,14 @@ import {
   bacaFilter,
   geserIndeks,
   histogram,
+  labelSumbu,
+  tanggalPanjang,
   ringkasTren,
   type Produk,
   deret,
   pilihRentang,
   rentangPreset,
+  rupiahRingkas,
   selisihHari,
   statusPreset,
   tambahHari,
@@ -130,4 +133,20 @@ test("geserIndeks: ujung kanan = median hari terakhir yang punya keduanya", () =
   expect([r.akhir, r.sejak]).toEqual([33000, "2026-11-07"]);
   expect(r.ubah).toBeCloseTo(0.1, 10);
   expect(ringkasTren([null, 33000], ["a", "b"])).toBeNull();
+});
+
+test("labelSumbu: hari/minggu '14 Nov', bulan 'Nov 2027'", () => {
+  expect(labelSumbu("2026-11-14", "hari")).toBe("14 Nov");
+  expect(labelSumbu("2027-01-03", "minggu")).toBe("3 Jan");
+  expect(labelSumbu("2027-11-01", "bulan")).toBe("Nov 2027");
+  expect(labelSumbu("2027-08-01", "bulan")).toBe("Agu 2027");
+});
+
+test("tanggalPanjang", () => {
+  expect(tanggalPanjang("2026-11-07")).toBe("7 Nov 2026");
+});
+
+test("rupiahRingkas: sumbu ringkas", () => {
+  expect([rupiahRingkas(0), rupiahRingkas(500), rupiahRingkas(30000), rupiahRingkas(32500), rupiahRingkas(1_250_000)])
+    .toEqual(["0", "500", "30 rb", "32,5 rb", "1,3 jt"]);
 });

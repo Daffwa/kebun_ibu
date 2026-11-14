@@ -334,3 +334,27 @@ export function ringkasTren(
   const akhir = ada[ada.length - 1].v;
   return { akhir, ubah: akhir / ada[0].v - 1, sejak: ada[0].t };
 }
+
+// ---------------------------------------------------------------- label
+
+const BULAN = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
+
+/** Label sumbu x: "14 Nov" per hari/minggu, "Nov 2027" per bulan. Dibaca dari teks, bukan jam lokal. */
+export function labelSumbu(tanggal: string, satuan: Satuan): string {
+  const [y, m, d] = urai(tanggal);
+  return satuan === "bulan" ? `${BULAN[m - 1]} ${y}` : `${d} ${BULAN[m - 1]}`;
+}
+
+/** "14 Nov 2026" untuk teks di luar sumbu. */
+export function tanggalPanjang(tanggal: string): string {
+  const [y, m, d] = urai(tanggal);
+  return `${d} ${BULAN[m - 1]} ${y}`;
+}
+
+/** "30 rb", "1,3 jt" — sumbu rupiah ringkas supaya muat di HP. */
+export function rupiahRingkas(v: number): string {
+  const satu = (x: number) => x.toLocaleString("id-ID", { maximumFractionDigits: 1 });
+  if (Math.abs(v) >= 1_000_000) return `${satu(v / 1_000_000)} jt`;
+  if (Math.abs(v) >= 1_000) return `${satu(v / 1_000)} rb`;
+  return String(v);
+}
