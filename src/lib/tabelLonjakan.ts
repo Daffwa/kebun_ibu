@@ -43,6 +43,11 @@ export function alamatPasar(query: string, awalan: Awalan, grup: Record<string, 
   return `/admin/pasar?${p}`;
 }
 
+/** Parameter tabel (`t_*`) yang sedang berlaku, tanpa `t_hal`: dasar tautan halaman dan pengaturan. */
+export function paramTabel(query: string): Record<string, string> {
+  return Object.fromEntries([...new URLSearchParams(query)].filter(([k]) => k.startsWith("t_") && k !== "t_hal"));
+}
+
 /** Isian tersembunyi untuk form Kustom (GET) kelompok `awalan`: semua parameter kelompok lain + `tambahan`. */
 export function isianTersembunyi(query: string, awalan: Awalan, tambahan: Record<string, string> = {}): [string, string][] {
   const lain: [string, string][] = [...new URLSearchParams(query)].filter(

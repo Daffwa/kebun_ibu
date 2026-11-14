@@ -15,7 +15,8 @@ import {
   statusPreset,
   tanggalPanjang,
 } from "@/lib/pasar";
-import { ambilBatas, ambilDaftarWilayah, ambilHarian, ambilLonjakan, ambilProdukRentang } from "@/lib/pasarData";
+import { ambilBatas, ambilDaftarWilayah, ambilHarian, ambilLonjakanHalaman, ambilProdukRentang } from "@/lib/pasarData";
+import { bacaTabel } from "@/lib/tabelLonjakan";
 import { pilihWilayah, saringanProduk } from "@/lib/wilayah";
 import { rupiah } from "@/lib/format";
 import AngkaUtama from "./AngkaUtama";
@@ -23,7 +24,7 @@ import GrafikHistogram from "./GrafikHistogram";
 import GrafikLonjakan from "./GrafikLonjakan";
 import GrafikTren from "./GrafikTren";
 import Saringan from "./Saringan";
-import TabelLonjakan from "./TabelLonjakan";
+import TabelLonjakan, { type PropsTabel } from "./TabelLonjakan";
 
 export const revalidate = 0;
 
@@ -48,6 +49,45 @@ function Kartu({ judul, children }: { judul: string; children: React.ReactNode }
 const persen = (v: number) =>
   `${v > 0 ? "+" : ""}${(v * 100).toLocaleString("id-ID", { maximumFractionDigits: 1, minimumFractionDigits: 1 })}%`;
 
+type Sp = Record<string, string | string[] | undefined>;
+type SupabaseServer = Awaited<ReturnType<typeof supabaseServer>>;
+
+function teksQuery(sp: Sp): string {
+  const p = new URLSearchParams();
+  for (const [k, v] of Object.entries(sp)) for (const isi of [v ?? []].flat()) p.append(k, isi);
+  return p.toString();
+}
+
+/** Data kartu tabel lonjakan: hanya dari parameter `t_*`, tidak bergantung pada saringan grafik. */
+async function siapkanTabel(sb: SupabaseServer, sp: Sp, query: string): Promise<PropsTabel> {
+  const t = bacaTabel(sp);
+  const daftarWilayah = await ambilDaftarWilayah(sb, t.filter.pasar);
+  const wilayah = pilihWilayah(t.wilayah, daftarWilayah);
+  const nama = `${NAMA_PASAR[t.filter.pasar]}${wilayah ? ` di ${wilayah.nama}` : ""}`;
+  const batas = await ambilBatas(sb, t.filter.pasar, wilayah?.wilayah ?? "semua");
+  const dasar = {
+    query, pasar: t.filter.pasar, wilayah, daftarWilayah, batas, urut: t.urut, baris: t.baris,
+    daftar: [], jumlah: 0, hal: 1,
+  };
+  if (!batas) return { ...dasar, rentang: t.filter.rentang, status: null, pesan: `Belum ada data harga untuk ${nama}.` };
+  const status = statusPreset(batas.awal, batas.akhir);
+  const pilih = pilihRentang(t.filter, batas.awal, batas.akhir);
+  if ("kosong" in pilih) {
+    const pesan = pilih.kosong === "terbalik"
+      ? "Rentang kosong: tanggal Dari sesudah tanggal Sampai."
+      : `Tidak ada data ${nama} di rentang ini.`;
+    return { ...dasar, rentang: "kustom", status, pesan };
+  }
+  const halaman = await ambilLonjakanHalaman(sb, {
+    pasar: t.filter.pasar, mulai: pilih.mulai, akhir: pilih.akhir, wilayah: saringanProduk(wilayah) ?? undefined,
+    urut: t.urut, baris: t.baris, hal: t.hal,
+  });
+  return {
+    ...dasar, ...halaman, rentang: pilih.rentang, mulai: pilih.mulai, akhir: pilih.akhir, status,
+    pesan: halaman.jumlah === 0 ? "Tidak ada toko yang melonjak untuk saringan ini." : null,
+  };
+}
+
 export default async function Pasar({
   searchParams,
 }: {
@@ -55,15 +95,17 @@ export default async function Pasar({
 }) {
   const sp = await searchParams;
   const filter = bacaFilter(sp);
+  const query = teksQuery(sp);
   const sb = await supabaseServer();
   // Wilayah dari URL hanya sah kalau ada di daftar pasar ini; lainnya = semua wilayah.
-  const daftarWilayah = await ambilDaftarWilayah(sb, filter.pasar);
+  const [tabel, daftarWilayah] = await Promise.all([siapkanTabel(sb, sp, query), ambilDaftarWilayah(sb, filter.pasar)]);
+  const kartuTabel = <TabelLonjakan {...tabel} />;
   const wilayah = pilihWilayah(sp.wilayah, daftarWilayah);
   const kodeWilayah = wilayah?.wilayah ?? "semua";
   const saringWilayah = saringanProduk(wilayah);
   const namaData = `${NAMA_PASAR[filter.pasar]}${wilayah ? ` di ${wilayah.nama}` : ""}`;
   const batas = await ambilBatas(sb, filter.pasar, kodeWilayah);
-  const saringan = { pasar: filter.pasar, wilayah, daftarWilayah };
+  const saringan = { pasar: filter.pasar, wilayah, daftarWilayah, awalan: "" as const, query };
 
   const kepala = (
     <div className="mb-5">
@@ -78,6 +120,7 @@ export default async function Pasar({
         {kepala}
         <Saringan {...saringan} rentang={filter.rentang} batas={null} status={null} />
         <Kosong judul={`Belum ada data harga Manalagi untuk ${namaData}.`} isi="Data dikirim laptop setiap hari sesudah penarikan harga." />
+        <div className="mt-4">{kartuTabel}</div>
       </>
     );
   }
@@ -98,6 +141,7 @@ export default async function Pasar({
             isi={`Data ${namaData} ada dari ${tanggalPanjang(batas.awal)} sampai ${tanggalPanjang(batas.akhir)}.`}
           />
         )}
+        <div className="mt-4">{kartuTabel}</div>
       </>
     );
   }
@@ -106,10 +150,7 @@ export default async function Pasar({
   const harian = await ambilHarian(sb, filter.pasar, mulai, akhir, kodeWilayah);
   const { titik, satuan } = deret(harian, mulai, akhir);
   // Grafik 1 dan 2: seluruh rentang, setiap produk sekali (median harganya di rentang).
-  const [barisProduk, lonjakan] = await Promise.all([
-    ambilProdukRentang(sb, filter.pasar, mulai, akhir, saringWilayah),
-    ambilLonjakan(sb, filter.pasar, mulai, akhir, saringWilayah),
-  ]);
+  const barisProduk = await ambilProdukRentang(sb, filter.pasar, mulai, akhir, saringWilayah);
   const produk = ringkasProduk(barisProduk);
 
   const indeks = geserIndeks(titik);
@@ -169,8 +210,9 @@ export default async function Pasar({
         }`}
       >
         <GrafikLonjakan titik={titik} satuan={satuan} />
-        <TabelLonjakan {...lonjakan} />
       </Kartu>
+
+      {kartuTabel}
     </>
   );
 }

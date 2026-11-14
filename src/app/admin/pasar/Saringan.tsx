@@ -11,26 +11,17 @@ import {
   type Preset,
   type Rentang,
 } from "@/lib/pasar";
+import { alamatPasar, isianTersembunyi, type Awalan } from "@/lib/tabelLonjakan";
 import type { Wilayah } from "@/lib/wilayah";
 import KotakWilayah from "./KotakWilayah";
 
 const PASAR: Pasar[] = ["semua", "tokopedia", "blibli"];
 const PRESET: Preset[] = ["30h", "1t", "5t"];
 
-const KOTAK =
+export const KOTAK =
   "min-h-11 w-full appearance-none rounded-full border-2 border-daun-tua bg-putih pr-8 pl-3 text-base font-semibold text-daun-tua";
 
-function alamat(q: { pasar: Pasar; rentang: Rentang; wilayah: string; dari?: string; sampai?: string }): string {
-  const p = new URLSearchParams({ pasar: q.pasar, rentang: q.rentang });
-  if (q.wilayah !== "semua") p.set("wilayah", q.wilayah);
-  if (q.rentang === "kustom" && q.dari && q.sampai) {
-    p.set("dari", q.dari);
-    p.set("sampai", q.sampai);
-  }
-  return `/admin/pasar?${p}`;
-}
-
-function Pilihan({ label, children, ...props }: React.SelectHTMLAttributes<HTMLSelectElement> & { label: string }) {
+export function Pilihan({ label, children, ...props }: React.SelectHTMLAttributes<HTMLSelectElement> & { label: string }) {
   return (
     <div className="relative">
       <select aria-label={label} className={KOTAK} {...props}>
@@ -44,7 +35,11 @@ function Pilihan({ label, children, ...props }: React.SelectHTMLAttributes<HTMLS
 }
 
 /**
- * Saringan di atas semua grafik: dua menu pilihan dan kotak cari wilayah. Preset yang terkunci tampil abu-abu di dalam
+ * Satu baris saringan: di atas grafik (`awalan` "") atau di kartu tabel lonjakan (`awalan` "t_").
+ * Alamat baru hanya mengganti parameter kelompoknya sendiri; kelompok lain di `query` tetap.
+ * `tambahan` = parameter kelompok ini yang bukan saringan (urutan dan baris tabel), ikut dibawa.
+ *
+ * Saringan: dua menu pilihan dan kotak cari wilayah. Preset yang terkunci tampil abu-abu di dalam
  * menu; satu baris pendek di bawahnya menyebut kapan preset berikutnya terbuka. Tanggal Dari–Sampai
  * hanya muncul kalau "Kustom…" dipilih. Halaman memberi `key` dari rentang yang tampil, jadi
  * keadaan di sini (dan isi tanggal) selalu ikut halaman sesudah berpindah.
@@ -58,7 +53,13 @@ export default function Saringan({
   status,
   wilayah,
   daftarWilayah,
+  awalan,
+  query,
+  tambahan = {},
 }: {
+  awalan: Awalan;
+  query: string;
+  tambahan?: Record<string, string>;
   pasar: Pasar;
   rentang: Rentang;
   wilayah: Wilayah | null;
@@ -71,9 +72,21 @@ export default function Saringan({
   const router = useRouter();
   const [memuat, mulaiTransisi] = useTransition();
   const [kustom, setKustom] = useState(rentang === "kustom");
-  const pergi = (url: string) => mulaiTransisi(() => router.push(url));
+  // Tabel ada di bawah grafik: pindah halaman tanpa melompat ke atas.
+  const pergi = (url: string) => mulaiTransisi(() => router.push(url, { scroll: awalan === "" }));
   const kodeWilayah = wilayah?.wilayah ?? "semua";
   const terkunciBerikut = status ? PRESET.find((p) => !status[p].terbuka) : undefined;
+  const alamat = (q: { pasar: Pasar; rentang: Rentang; wilayah: string; dari?: string; sampai?: string }) => {
+    const kustom = q.rentang === "kustom" && q.dari && q.sampai;
+    return alamatPasar(query, awalan, {
+      [`${awalan}pasar`]: q.pasar,
+      [`${awalan}rentang`]: q.rentang,
+      [`${awalan}wilayah`]: q.wilayah !== "semua" ? q.wilayah : undefined,
+      [`${awalan}dari`]: kustom ? q.dari : undefined,
+      [`${awalan}sampai`]: kustom ? q.sampai : undefined,
+      ...tambahan,
+    });
+  };
 
   return (
     <div className={`mb-5 space-y-2 transition-opacity ${memuat ? "opacity-60" : ""}`}>
@@ -132,13 +145,16 @@ export default function Saringan({
 
       {batas && kustom && (
         <form method="get" action="/admin/pasar" className="flex flex-wrap items-end gap-2 pt-1">
-          <input type="hidden" name="pasar" value={pasar} />
-          <input type="hidden" name="rentang" value="kustom" />
-          {wilayah && <input type="hidden" name="wilayah" value={wilayah.wilayah} />}
+          <input type="hidden" name={`${awalan}pasar`} value={pasar} />
+          <input type="hidden" name={`${awalan}rentang`} value="kustom" />
+          {wilayah && <input type="hidden" name={`${awalan}wilayah`} value={wilayah.wilayah} />}
+          {isianTersembunyi(query, awalan, tambahan).map(([k, v]) => (
+            <input key={k} type="hidden" name={k} value={v} />
+          ))}
           {(
             [
-              ["dari", "Dari", mulai ?? batas.awal],
-              ["sampai", "Sampai", akhir ?? batas.akhir],
+              [`${awalan}dari`, "Dari", mulai ?? batas.awal],
+              [`${awalan}sampai`, "Sampai", akhir ?? batas.akhir],
             ] as const
           ).map(([nama, label, nilai]) => (
             <label key={nama} className="flex flex-col text-sm text-daun">

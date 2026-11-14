@@ -1,5 +1,5 @@
 import { expect, test } from "vitest";
-import { alamatPasar, bacaTabel, isianTersembunyi, nomorHalaman } from "./tabelLonjakan";
+import { alamatPasar, bacaTabel, isianTersembunyi, nomorHalaman, paramTabel } from "./tabelLonjakan";
 
 const param = (url: string) => new URLSearchParams(url.split("?")[1]);
 
@@ -61,4 +61,9 @@ test("nomorHalaman", () => {
   expect(nomorHalaman(5, 9)).toEqual([1, "…", 4, 5, 6, "…", 9]);
   expect(nomorHalaman(1, 9)).toEqual([1, 2, "…", 9]);
   expect(nomorHalaman(3, 9)).toEqual([1, 2, 3, 4, "…", 9]); // celah satu halaman ditulis angkanya
+});
+
+test("paramTabel: parameter t_* sekarang tanpa t_hal (untuk tautan halaman dan pengaturan)", () => {
+  expect(paramTabel("pasar=blibli&t_pasar=tokopedia&t_urut=naik&t_hal=3")).toEqual({ t_pasar: "tokopedia", t_urut: "naik" });
+  expect(paramTabel("")).toEqual({});
 });
