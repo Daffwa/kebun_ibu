@@ -58,6 +58,7 @@ body {
   background: rgba(255, 255, 255, 0.92);
   font-weight: 800;
   letter-spacing: 0.04em;
+  animation: stampIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
 
 /* Kertas bergaris tipis di belakang banner musim, seperti papan cat di
@@ -70,6 +71,109 @@ body {
     transparent 2px,
     transparent 10px
   );
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.papan:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px -4px rgba(23, 57, 42, 0.2);
+}
+
+/* Animasi halus agar antarmuka hidup dan tidak kaku */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUpModal {
+  from {
+    opacity: 0;
+    transform: translateY(36px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes stampIn {
+  0% {
+    opacity: 0;
+    transform: scale(1.6) rotate(-18deg);
+  }
+  65% {
+    opacity: 1;
+    transform: scale(0.96) rotate(-6deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(-8deg);
+  }
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(232, 163, 61, 0.45);
+  }
+  50% {
+    transform: scale(1.04);
+    box-shadow: 0 0 0 6px rgba(232, 163, 61, 0);
+  }
+}
+
+@keyframes floatGentle {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
+.animasi-masuk {
+  animation: fadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animasi-modal {
+  animation: slideUpModal 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animasi-pulse-emas {
+  animation: pulseGlow 2.5s infinite ease-in-out;
+}
+
+.animasi-mengapung {
+  animation: floatGentle 3s ease-in-out infinite;
+}
+
+/* Interaksi halus kartu dan tombol */
+.kartu-interaktif {
+  transition: transform 0.24s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.24s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease;
+}
+.kartu-interaktif:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px -6px rgba(23, 57, 42, 0.14);
+}
+.kartu-interaktif:active {
+  transform: scale(0.985);
+}
+
+.tombol-interaktif {
+  transition: transform 0.16s cubic-bezier(0.16, 1, 0.3, 1), filter 0.16s ease, box-shadow 0.16s ease;
+}
+.tombol-interaktif:hover {
+  filter: brightness(1.06);
+  transform: translateY(-1.5px);
+  box-shadow: 0 4px 14px rgba(23, 57, 42, 0.15);
+}
+.tombol-interaktif:active {
+  transform: scale(0.96);
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -55,7 +55,7 @@ export default function FormPesanan({
       <button
         type="button"
         onClick={() => setBuka(true)}
-        className="min-h-13 w-full rounded-full bg-daun-tua px-6 py-3 text-lg font-bold text-putih"
+        className="min-h-13 w-full rounded-full bg-daun-tua px-6 py-3 text-lg font-bold text-putih shadow-md tombol-interaktif"
       >
         {lelang ? "Lelang" : `Pesan ${rupiah(harga)}`}
       </button>
@@ -66,13 +66,13 @@ export default function FormPesanan({
       </p>
 
       {buka ? (
-        <div className="fixed inset-0 z-50 flex items-end justify-center bg-daun-tua/50 sm:items-center">
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-daun-tua/50 backdrop-blur-xs sm:items-center">
           <div
             ref={panelRef}
             role="dialog"
             aria-modal="true"
             aria-label={lelang ? "Form lelang" : "Form pesan"}
-            className="max-h-[92dvh] w-full max-w-lg overflow-y-auto rounded-t-[16px] border-t-4 border-daun-tua bg-kertas px-5 pt-5 pb-8 sm:rounded-[16px] sm:border-4"
+            className="max-h-[92dvh] w-full max-w-lg overflow-y-auto rounded-t-[20px] border-t-4 border-daun-tua bg-kertas px-5 pt-5 pb-8 shadow-2xl animasi-modal sm:rounded-[20px] sm:border-4"
           >
             <div className="mb-4 flex items-start justify-between gap-4">
               <div>

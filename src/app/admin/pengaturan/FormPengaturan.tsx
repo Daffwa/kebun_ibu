@@ -58,34 +58,36 @@ export default function FormPengaturan({
         </p>
       </div>
 
-      <KotakTemplat
-        jenis="wa_pesan"
-        judul="Notifikasi WhatsApp: pesanan baru"
-        keterangan="Dikirim ke WhatsApp Ibu setiap ada pesanan barang biasa."
-        awal={templat.wa_pesan}
-        galat={hasil?.error?.wa_pesan}
-      />
-      <KotakTemplat
-        jenis="wa_lelang"
-        judul="Notifikasi WhatsApp: tawaran lelang baru"
-        keterangan="Dikirim ke WhatsApp Ibu setiap ada tawaran lelang."
-        awal={templat.wa_lelang}
-        galat={hasil?.error?.wa_lelang}
-      />
-      <KotakTemplat
-        jenis="bagikan_jual"
-        judul="Bagikan: barang biasa"
-        keterangan="Teks yang disalin saat menekan Bagikan pada barang biasa."
-        awal={templat.bagikan_jual}
-        galat={hasil?.error?.bagikan_jual}
-      />
-      <KotakTemplat
-        jenis="bagikan_lelang"
-        judul="Bagikan: barang lelang"
-        keterangan="Teks yang disalin saat menekan Bagikan pada barang lelang."
-        awal={templat.bagikan_lelang}
-        galat={hasil?.error?.bagikan_lelang}
-      />
+      <div className="grid gap-4 md:grid-cols-2">
+        <KotakTemplat
+          jenis="wa_pesan"
+          judul="Notifikasi WhatsApp: pesanan baru"
+          keterangan="Dikirim ke WhatsApp Ibu setiap ada pesanan barang biasa."
+          awal={templat.wa_pesan}
+          galat={hasil?.error?.wa_pesan}
+        />
+        <KotakTemplat
+          jenis="wa_lelang"
+          judul="Notifikasi WhatsApp: tawaran lelang baru"
+          keterangan="Dikirim ke WhatsApp Ibu setiap ada tawaran lelang."
+          awal={templat.wa_lelang}
+          galat={hasil?.error?.wa_lelang}
+        />
+        <KotakTemplat
+          jenis="bagikan_jual"
+          judul="Bagikan: barang biasa"
+          keterangan="Teks yang disalin saat menekan Bagikan pada barang biasa."
+          awal={templat.bagikan_jual}
+          galat={hasil?.error?.bagikan_jual}
+        />
+        <KotakTemplat
+          jenis="bagikan_lelang"
+          judul="Bagikan: barang lelang"
+          keterangan="Teks yang disalin saat menekan Bagikan pada barang lelang."
+          awal={templat.bagikan_lelang}
+          galat={hasil?.error?.bagikan_lelang}
+        />
+      </div>
 
       {hasil?.pesan ? (
         <p

@@ -82,7 +82,7 @@ export default function DaftarBarangPublik({
               <h2 className="mb-4 text-2xl font-extrabold text-daun-tua">
                 Sedang dilelang
               </h2>
-              <ul className="grid gap-6">{lelang.map(kartu)}</ul>
+              <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">{lelang.map(kartu)}</ul>
             </section>
           ) : null}
 
@@ -93,7 +93,7 @@ export default function DaftarBarangPublik({
                   Dijual
                 </h2>
               ) : null}
-              <ul className="grid gap-6">{lainnya.map(kartu)}</ul>
+              <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">{lainnya.map(kartu)}</ul>
             </section>
           ) : null}
         </>
@@ -122,15 +122,15 @@ function KartuListing({
   return (
     <Link
       href={`/l/${listing.id}`}
-      className="block overflow-hidden rounded-[10px] border-2 border-daun-tua bg-putih"
+      className="group block overflow-hidden rounded-[10px] border-2 border-daun-tua bg-putih kartu-interaktif animasi-masuk"
     >
-      <div className="relative aspect-4/3 bg-kertas-tua">
+      <div className="relative aspect-4/3 overflow-hidden bg-kertas-tua">
         {foto ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={urlFoto(foto.path)}
             alt={listing.judul}
-            className={`h-full w-full object-cover ${laku ? "opacity-55" : ""}`}
+            className={`h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105 ${laku ? "opacity-55" : ""}`}
             loading="lazy"
           />
         ) : (
@@ -141,20 +141,20 @@ function KartuListing({
 
         {laku ? (
           <div className="absolute inset-0 flex items-center justify-center">
-            <span className="stempel rounded-[6px] px-5 py-2 text-2xl">
+            <span className="stempel rounded-[6px] px-5 py-2 text-2xl shadow-lg">
               Sudah laku
             </span>
           </div>
         ) : null}
 
         {listing.status === "segera" ? (
-          <span className="absolute top-3 left-3 rounded-full bg-daun-tua px-4 py-1.5 text-sm font-semibold text-putih">
+          <span className="absolute top-3 left-3 rounded-full bg-daun-tua px-4 py-1.5 text-sm font-semibold text-putih shadow-sm">
             Segera
           </span>
         ) : null}
 
         {lelang && !laku ? (
-          <span className="absolute top-3 right-3 rounded-full border-2 border-daun-tua bg-emas px-4 py-1 text-sm font-extrabold tracking-wide text-daun-tua">
+          <span className="absolute top-3 right-3 rounded-full border-2 border-daun-tua bg-emas px-4 py-1 text-sm font-extrabold tracking-wide text-daun-tua shadow-sm animasi-pulse-emas">
             LELANG
           </span>
         ) : null}
