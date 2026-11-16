@@ -112,10 +112,9 @@ const p = (harga: number, terjual: number | null = null, toko = "A") =>
   ({ tanggal: "2026-11-14", sumber: "blibli", produk_key: `${toko}${harga}`, nama_toko: toko,
      harga_per_kg: harga, terjual_min: terjual }) as Produk;
 
-test("angkaUtama: tertimbang hanya produk laku", () => {
+test("angkaUtama: median, rata-rata, jumlah produk dan toko (tanpa tertimbang, dihapus 16 Nov)", () => {
   expect(angkaUtama([p(20000, 10, "A"), p(30000, 30, "B"), p(40000, null, "B")]))
-    .toEqual({ median: 30000, rataRata: 30000, tertimbang: 27500, jumlahProduk: 3, jumlahToko: 2 });
-  expect(angkaUtama([p(20000, 0)]).tertimbang).toBeNull();
+    .toEqual({ median: 30000, rataRata: 30000, jumlahProduk: 3, jumlahToko: 2 });
 });
 
 test("histogram: kelompok Rp5.000, kelompok terakhir menutup kanan", () => {
@@ -200,6 +199,5 @@ test("ringkasProduk: produk 3 hari dihitung sekali, harga = median, terjual dari
     { tanggal: "2026-11-10", sumber: "tokopedia", produk_key: "a", nama_toko: "Toko A", harga_per_kg: 31000, terjual_min: null },
     { tanggal: "2026-11-08", sumber: "tokopedia", produk_key: "b", nama_toko: "Toko B", harga_per_kg: 25000, terjual_min: 5 },
   ]);
-  // grafik 1 di atas hasil ini: "a" tidak ikut tertimbang (terjual hari terakhir kosong)
-  expect(angkaUtama(hasil)).toEqual({ median: 28000, rataRata: 28000, tertimbang: 25000, jumlahProduk: 2, jumlahToko: 2 });
+  expect(angkaUtama(hasil)).toEqual({ median: 28000, rataRata: 28000, jumlahProduk: 2, jumlahToko: 2 });
 });

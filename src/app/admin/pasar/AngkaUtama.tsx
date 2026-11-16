@@ -8,13 +8,12 @@ function judulRentang(mulai: string, akhir: string): string {
   return `${tanggalPanjang(mulai)} – ${tanggalPanjang(akhir)}`;
 }
 
-/** Grafik 1: tiga angka utama atas seluruh rentang. `produk` = hasil `ringkasProduk`. */
+/** Grafik 1: dua angka utama atas seluruh rentang. `produk` = hasil `ringkasProduk`. */
 export default function AngkaUtama({ produk, mulai, akhir }: { produk: Produk[]; mulai: string; akhir: string }) {
   const a = angkaUtama(produk);
   const angka = [
     { judul: "Median per kg", nilai: a.median, catatan: "harga tengah pasar" },
     { judul: "Rata-rata per kg", nilai: a.rataRata, catatan: "terseret harga ekstrem" },
-    { judul: "Tertimbang terjual", nilai: a.tertimbang, catatan: "perkiraan harga yang dibayar pembeli" },
   ];
 
   return (
@@ -22,7 +21,7 @@ export default function AngkaUtama({ produk, mulai, akhir }: { produk: Produk[];
       <p className="mb-3 text-sm text-daun">
         {judulRentang(mulai, akhir)} · {a.jumlahProduk} produk, {a.jumlahToko} toko
       </p>
-      <dl className="grid gap-4 sm:grid-cols-3">
+      <dl className="grid gap-4 sm:grid-cols-2">
         {angka.map((x) => (
           <div key={x.judul}>
             <dt className="text-daun">{x.judul}</dt>
