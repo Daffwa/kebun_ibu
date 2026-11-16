@@ -8,7 +8,7 @@ import { KotakTooltip, SUMBU, TINGGI, WARNA, titikGaris } from "./gaya";
 type TitikTren = { tanggal: string; indeks: number | null; median: number | null };
 
 const SERI = [
-  { kunci: "indeks", nama: "Produk yang sama", warna: WARNA.biru },
+  { kunci: "indeks", nama: "Produk yang sama (ujung = median terakhir)", warna: WARNA.biru },
   { kunci: "median", nama: "Median semua produk", warna: WARNA.oranye },
 ] as const;
 

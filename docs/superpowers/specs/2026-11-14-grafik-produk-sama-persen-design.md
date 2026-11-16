@@ -1,5 +1,11 @@
 # Grafik "produk yang sama" dalam persen (desain singkat)
 
+> **16 Nov 2026: pengguna mengganti pilihan ke A (ganti kata saja).** Grafik tetap rupiah. Judul jadi
+> "Median {tanggal terakhir}: Rp X · produk yang sama berubah ±x,x% sejak {tanggal pertama}", legenda biru
+> "Produk yang sama (ujung = median terakhir)", keterangan menjelaskan garis biru bukan harga satu produk.
+> Notebook ikut (Grafik 3 dikembalikan ke rupiah dengan kata yang sama). Desain B di bawah tidak dibangun;
+> rencana `docs/superpowers/plans/2026-11-14-grafik-produk-sama-persen.md` dibatalkan.
+
 Tanggal: 14 Nov 2026. Halaman: `/admin/pasar` (grafik 3) dan notebook `dashboard_contoh.ipynb` (Grafik 3).
 
 ## Maksud

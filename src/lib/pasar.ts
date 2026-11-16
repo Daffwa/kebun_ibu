@@ -340,15 +340,15 @@ export function geserIndeks(titik: Titik[]): (number | null)[] {
   return titik.map((t) => (t.indeks_berantai === null ? null : t.indeks_berantai * faktor));
 }
 
-/** Judul grafik 3: nilai terakhir dan perubahan sejak titik berdata pertama; null kalau < 2 titik. */
+/** Judul grafik 3: nilai terakhir (dan tanggalnya) serta perubahan sejak titik berdata pertama; null kalau < 2 titik. */
 export function ringkasTren(
   nilai: (number | null)[],
   tanggal: string[],
-): { akhir: number; ubah: number; sejak: string } | null {
+): { akhir: number; ubah: number; sejak: string; sampai: string } | null {
   const ada = nilai.flatMap((v, i) => (v === null ? [] : [{ v, t: tanggal[i] }]));
   if (ada.length < 2) return null;
   const akhir = ada[ada.length - 1].v;
-  return { akhir, ubah: akhir / ada[0].v - 1, sejak: ada[0].t };
+  return { akhir, ubah: akhir / ada[0].v - 1, sejak: ada[0].t, sampai: ada[ada.length - 1].t };
 }
 
 // ---------------------------------------------------------------- label

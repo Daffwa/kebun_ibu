@@ -10,7 +10,7 @@ import {
   rentangTeks,
   ringkasProduk,
   ringkasTren,
-  rupiahRingkas,
+  labelSumbu,
   selisihHari,
   statusPreset,
   tanggalPanjang,
@@ -190,8 +190,12 @@ export default async function Pasar({
 
       <Kartu
         judul={
-          "Harga per kg produk yang sama" +
-          (tren ? `: ${rupiah(tren.akhir)}, ${persen(tren.ubah)} sejak ${tanggalPanjang(tren.sejak)}` : "")
+          // 16 Nov: "Harga per kg produk yang sama: Rp 30.000" terbaca sebagai harga produk; angka itu
+          // adalah median titik terakhir, jadi judul menyebutnya begitu.
+          tren
+            ? `Median ${satuan === "hari" ? tanggalPanjang(tren.sampai) : labelSumbu(tren.sampai, satuan)}: ${rupiah(tren.akhir)} · ` +
+              `produk yang sama berubah ${persen(tren.ubah)} sejak ${tanggalPanjang(tren.sejak)}`
+            : "Harga per kg: produk yang sama vs semua produk"
         }
       >
         <GrafikTren
@@ -199,8 +203,9 @@ export default async function Pasar({
           satuan={satuan}
         />
         <p className="mt-2 text-sm text-daun">
-          Garis biru hanya bergerak kalau produk yang sama berubah harga, jadi tidak terpengaruh produk yang muncul
-          berganti. Ujung kanannya = median hari terakhir ({tren ? rupiahRingkas(tren.akhir) : "–"}).
+          Garis biru bukan harga satu produk. Garis itu hanya bergerak kalau produk yang sama berubah harga, dan ujung
+          kanannya disamakan dengan median terakhir. Kalau garis oranye bergerak tapi biru datar, perubahannya datang dari
+          produk yang muncul berganti, bukan dari penjual yang mengubah harga.
         </p>
       </Kartu>
 
