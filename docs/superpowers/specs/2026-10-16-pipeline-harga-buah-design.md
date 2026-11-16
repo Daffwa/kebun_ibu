@@ -1,16 +1,47 @@
 # Desain: Pipeline ETL Harga Buah Marketplace
 
-Tanggal: 16 Oktober 2026
-Status: menunggu tinjauan
+Tanggal: 16 Oktober 2026 · **Diperbarui: 7 November 2026**
+Status: menunggu tinjauan pembaruan 7 November
 Latar belakang: [`rencana-data-science.md`](../../rencana-data-science.md),
-[`keputusan-data-science-2026-10-13.md`](../../keputusan-data-science-2026-10-13.md)
+[`keputusan-data-science-2026-10-13.md`](../../keputusan-data-science-2026-10-13.md),
+[`catatan-scraping-vps-2026-11-07.md`](../../catatan-scraping-vps-2026-11-07.md)
+
+## 0. Yang berubah pada 7 November 2026
+
+Hasil eksplorasi data mentah 26 Oktober – 7 November (notebook
+`data-science/eksplor.ipynb`):
+
+1. **Penarikan harian otomatis sudah jalan** (laptop + VPS). Tidak lagi di
+   luar lingkup (bagian 1, 4.4).
+2. **Blibli: harga semua opsi varian ikut ditarik** sejak 8 November
+   (bagian 4.1). Lapisan 1 Blibli jadi **satu baris per opsi**
+   (`item_sku`), bukan per produk (bagian 5.1).
+3. **Kolom Blibli: 29 kolom sumber** + 5 kolom turunan (bagian 5.1).
+4. **Aturan berat diperbarui** dari profil ±9.400 nama asli: pecahan
+   "1/2 kg" sekarang **dibaca** (menggantikan aturan lama "dilewati"),
+   ditambah berat cadangan dari `variant` Blibli dan URL Tokopedia
+   (bagian 5.2).
+5. **Lima cek perbandingan kolom Blibli** yang gagal masuk karantina
+   (bagian 6).
+6. **Target utama analisis: harga Mangga Manalagi.** Penarikan tetap
+   per kategori buah (konteks pasar).
+7. **(8 Nov) Tinjauan lewat `transform/transform.ipynb`:** logika tetap di `.py`
+   (supaya bisa dites pytest dan dijalankan terjadwal), tetapi setiap
+   langkah transform punya bagian di notebook yang menampilkan **kode
+   fungsinya dan hasilnya**. Pengguna meninjau kode + hasil di sana
+   (bagian 2, 11).
+8. **(8 Nov) `sku` Blibli disimpan** dan dibandingkan dengan `id` (cek G).
+
+Tanda **[usulan Claude]** = keputusan kecil oleh Claude, bukan pengguna.
+Periksa saat membaca.
 
 ## 1. Tujuan dan lingkup
 
 Membangun pipeline **ETL** yang mengambil produk buah dari **Blibli** dan
 **Tokopedia**, membersihkan dan menyeragamkannya di Python, lalu memuatnya
 ke **DuckDB** sebagai **star schema**. Hasilnya menjadi dasar analisis dan
-model di tahap berikutnya.
+model di tahap berikutnya. **Target utama: harga Mangga Manalagi**
+(diputuskan 4 November).
 
 Diperlakukan sebagai proyek data engineering yang serius:
 - pemuatan yang aman diulang;
@@ -22,8 +53,9 @@ Diperlakukan sebagai proyek data engineering yang serius:
 
 **Di luar lingkup:**
 - model harga per kg (didesain setelah pipeline ini jadi);
-- dashboard;
-- penjadwalan otomatis;
+- dashboard (usulan dashboard `/admin/pasar` 26 Oktober belum diputuskan,
+  bagian 13);
+- halaman produk Tokopedia (hanya di notebook, bagian 4.2);
 - Shopee.
 
 ## 2. Keputusan yang dikunci
@@ -36,40 +68,57 @@ Diperlakukan sebagai proyek data engineering yang serius:
 | Validasi | **Pandera** (backend Polars) |
 | Gudang data | **DuckDB**, satu berkas |
 | Bentuk tabel akhir | **Star schema** + view datar `v_produk` |
-| Menjalankan | `run.py` dari laptop sendiri, beberapa kali (bukan harian) |
+| Penarikan | **Harian otomatis**: `tarik_harian.py` (bagian 4.4) |
+| Transform + load | `run.py`, dijalankan manual dari laptop |
+| Tempat meninjau | **`transform/transform.ipynb`**: satu bagian per langkah. Sel 1 menampilkan kode fungsi (`tampilkan_kode(fungsi)`: `inspect.getsource` + pygments tema gelap `github-dark`), sel 2 menjalankannya pada data asli dan menampilkan tabel hasil. Logika tidak ditulis ulang di notebook (8 Nov) |
 | Tes | pytest + GitHub Actions |
-| Tidak dipakai | Airflow, Kafka, dbt, Selenium/BeautifulSoup |
+| Tidak dipakai | Airflow, Kafka, dbt, Selenium. Selenium **diuji 7 Nov dan gagal** di VPS (catatan scraping) |
 
 ## 3. Arsitektur
 
 ```
-EXTRACT                     TRANSFORM (Polars)                LOAD (DuckDB)
-                                                              lapisan 1 (per platform)
-extract/blibli.py    ─┐     transform/blibli.py ──┐           ├─ blibli_produk
-extract/tokopedia.py ─┤     transform/tokopedia.py┤           ├─ tokopedia_produk
-                      │       ↓ parser bersama    │           lapisan 2 (star schema)
-data_lake/raw/        │       ↓ Pandera ──gagal──►│──────────►├─ dim_produk
- <sumber>/            │       ↓ lolos             │           ├─ dim_toko
- date=YYYY-MM-DD/     │     transform/model.py    │           ├─ dim_tanggal
- page_NNN.json ◄──────┘     (bangun dim + fakta)  │           ├─ fakta_harga
- (tidak pernah diubah)                            │           ├─ v_produk (view)
-                                                  └──────────►├─ produk_karantina
-                                                              └─ pipeline_runs
+EXTRACT (harian)               TRANSFORM (Polars)                LOAD (DuckDB)
+                                                                 lapisan 1 (per platform)
+extract/blibli.py    ─┐        transform/blibli.py ──┐           ├─ blibli_produk
+extract/tokopedia.py ─┤        transform/tokopedia.py┤           ├─ tokopedia_produk
+                      │          ↓ parser bersama    │           lapisan 2 (star schema)
+data_lake/raw/        │          ↓ Pandera ──gagal──►│──────────►├─ dim_produk
+ <sumber>/            │          ↓ lolos             │           ├─ dim_toko
+ date=YYYY-MM-DD/     │        transform/model.py    │           ├─ dim_tanggal
+  <kat>_page_NNN.json ◄┤        (bangun dim + fakta)  │           ├─ fakta_harga
+  varian/*.json (Blibli)                             │           ├─ v_produk (view)
+  halaman/<id>.json (Tokopedia, Manalagi)            │           │
+  _SUKSES                                            └──────────►├─ produk_karantina
+ (tidak pernah diubah)                                           └─ pipeline_runs
+data_lake_vps/raw/tokopedia/...  (salinan dari VPS)
 ```
 
 ## 4. Extract
 
-### 4.1 Blibli
+### 4.1 Blibli (hanya dari laptop)
 
-- **Telusuri kategori buah** (`BU-1000105`), bukan pencarian kata.
-  Skrip lama `skrip/tarik_blibli.py` masih berbasis pencarian kata, jadi
-  penarik kategori ditulis ulang. Data mentah kategori dari 27 September
-  (`data-mentah/blibli_kategori_mentah.json`, 1.869 produk) menjadi bahan
-  uji dan cuplikan awal.
-- Header browser lengkap seperti `tarik_blibli.py`.
-- Batas situs 20 halaman per kategori. Itu sudah batasnya, bukan galat.
+- **Dua kategori:** `BU-1000190` (Buah Lokal) dan `BU-1000191` (Buah
+  Impor), masing-masing maksimal 20 halaman × 40 produk. Halaman 21 →
+  HTTP 422 = selesai, bukan galat.
+- Berkas: `<kategori>_page_NNN.json`.
+- **Varian (sejak 8 November):** setiap produk dengan `hasVariants = true`
+  (±168 per hari):
+  - `GET /backend/product-detail/products/ps--<id>/_summary` → disimpan
+    `varian/ps--<id>.json`. Isinya daftar opsi (`data.options[]`) dan
+    harga opsi default.
+  - Untuk setiap opsi yang `selected = false`:
+    `GET .../is--<itemSku>/_summary` → `varian/is--<itemSku>.json`.
+    Isinya harga opsi itu (`data.price.offered`, `listed`,
+    `listDiscount`).
+  - Satu produk gagal (misalnya 404) → dilewati, tarikan tetap
+    `berhasil`, log: `varian: N produk, M gagal`. **Semua** gagal →
+    `sebagian`.
+- **Blibli memblokir IP VPS** (HTTP 403 Cloudflare), jadi Blibli hanya
+  ditarik dari laptop.
+- Tanggal sebelum 8 November tidak punya folder `varian/`. Harga opsi
+  lain untuk tanggal itu **tidak ada** dan tidak bisa diambil mundur.
 
-### 4.2 Tokopedia
+### 4.2 Tokopedia (laptop + VPS)
 
 - `POST https://gql.tokopedia.com/graphql/SearchProductV5Query`.
 - Parameter: `source=directory`,
@@ -77,53 +126,209 @@ data_lake/raw/        │       ↓ Pandera ──gagal──►│────�
   `rows=60`, `page=N`, `start=(N-1)*60`, `ob=23`.
 - Kunjungi beranda dulu dalam sesi yang sama untuk mendapat cookie Akamai.
 - Halaman 1 sampai halaman kosong pertama atau halaman 100 (sekitar
-  6.000 produk).
+  6.000 baris; ±5.500 produk unik karena halaman tumpang tindih).
+- Query GraphQL hanya meminta 13 field. Berat, stok, dan jumlah terjual
+  pasti **tidak ada** di hasil cari.
+- **Halaman produk Mangga Manalagi (sejak 8 November, keputusan pengguna
+  bagian 13 #11 = a):** setelah hasil cari selesai, setiap produk yang
+  `mangga_manalagi(name)` benar (±40–55 per hari) diambil halamannya:
+  - `GET <url tanpa query>` dengan sesi `curl_cffi` **baru** per percobaan
+    (kunjungi beranda dulu). HTML berisi JSON `window.__cache=`; JSON itu
+    disimpan apa adanya ke `halaman/<id>.json`.
+  - Tokopedia kadang mengirim halaman kosong (±22 KB, tanpa
+    `pdpBasicInfo`; 4 dari 9 percobaan pada uji 8 Nov) → dianggap
+    `KesalahanSementara`, dicoba ulang (aturan 4.3).
+  - Yang dipakai transform: `pdpBasicInfo.weight` + `weightUnit` (berat
+    yang diisi penjual, "Berat Satuan" di halaman) dan
+    `pdpContentSnapshotVariant.isVariant` / `parentID`.
+  - Satu produk gagal → dilewati, log `halaman produk: N, M gagal`.
+    **Semua** gagal → `sebagian` (sama dengan varian Blibli).
 
 ### 4.3 Aturan bersama
 
-- Jeda acak **1,5–3 detik** antar-halaman.
+- Jeda acak **1,5–3 detik** antar-permintaan.
 - Coba ulang 3 kali dengan jeda makin panjang (2, 4, 8 detik) untuk galat
   jaringan, `429`, atau `5xx`.
-- Setiap jawaban disimpan **apa adanya** ke
-  `data_lake/raw/<sumber>/date=YYYY-MM-DD/page_NNN.json`. Kalau folder
-  tanggal itu sudah ada, isinya ditimpa utuh. Tarik ulang di hari yang sama
-  menggantikan tarikan sebelumnya.
+- Setiap jawaban disimpan **apa adanya**. Kalau folder tanggal itu sudah
+  ada, isinya ditimpa utuh.
 - Kalau satu halaman tetap gagal setelah 3 kali coba, penarikan berhenti
   di situ. Halaman yang sudah tersimpan tetap dipakai, dan run dicatat
   `sebagian` (bagian 9).
 
+### 4.4 Jadwal harian (sudah jalan)
+
+| Mesin | Jadwal | Sumber |
+|---|---|---|
+| Laptop | Task Scheduler `KebunIbu-TarikHarian`, 06:00 + 12:00 (cadangan), jalan saat laptop menyala kalau terlewat | Blibli + Tokopedia, lalu `sinkron_vps.py` |
+| VPS (DomaiNesia, Jakarta, 1 GB) | cron 06:00 + 12:00 WIB | Tokopedia saja |
+
+- Sumber yang sudah sukses hari itu (`_SUKSES`) dilewati. `--ulang
+  <sumber>` memaksa tarik ulang. `--sumber` memilih sumber.
+- `sinkron_vps.py` menyalin folder VPS yang sudah `_SUKSES` ke
+  `data_lake_vps/raw/tokopedia/` di laptop.
+
 ## 5. Transform
+
+### 5.0 Blibli vs Tokopedia: yang sama dan yang khas (8 Nov)
+
+Alurnya sama: **hasil cari → (opsi/halaman produk) → JSON mentah per tanggal
+→ transform Polars per platform → parser bersama → fakta**. Yang khas:
+
+| Langkah | Sama di keduanya | Khas Blibli | Khas Tokopedia |
+|---|---|---|---|
+| Hasil cari | jeda 1,5–3 dtk, coba ulang 2/4/8 dtk, simpan apa adanya, `_SUKSES` | REST `GET /backend/search/products`, 2 kategori (lokal/impor) × ≤20 hal × 40 | GraphQL `POST SearchProductV5Query`, 1 kategori × ≤100 hal × 60; perlu `curl_cffi` + cookie beranda |
+| Tahu produk punya opsi? | — | **ya, di kartu** (`hasVariants`) | **tidak**; baru tahu dari halaman produk (`isVariant`) |
+| Opsi diambil untuk | — | **semua** produk bervarian (±174/hari) | **hanya Mangga Manalagi** (±25/hari), karena harus buka halaman tiap produk (±25 dtk/produk) |
+| Sumber data opsi | JSON per produk | API `_summary` (`ps--`, `is--`), 1 berkas per opsi | HTML → `window.__cache` (`pdpProductVariantChildren`: semua opsi + harga dalam 1 berkas); ±50% halaman kosong → coba ulang |
+| Label asal | `asal_dari_nama` | kategori lokal/impor dari Blibli | tidak ada |
+| Berat | `berat_gram` / `pilih_berat` | variant → nama → usp | opsi → halaman (bersyarat) → nama → URL |
+| Harga coret / diskon | harga = harga bayar | `listPrice` + `discount` dipakai | `original` hanya disimpan, `diskon_persen` NULL (13 #1–2) |
+| Voucher, kampanye | — | ada | tidak ada |
+| Terjual | ember dari label | `soldCountTotal` angka + label bulanan | hanya label (`ri_product_credibility`) |
+| Mesin | laptop | laptop (VPS diblokir 403) | laptop (13 #3) |
 
 ### 5.1 Lapisan 1: tabel per platform
 
-Setiap modul platform membaca semua halaman mentah satu tanggal dan
-menghasilkan satu DataFrame. **Kolom asli platform dipertahankan.**
+Setiap modul platform membaca semua berkas mentah satu tanggal dan
+menghasilkan satu DataFrame.
 
-| `blibli_produk` | `tokopedia_produk` |
-|---|---|
-| `tanggal`, `produk_id` (`id`), `sku`, `nama`, `harga`, `harga_coret`, `diskon_persen`, `merchant_code`, `penjual`, `resmi`, `lokasi`, `kategori` (jenjang lengkap), `rating`, `jumlah_ulasan`, `total_terjual` (angka pasti), `url` | `tanggal`, `produk_id`, `nama`, `harga`, `harga_asli`, `diskon_persen`, `toko_id`, `nama_toko`, `kota`, `tier_toko`, `rating`, `terjual_label` ("60+ terjual"), `kategori` (breadcrumb), `url` |
+#### `blibli_produk`: satu baris per opsi (`item_sku`) per tanggal
 
-Baris ganda dalam satu tanggal (karena halaman tumpang tindih) diambil
-satu per (`produk_id`, `tanggal`).
+**Baris default** (`opsi_default = true`) berasal dari kartu hasil cari.
+**Baris opsi lain** (`opsi_default = false`) berasal dari
+`varian/is--<itemSku>.json`. Tanggal tanpa `varian/` hanya punya baris
+default.
+
+| # | Kolom | Baris default (kartu cari) | Baris opsi lain (`is--` file) |
+|---|---|---|---|
+| 1 | `tanggal` | tanggal folder | sama |
+| 2 | `produk_id` | `id` | `data.productSku` |
+| 3 | `item_sku` | `itemSku` | `data.itemSku` |
+| 4 | `opsi_default` | `true` | `false` |
+| 5 | `nama` | `name` | salin dari baris default |
+| 6 | `variant` | `variant` | `data.options[selected].attributes[0].value` |
+| 7 | `harga` | `price.salePrice` | `data.price.offered` |
+| 8 | `harga_coret` | `price.listPrice` | `data.price.listed` |
+| 9 | `diskon_persen` | `price.discount` | `data.price.listDiscount` |
+| 10 | `harga_voucher` | `contextualPrice.priceDisplay` ("Rp39.100" → 39100) | NULL |
+| 11 | `harga_coret_voucher` **[usulan Claude]** | `contextualPrice.strikeThroughPriceDisplay` → angka | NULL |
+| 12 | `diskon_voucher_persen` | `contextualPrice.discount` | NULL |
+| 13 | `kampanye` | `campaignInfo.name` | NULL |
+| 14 | `harga_sebelum_kampanye` | `price.offerPriceDisplay` → angka | NULL |
+| 15 | `merchant_code` | `merchantCode` | salin |
+| 16 | `penjual` | `merchantName` | salin |
+| 17 | `resmi` | `official` | salin |
+| 18 | `lokasi` | `location` | salin |
+| 19 | `lencana_toko` | `badge.merchantBadge` | salin |
+| 20 | `rating_toko` | `review.sellerRating` | salin |
+| 21 | `merek` | `brand` | salin |
+| 22 | `kategori` | `" > ".join(categoryNameHierarchy)` | salin |
+| 23 | `kategori_tarik` | awalan nama berkas (`BU-1000190`/`BU-1000191`) | salin |
+| 24 | `rating` | `review.absoluteRating`, **NULL kalau `review.count = 0`** | salin |
+| 25 | `jumlah_ulasan` | `review.count` | salin |
+| 26 | `total_terjual` | `soldCountTotal` (NULL tetap NULL) | salin |
+| 27 | `terjual_bulan_ini_min` | angka dari `monthlySoldCountLabel` ("Dibeli 100+ kali bulan ini" → 100) | NULL |
+| 28 | `url` | `"https://www.blibli.com" + path url + "?ds=" + item_sku` (tanpa `sid`/`metaData` pelacak yang berubah tiap hari) **[usulan Claude 8 Nov]** | path dari baris default + `?ds=` item_sku opsi itu |
+| 29 | `sku` | `sku` | NULL (berkas `is--` tidak punya `sku`) |
+
+Catatan:
+- `sku` **disimpan** (keputusan pengguna 8 Nov) walaupun sama dengan `id`
+  di 24.000 dari 24.000 baris (18 Okt – 8 Nov): datanya bisa berubah,
+  jadi dibandingkan lewat cek G (bagian 6.1). Yang punya kode tambahan
+  adalah `itemSku` (`id` + `-00001`), disimpan sebagai `item_sku`.
+- Kolom 10–14 dan 27 hanya ada di kartu cari, yang hanya memuat opsi
+  default. Untuk opsi lain nilainya NULL, bukan ditebak.
+- `harga_coret_voucher` ditambahkan **[usulan Claude]** supaya cek D
+  (bagian 6) bisa dijalankan sebagai kolom.
+- `itemCode` di berkas varian **tidak dipakai**: penomorannya terbalik
+  terhadap `itemSku` (500 gr = `MTA-…-00002`). Hanya `itemSku` yang
+  cocok dengan halaman.
+- **Opsi tanpa harga** (keputusan pengguna B, 8 Nov): 86 dari 665 berkas
+  `is--` punya `price: null`; semuanya opsi yang Blibli tandai
+  `available: false`. Barisnya **tetap dibuat** dengan `harga`,
+  `harga_coret`, `diskon_persen` NULL, lalu dikarantina di bagian 6
+  (±43 baris per hari).
+- Kunci unik: (`item_sku`, `tanggal`). Kalau satu `item_sku` muncul di
+  dua kategori, yang pertama dipertahankan.
+
+#### `tokopedia_produk`: satu baris per produk per tanggal
+
+`tanggal`, `produk_id`, `nama`, `harga` (`price.number`), `harga_asli`
+(`price.original` → angka, "" → NULL; disimpan, tidak dipakai di fakta),
+`diskon_persen` (selalu NULL, keputusan 8 Nov), `toko_id`,
+`nama_toko`, `kota`, `tier_toko`, `rating` ("" → NULL), `terjual_label`
+(label `ri_product_credibility`), `kategori` (`category.breadcrumb`),
+`url` (tanpa query string). Kunci unik: (`produk_id`, `tanggal`).
+
+`harga_asli` dan `diskon_persen` sudah diputuskan 8 Nov (bagian 13 #1–2).
+Salinan: hanya laptop (#3, 8 Nov). Varian (#11, 8 Nov): berat dari halaman produk Mangga Manalagi.
+
+#### Kolom turunan (kedua platform)
+
+`berat_gram`, `sumber_berat` (`nama` / `variant` / `usp` / `url` / `halaman` / `opsi`),
+`jenis_satuan` (`berat` / `jumlah` / `kemasan` / `lain`), `jumlah_buah`
+(hanya kalau `jenis_satuan = jumlah`), dan `berat_dikali` (multipack, 8 Nov). Dihitung di
+lapisan 1 karena butuh field mentah yang bukan kolom
+(`uniqueSellingPoint` Blibli). Aturannya di bagian 5.2.
 
 ### 5.2 Parser bersama (`transform/parser.py`)
 
 Semua berupa fungsi Python murni, masing-masing dengan unit test.
 
+#### Berat (`berat_gram`), aturan 4 November
+
+| Aturan | Contoh | Hasil |
+|---|---|---|
+| Satuan berat: `kg`, `kilogram`, `kilo`, `gram`, `gr`, `grm`, `g`, `ons` (100 g); huruf besar/kecil sama | "1 KILO", "500 grm" | 1000, 500 |
+| Cari di **seluruh nama**, bukan hanya kata pertama setelah angka | "Mangga Super Fresh Premium 500gr" | 500 |
+| Rentang → titik tengah | "470 - 500 G", "170 - 180 G" | 485, 175 |
+| **Pecahan dibaca** (menggantikan aturan lama "dilewati") | "1/2 kg", "1/4Kg" | 500, 250 |
+| Koma/titik + 1–2 angka = desimal | "1,5 kg", "2.5 kg", "0,95kg" | 1500, 2500, 950 |
+| Titik + tepat 3 angka = ribuan | "1.000 gr" | 1000 |
+| Per kilo | "/kg", "per kg", "Kiloan", "isi 3-5/ kg" | 1000 |
+| Kata bilangan (daftar kecil) | "sekilo", "setengah kilo" | 1000, 500 |
+| Dua berat yang **berbeda** (dua pilihan dalam satu nama) | "1 Kg 1/2 Kg" | `None`, `jenis_satuan = lain` |
+| Berat yang sama ditulis dua kali | "1 kg ( 0.9 - 1.1 kg / pack)" | 1000 |
+| Berat tunggal di dalam rentang lain **[usulan Claude]** | "500 gram ( 400 - 500 gram / pack)" | 500 |
+| Di luar 100–20.000 g | "Semangka 30 kg", "+-0.9g-1kg" | `None` |
+| Berat **dan** jumlah | "Apel 1 kg isi 6 pcs" | berat menang |
+
+#### Berat cadangan (urutan prioritas)
+
+| Platform | Urutan | Alasan |
+|---|---|---|
+| Blibli, produk **beberapa opsi** (`hasVariants`) | **hanya `variant` opsi itu** (berat, lalu jumlah, lalu kemasan). Tidak pernah meminjam dari nama (**keputusan A1, 8 Nov**) | Nama menggambarkan seluruh produk, bukan tiap opsi. "Buy 1 Get 1" pada "HarvestMoon Mangga … Per Kg" akan jadi 65.000/kg kalau meminjam 1 kg dari nama. Pada 8 Nov: 27 dari 516 opsi kena; ±10 akan salah (Buy 1 Get 1, 2pack, LonganHitam50), ±17 kehilangan berat yang mungkin benar (PERU, Ungu) dan jadi `lain`. |
+| Blibli, produk **satu opsi** | `variant` → nama → `uniqueSellingPoint` | `variant` = opsi yang harganya tercatat. "Apel Fuji Super Fresh 1 Kg" dengan variant "500 gr" berharga Rp46.000 = harga 500 gr (dicek di halaman, 5 Nov). Berat dari nama akan membagi dua harga per kg. |
+| Tokopedia | **opsi** → **halaman (bersyarat)** → nama → URL | **8 Nov, usulan pengguna "terjemahkan data opsi":** produk bervarian → berat dari `optionName` anak (`pdpProductVariantChildren`, `productID` = id kartu) lewat `berat_gram`, `sumber_berat = "opsi"`. Uji 8 Nov, 7 produk bervarian: 6690740844 opsi "1 kg" (halaman salah: 0,5 kg); 104038193482 opsi "500 Gram" (nama + halaman salah: 1 kg); 103999725486 "mengkal bermadu, 500 gram". Lalu **keputusan pengguna 1:** berat halaman produk (`pdpBasicInfo.weight`, hanya Mangga Manalagi, bagian 4.2) dipakai **hanya kalau** nama tanpa berat **atau** `isVariant = true`; selain itu nama menang, karena berat halaman = berat kirim yang kadang termasuk kemasan (uji 8 Nov: nama 1 kg → halaman 1.010 / 1.150 / 1.200 g). Slug URL bisa basi: 6690740844 nama "Mangga Manalagi Madu", slug `...-madu-1-kg`, halaman 0,5 kg (opsi). Slug URL dipakai **hanya** kalau nama tanpa berat. Slug ambigu ("1 2 kg" dari 1/2, 1.2, atau 1-2) dilewati. Kecocokan URL vs nama: 98% (4.528/4.616). |
+
+`sumber_berat` mencatat asalnya. Urutan `uniqueSellingPoint` (paling
+akhir) **[usulan Claude]**; usp hanya menambah ±12 nama.
+
+#### Jenis satuan (`jenis_satuan`)
+
+| Nilai | Kapan | Harga turunan |
+|---|---|---|
+| `berat` | berat terbaca | `harga_per_kg` |
+| `jumlah` | tanpa berat, ada jumlah (pcs, buah, sisir, butir, biji) | `harga_per_buah` |
+| `kemasan` | tanpa berat/jumlah, ada kemasan (pack, dus, box, paket) atau cairan (ml, liter) | — (disimpan untuk tinjauan, misalnya computer vision nanti) |
+| `lain` | tanpa angka, dua berat berbeda, atau tidak cocok pola | — |
+
+Satu tabel dengan kolom `jenis_satuan`, bukan tabel terpisah. Tampilan
+per jenis dibuat lewat view.
+
+#### Fungsi lain (tidak berubah)
+
 | Fungsi | Aturan |
 |---|---|
-| `berat_gram(nama)` | Logika dari `skrip/bersihkan_blibli.py`. Rentang "470 - 500 G" diambil titik tengahnya. "1/2 kg" dan sejenisnya dilewati, bukan ditebak. Di luar 100–20.000 g dianggap tidak terbaca. Hasil `None` kalau tidak ada berat. |
-| `jenis_buah(nama)` | Kamus kata kunci → jenis (mangga, apel, pisang, jeruk, anggur, melon, alpukat, pepaya, buah naga, pir, …), dengan sinonim (dragon fruit, avocado, pear). Tidak cocok → `lainnya`. |
-| `asal(...)` | Blibli: dari kategori ("Buah Lokal" / "Buah Impor"), dengan `asal_sumber = 'label'`. Tokopedia: kata "impor"/"import"/"lokal" di nama lebih dulu, lalu daftar varietas (kiwi, fuji, red globe, sunkist → impor; salak, manggis, arumanis → lokal). `asal_sumber = 'aturan'`. Tidak bisa ditentukan → `tidak_diketahui`. |
-| `olahan(nama)` | `True` untuk bibit, benih, keripik, sale, jus, dan lain-lain (pola dari `bersihkan_blibli.py`). **Baris tetap disimpan**, hanya ditandai. |
-| `terjual_min(...)` | Blibli: angka pasti dipetakan ke batas bawah rentang Tokopedia. Tokopedia: "60+ terjual" → 60, "1rb+ terjual" → 1000. Rentangnya diseragamkan supaya kedua platform bisa dibandingkan. |
-| `jenis_toko(...)` | Blibli: `resmi` → `resmi`, selain itu `biasa`. Tokopedia: dari `tier_toko`, pemetaannya **menunggu verifikasi** (bagian 13). |
-| `region(kota)` | Kota → `jabodetabek` / `jawa_lain` / `luar_jawa`, lewat tabel pemetaan. |
+| `jenis_buah(nama)` | Kamus kata kunci → jenis (mangga, apel, pisang, jeruk, anggur, melon, alpukat, pepaya, buah naga, pir, …), dengan sinonim. Tidak cocok → `lainnya`. **Perangkap:** "manalagi" juga ada di Apel Manalagi (±40 produk) dan manisan belimbing "simanalagi". Mangga Manalagi = nama memuat **mangga dan manalagi** (`mangga_manalagi(nama)`, 8 Nov). Salah ketik dihitung: tiap kata boleh beda **1 huruf** dari "mangga"/"manalagi" (manga, manggah, mangg, "Manalgi"), tertempel ke kata berikutnya ("ManggaMuda"), angka pengganti huruf ("M4ngg4 M4n4lgi"), dan "mango". **Batasnya 1 huruf**: pada 9.871 nama, 1 huruf dari "mangga" = tepat 4 salah ketik asli, 2 huruf = buah lain (nangka, manggis, bangka); 2 huruf dari "manalagi" = "simanalagi" (manisan belimbing). |
+| `asal(...)` | Blibli: dari kategori, `asal_sumber = 'label'`. Tokopedia: aturan kata + varietas, `asal_sumber = 'aturan'`. |
+| `olahan(nama)` | `True` untuk bibit, benih, keripik, sale, jus, dll. Baris tetap disimpan, hanya ditandai. Kata "kulit" dan "daun" sering salah cocok. **Aturan akhir ditunda** (bagian 13). |
+| `terjual_min(...)` | Blibli: angka pasti → batas bawah rentang Tokopedia. Tokopedia: "60+ terjual" → 60, "1rb+ terjual" → 1000. Usulan Claude 13–16 Okt; **disetujui pengguna 8 Nov** ("keep"). Angka pasti Blibli tetap di `blibli_produk.total_terjual`. |
+| `jenis_toko(...)` | Blibli: `resmi`/`biasa`. Tokopedia: `tier_<n>`, arti tier belum diverifikasi. |
+| `region(kota)` | Kota → `jabodetabek` / `jawa_lain` / `luar_jawa`. |
 
-**Aturan asal diuji terhadap Blibli,** yang label aslinya diketahui. Kalau
-label Blibli disembunyikan dan aturannya dijalankan, tingkat ketepatannya
-dicatat. Angka itu masuk laporan sebagai bukti seberapa bisa dipercaya
-label asal di Tokopedia.
+**Aturan asal diuji terhadap Blibli,** yang label aslinya diketahui
+(tidak berubah).
 
 ### 5.3 Lapisan 2: star schema (`transform/model.py`)
 
@@ -134,27 +339,26 @@ label asal di Tokopedia.
                        │
 dim_produk ───── fakta_harga ───── dim_tanggal
 produk_key, sumber,   tanggal, produk_key, toko_key,   tanggal, tahun,
-produk_id, nama,      harga, harga_coret, diskon,      bulan, minggu, hari
-jenis_buah, asal,     harga_per_kg, rating,
-asal_sumber,          terjual_min
-berat_gram, olahan
+produk_id, nama,      item_sku, opsi_default, variant,  bulan, minggu, hari
+jenis_buah, asal,     harga, harga_coret, diskon,
+asal_sumber, olahan   berat_gram, sumber_berat, jenis_satuan,
+                      harga_per_kg, harga_per_buah, rating, terjual_min
 ```
 
-- **Grain `fakta_harga`:** satu baris = satu produk di satu marketplace
-  pada satu tanggal tarik.
-- **Kunci pengganti berbasis hash, bukan nomor urut:**
-  `produk_key = md5(sumber || '|' || produk_id)` dan
-  `toko_key = md5(sumber || '|' || toko_id)`. Kuncinya tetap sama di
-  setiap run. (Pelajaran dari proyek jobstreet: nomor urut berubah setiap
-  dibangun ulang.)
+- **Grain `fakta_harga`:** satu baris = satu **opsi** produk di satu
+  marketplace pada satu tanggal tarik. Tokopedia: satu opsi per produk
+  (`item_sku` = `produk_id`, `opsi_default = true`).
+- `berat_gram` pindah dari `dim_produk` ke fakta, karena tiap opsi punya
+  berat sendiri (500 gr vs 1 kg).
+- **Kunci pengganti berbasis hash:** `produk_key = md5(sumber || '|' ||
+  produk_id)`, `toko_key = md5(sumber || '|' || toko_id)`.
 - **Kunci alami toko:** Blibli `merchant_code`, Tokopedia `shop.id`.
-- **Perubahan atribut** (nama produk diganti, toko pindah kota):
-  **SCD tipe 1**. Dimensi menyimpan nilai terbaru, riwayat tidak
-  disimpan. Riwayat harga ada di `fakta_harga`, dan itu yang penting.
-- `harga_per_kg = round(harga / berat_gram * 1000)`, `NULL` kalau berat
-  tidak terbaca.
-- `v_produk`: view yang menggabungkan fakta dengan ketiga dimensi menjadi
-  satu tabel datar untuk analisis.
+- **SCD tipe 1** untuk dimensi.
+- `harga_per_kg = round(harga / berat_gram * 1000)` kalau `jenis_satuan =
+  berat`; `harga_per_buah = round(harga / jumlah)` kalau `jumlah`. Selain
+  itu NULL.
+- `v_produk`: view datar fakta + tiga dimensi.
+- Untuk analisis "satu harga per produk", filter `opsi_default = true`.
 
 ## 6. Validasi dan karantina
 
@@ -166,11 +370,30 @@ Skema Pandera untuk setiap DataFrame **sebelum dimuat**:
 | `harga > 0` | lapisan 1, fakta |
 | `rating` di antara 0–5, atau kosong | lapisan 1 |
 | `diskon_persen` di antara 0–100 | lapisan 1 |
-| `harga_per_kg` di antara 3.000–500.000, atau kosong | fakta |
+| `harga_per_kg` di antara 2.000–2.000.000, atau kosong (diputuskan 9 Nov, 13 #5: 128 baris / 9 nama dikarantina; batas lama 3.000–500.000 mengkarantina 2.665 baris buah premium asli) | fakta |
 | `sumber` ∈ {blibli, tokopedia} | dimensi, fakta |
-| (`produk_id`, `tanggal`) unik | lapisan 1 |
+| Blibli (`item_sku`, `tanggal`) unik; Tokopedia (`produk_id`, `tanggal`) unik | lapisan 1 |
 | `produk_key` unik di `dim_produk`; `toko_key` unik di `dim_toko` | dimensi |
 | setiap `produk_key`/`toko_key` di fakta ada di dimensinya | fakta |
+
+### 6.1 Cek perbandingan kolom Blibli (diputuskan 7 November)
+
+Kolom yang mirip dibandingkan, karena ini data, bukan algoritma: polanya
+bisa berubah kapan saja. Baris yang gagal **masuk karantina** untuk
+ditinjau manual.
+
+| Cek | Aturan | Hasil di 22.400 baris (14 tanggal) |
+|---|---|---|
+| A | `harga_voucher < harga ≤ harga_coret` (bagian kiri hanya kalau `harga_voucher` ada) | 0 gagal |
+| B | `diskon_persen` berbeda ≤ 1 poin dari `(1 − harga/harga_coret) × 100` | 0 gagal |
+| D | `harga_coret_voucher = harga_coret` (kalau ada) | 0 gagal |
+| E | `diskon_voucher_persen` berbeda ≤ 1 poin dari `(1 − harga_voucher/harga_coret) × 100` | 0 gagal |
+| F | `harga_sebelum_kampanye ≥ harga`, dan berbeda dari `harga` hanya kalau `kampanye` terisi | **8 gagal** (2 produk mangga Rp10.000, diskon 60–75%, tanpa nama kampanye) |
+| G | `sku = produk_id` (kalau `sku` ada; ditambahkan 8 Nov) | 0 gagal di 24.000 baris (18 Okt – 8 Nov) |
+| H | `berat_dikali = true` (multipack "8x125GR" dikalikan, keputusan pengguna 8 Nov) | **Dicatat di karantina tetapi tetap masuk fakta**, untuk ditinjau. 6 nama di semua tanggal sampai 8 Nov (tidak ada mangga) |
+| C | `item_sku` opsi default berbeda dari kemarin | **Tanda saja, bukan karantina** (117 kali). Dibuat sebagai view DuckDB dengan `LAG` **[usulan Claude]**. |
+
+### 6.2 Karantina
 
 Baris yang gagal masuk ke `produk_karantina` (`sumber`, `tanggal`,
 `produk_id`, `data` berupa JSON baris aslinya, `alasan`). **Tidak ada
@@ -181,8 +404,7 @@ baris yang dibuang diam-diam.** Jumlahnya dicatat di `pipeline_runs`.
 - Berkas: `warehouse/harga_buah.duckdb`.
 - **Aman diulang (idempoten)**: dalam satu transaksi, hapus semua baris
   (`sumber`, `tanggal`) di lapisan 1, fakta, dan karantina, lalu sisipkan
-  yang baru. Dimensi di-*upsert* per kunci. Menjalankan dua kali tidak
-  pernah membuat baris ganda.
+  yang baru. Dimensi di-*upsert* per kunci.
 - Tabel `pipeline_runs`: `run_id`, `mulai`, `selesai`, `sumber`,
   `tanggal`, `halaman_ditarik`, `baris_mentah`, `baris_dimuat`,
   `baris_karantina`, `status` (`berhasil` / `sebagian` / `gagal`),
@@ -191,9 +413,8 @@ baris yang dibuang diam-diam.** Jumlahnya dicatat di `pipeline_runs`.
 ## 8. Menjalankan
 
 ```
-python run.py --sumber blibli,tokopedia             # tarik hari ini + proses + muat
-python run.py --sumber tokopedia --tahap transform,load --tanggal 2026-10-13
-                                                    # proses ulang data mentah lama
+python tarik_harian.py                              # dijalankan Task Scheduler / cron
+python run.py --sumber blibli,tokopedia --tahap transform,load --tanggal 2026-11-08
 ```
 
 `--tahap` bisa `extract`, `transform`, `load`, atau gabungannya. Proses
@@ -206,69 +427,77 @@ ditulis ke layar dan ke `logs/run_<run_id>.log`.
 |---|---|
 | Halaman gagal setelah 3 kali coba | Penarikan berhenti; halaman tersimpan diproses; status `sebagian` |
 | Halaman pertama gagal (API berubah atau diblokir) | Status `gagal`, tidak ada yang dimuat, pesan galat dicatat |
-| Bentuk JSON berubah (kolom hilang) | Transform gagal dengan pesan yang menyebut kolomnya; status `gagal` |
-| Baris melanggar skema | Dikarantina, run tetap jalan |
+| Satu ringkasan varian Blibli gagal | Produk itu hanya punya baris default; status tetap `berhasil` |
+| Bentuk JSON berubah (kolom wajib hilang) | Transform gagal dengan pesan yang menyebut kolomnya; status `gagal` |
+| Baris melanggar skema atau cek A/B/D/E/F | Dikarantina, run tetap jalan |
 | Load gagal di tengah | Transaksi dibatalkan, DuckDB kembali ke keadaan sebelum run |
 
 ## 10. Pengujian
 
-1. **Unit test parser**, dengan nama produk asli sebagai bahan uji
-   (sekitar 30 nama untuk `berat_gram`, termasuk "1/2 kg", rentang,
-   "1,5kg", dan nama tanpa berat).
-2. **Tes skema Pandera:** baris rusak buatan harus masuk karantina.
+1. **Unit test parser** dengan nama produk asli, **termasuk nama Mangga
+   Manalagi sungguhan**: "MANGGA MANALAGI 170 - 180 G", "Mangga Manalagi
+   1 kg ( 0.9 - 1.1 kg / pack)", "Mangga manalagi segar manis 1/2 kg",
+   "Mangga manalagi madu (Arum) … 1kg isi 3-5 buah", "Mangga Manalagi
+   Potong Manis" (tanpa berat), "Mangga Manalagi Kiloan Raja Alpukat".
+2. **Tes skema Pandera:** baris rusak buatan masuk karantina; satu tes per
+   cek A, B, D, E, F, G.
 3. **Tes integrasi** atas cuplikan kecil data mentah asli
-   (`tests/fixtures/`, beberapa halaman per platform): jalankan
-   transform + load ke DuckDB sementara, lalu periksa:
+   (`tests/fixtures/`), termasuk satu folder Blibli **dengan** `varian/`
+   dan satu **tanpa**:
    - jumlah baris fakta = jumlah baris yang lolos validasi;
    - tidak ada kunci fakta tanpa pasangan di dimensi;
    - **menjalankan dua kali menghasilkan jumlah baris yang sama**;
-   - produk yang tokonya tanpa kota tetap masuk fakta. (Kasus ini sempat
-     hilang di demo, karena join biasa tidak mencocokkan nilai kosong.)
+   - produk yang tokonya tanpa kota tetap masuk fakta;
+   - produk bervarian menghasilkan satu baris per opsi.
 4. **Aturan asal vs label Blibli:** tingkat ketepatan dihitung dan
-   dicetak (bagian 5.2).
+   dicetak.
 5. **CI** (GitHub Actions): pytest + pipeline penuh atas cuplikan tadi,
    tanpa akses internet.
 
 ## 11. Susunan repo
 
-**Diubah 17 Oktober 2026:** subfolder `data-science/` di repo kebun-ibu,
-bukan repo terpisah (keputusan pengguna).
-- Folder ini punya venv, tes, dan CI sendiri.
-- `vercel.json` diberi `ignoreCommand` supaya perubahan yang hanya
-  menyentuh `data-science/` tidak memicu deploy ulang situs.
+Subfolder `data-science/` di repo kebun-ibu (17 Oktober).
 
 ```
 kebun-ibu/data-science/
-  extract/      blibli.py, tokopedia.py, http.py (jeda + coba ulang)
-  transform/    blibli.py, tokopedia.py, parser.py, model.py, skema.py
+  extract/      blibli.py, tokopedia.py, http.py
+  transform/    blibli.py, tokopedia.py, parser.py, model.py, skema.py,
+                transform.ipynb (tinjauan: kode + hasil tiap langkah)
   load/         duckdb_loader.py
+  tarik_harian.py, sinkron_vps.py, daftar_tugas_harian.ps1
   run.py
-  data_lake/raw/...      (diabaikan git)
-  warehouse/             (diabaikan git)
-  tests/        fixtures/, test_parser.py, test_skema.py, test_pipeline.py
+  eksplor.ipynb                     (eksplorasi, bukan kode produksi)
+  data_lake/raw/...                 (diabaikan git)
+  data_lake_vps/raw/tokopedia/...   (salinan VPS, diabaikan git)
+  data_lake/halaman_tokopedia/...   (notebook bagian 5, diabaikan git)
+  warehouse/                        (diabaikan git)
+  tests/
   .github/workflows/ci.yml
-  requirements.txt       polars, pandera[polars], duckdb, curl_cffi, pytest
-  README.md
+  requirements.txt, README.md
 ```
-
-`skrip/` dan `data-mentah/` di repo kebun-ibu dipindah ke sini. Data
-mentah lama masuk `data_lake/raw/blibli/date=2026-09-27/`.
 
 ## 12. Tahapan hasil
 
-Setiap tahap berakhir dengan sesuatu yang bisa dikumpulkan:
-
-1. Penarik Tokopedia + Blibli kategori, data mentah tersimpan.
+1. ✅ Penarik Tokopedia + Blibli (kategori + varian), penarikan harian.
 2. Lapisan 1 + validasi + karantina, dimuat ke DuckDB.
 3. Star schema + `v_produk` + tes integrasi + CI.
 
 ## 13. Hal yang masih terbuka
 
-1. **Arti `tier_toko` Tokopedia** (2 dan 3). Perlu diverifikasi sebelum
-   `jenis_toko` untuk Tokopedia dipakai. Sampai saat itu nilainya
-   `tier_2` / `tier_3`, bukan tebakan.
-2. ~~Nama dan lokasi repo baru~~. Diputuskan: `kebun-ibu/data-science/`
-   (bagian 11).
-3. **Batas ketepatan aturan asal** yang dianggap cukup. Usulan ≥ 90%
-   terhadap label Blibli; kalau di bawah itu, asal Tokopedia ditandai
-   `tidak_diketahui` di analisis.
+Pengguna selesai membaca spec pada 8 November. Usulan di bawah dipakai
+sebagai bawaan, dan **Claude menanyakan tiap poin saat task yang
+memakainya dimulai** (misalnya #1–3 di Task 5, #5–6 di Task 1/7).
+
+| # | Hal | Usulan Claude | Data pendukung |
+|---|---|---|---|
+| 1 | ✅ **`harga_asli` Tokopedia**: **diputuskan 8 Nov (A): simpan apa adanya di lapisan 1, tidak dipakai di fakta.** Pengguna cek halaman 1256380209: Rp24.750 tanpa coret → strategi pemasaran di kartu cari. `harga` (`price.number`) = harga di halaman, itu yang dipakai. Harga transaksi per pesanan tidak ada di data | — | Mangga Manalagi: 39 dari 41 produk tidak pernah dicoret, 2 selalu dicoret (1% dan 3%). Semua produk: 5.581 tidak pernah, 1.289 selalu, 938 kadang (median 12%, mis. paket 5 kg 7286804348: 12% 23 Okt, 10% 7 Nov). Tinjauan di `transform.ipynb` |
+| 2 | ✅ **`diskon_persen` Tokopedia** selalu 0 dari API: **mengikuti #1, NULL di lapisan 1** (tidak dihitung dari `harga_asli`) | — | 0 di semua 77.799 baris |
+| 3 | ✅ **Salinan laptop vs VPS** untuk Tokopedia di tanggal yang sama: **diputuskan 8 Nov: hanya laptop** (`data_lake/raw/tokopedia/`); `data_lake_vps/` tidak dibaca transform. Pengguna tidak mau bayar VPS bulanan untuk proyek pribadi. Akibat yang diterima: jam tarik laptop berubah-ubah (09:33–13:46), jadi harga sebagian produk bisa naik-turun karena jam, bukan karena pasar | — | Keduanya tarik setiap hari sejak 27 Okt. **Uji 8 Nov:** skrip VPS = laptop (diff kosong), cron VPS 06:00 + 12:00 WIB sama dengan Task Scheduler laptop. Tapi VPS selalu tarik **06:00–06:04**, laptop tarik saat menyala (6 Nov 13:02, 7 Nov 09:33, 8 Nov 13:46). Per tanggal ±190–250 produk harganya beda (Jeruk Dekopon 12426856674: VPS 705.000, laptop 735.000). Tarik **bersamaan** dari laptop + VPS 20:41: 839 produk, **0 beda harga** (Dekopon 735.000 di keduanya) → beda karena **jam tarik**, bukan lokasi/skrip |
+| 4 | **Label Tokopedia yang belum dipakai**: `nett_price`, `promotion_label` ("Harga Diskon"), `ri_ribbon` ("12%"), `ri_product_offer` | Tidak dipakai dulu; tetap ada di data mentah | 614 / 637 / 640 / 4.356 baris pada 7 Nov |
+| 5 | ✅ **Batas harga per kg diputuskan 9 Nov: 2.000–2.000.000** (usulan diterima). **Olahan** (aturan akhir) dan **batas harga per kg** karantina. *8 Nov: `sale` dan `pohon` dibuang dari daftar olahan (pengguna); sisanya tetap. Kurma/kelapa/lemon tetap `lainnya` (pengguna: bukan fokus)* | Batas 2.000–2.000.000/kg (usulan 4 Nov) supaya anggur Nagano Rp4 jt/kg tidak salah dikarantina | Ditunda pengguna 4 Nov: "filter later" |
+| 6 | ✅ **Multipack** ("8x125GR", "200 gr×12 Pcs"): **diputuskan 8 Nov: dikalikan + dicatat di karantina (cek H)** | Kalikan: 8 × 125 = 1.000 g | Penyebab utama harga per kg yang terlalu tinggi |
+| 7 | **URL gambar pertama Blibli** (diterima 4 Nov untuk ide computer vision) | Tambah kolom `gambar` kalau masih diinginkan; tidak ada di daftar 29 kolom | — |
+| 8 | **Arti `tier_toko`** Tokopedia | Tetap `tier_<n>` | Halaman produk menampilkan lencana hijau, artinya belum dicek |
+| 9 | **Dashboard `/admin/pasar` + 4 insight** (usulan 26 Okt) | Menunggu keputusan pengguna | — |
+| 10 | **Batas ketepatan aturan asal** | ≥ 90% terhadap label Blibli | — |
+| 11 | ✅ **Diputuskan 8 Nov: (a)**, tarik halaman produk Mangga Manalagi setiap hari (bagian 4.2); berat halaman dipakai sebelum berat nama/url. Uji 8 Nov: 8061245026 nama tanpa berat → halaman 0,5 kg; 104132111948 opsi tapi berat halaman = nama (1 kg). **Varian Tokopedia tidak terlihat di hasil cari** (8 Nov): kartu cari bisa berupa satu opsi dari produk bervarian, tetapi namanya nama induk. Berat dari nama bisa salah untuk opsi itu | Putuskan di Task 5: (a) tarik halaman produk Mangga Manalagi saja (±23/hari) untuk `isVariant` + berat, (b) terima, atau (c) tandai baris yang harga/kg-nya jauh dari produk lain | 103999725486 "Mangga manalagi madu (Arum ) … 1kg isi 3-5 buah": Rp13.000, halaman: `isVariant=True`, berat 0,5 kg → parser 1000 g = 13.000/kg, kemungkinan sebenarnya 26.000/kg |

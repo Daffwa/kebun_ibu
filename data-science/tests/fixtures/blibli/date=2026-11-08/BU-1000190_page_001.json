@@ -1,0 +1,5574 @@
+{
+ "code": 200,
+ "status": "OK",
+ "data": {
+  "pageType": [],
+  "suggestions": [],
+  "correctedSearchResponses": [],
+  "ageRestricted": false,
+  "products": [
+   {
+    "id": "DOD-70072-00076",
+    "sku": "DOD-70072-00076",
+    "merchantCode": "DOD-70072",
+    "status": "AVAILABLE",
+    "name": "Buah Mangga Manalagi segar",
+    "price": {
+     "priceDisplay": "Rp13.000",
+     "discount": 0,
+     "discountPrice": 0.0,
+     "minPrice": 13000.0,
+     "offerPriceDisplay": "Rp13.000",
+     "isPriceRange": false,
+     "listPrice": 13000,
+     "salePrice": 13000
+    },
+    "images": [
+     "https://www.static-src.com/wcsstore/Indraprastha/images/catalog/medium//catalog-image/99/MTA-111351996/no-brand_no-brand_full01.jpg"
+    ],
+    "rootCategory": {
+     "id": "53400",
+     "name": "Bliblimart"
+    },
+    "brand": "no brand",
+    "review": {
+     "rating": 3,
+     "count": 2,
+     "absoluteRating": 3.0,
+     "sellerRating": 4.4,
+     "isNewSeller": false
+    },
+    "itemCount": 2,
+    "defaultSku": "DOD-70072-00076-00001-PP-3482691",
+    "itemSku": "DOD-70072-00076-00001",
+    "tags": [
+     "REGULAR",
+     "SHIPPING_ETD",
+     "XTRA_PROMO",
+     "FREE_SHIPPING"
+    ],
+    "formattedId": "ps--DOD-70072-00076",
+    "url": "/p/buah-mangga-manalagi-segar/ps--DOD-70072-00076?ds=DOD-70072-00076-00001&source=CATEGORY&sid=ba7de7158540374b&metaData=SnHZRCX7NPLsJ+ExPEFNC1cGXwSFpLJsXh2noxRjCIuT2r7fOYNS0fn24lYkspaBm8CiPo8EZ10eZSzkbYY9vOjqrM/mjls6JQDzIHvTluMiB4zoBbkTKkiVxxU6hr74PdxTHKZBV9wukrN4w82/yWp5HoWHuYDNl07Gpt+tmXf2vEy5kryDw6vLV+IXhJsvX9iVWePpnlR0dXZ34fvxIUOlHPk6pzDlDInI5C9oafXDheG3QXH0j+lhGINmJkRFTSq+Dm5aJIUpxYynI3smjfWFw0G0bRYtdhzVZ651XA5h7O6vYje4WTacdNnA+ifXeKeJuuSSYmwKSN738q3Mzw==&cnc=false&pickupPointCode=PP-3482691&pid1=DOD-70072-00076",
+    "attributes": [],
+    "productFeatures": "",
+    "storeClosingInfo": {
+     "storeClosed": false,
+     "endDate": 0,
+     "delayShipping": false
+    },
+    "promoEndTime": 0,
+    "debugData": {},
+    "allCategories": [
+     "53400",
+     "MA-1000295",
+     "MA-1000331",
+     "MA-1000330",
+     "BU-1000155",
+     "SA-1000187",
+     "BU-1000105",
+     "BU-1000190"
+    ],
+    "merchantVoucherCount": 0,
+    "expandedProducts": [],
+    "location": "Kota Depok",
+    "numLocations": 0,
+    "badge": {
+     "merchantBadgeUrl": "https://www.static-src.com//siva/asset/06_2025/seller-gold.png",
+     "merchantBadge": "Gold"
+    },
+    "size": [
+     ""
+    ],
+    "level0Id": "MTA-111351996",
+    "uniqueSellingPoint": "<p></p>",
+    "merchantName": "Doyan Daging Store Depok",
+    "soldRangeCount": {
+     "en": "6",
+     "id": "6"
+    },
+    "soldCountTotal": 6,
+    "categoryIdHierarchy": [
+     "53400",
+     "SA-1000187",
+     "BU-1000105",
+     "BU-1000190"
+    ],
+    "cartLogisticOptions": [],
+    "deliveryEstimate": "1–3 hari",
+    "showShippingEtdBackground": false,
+    "merchantVoucherMessage": "No voucher available",
+    "wholesaleMinQuantity": 0,
+    "wholesaleDiscountPercentage": 0.0,
+    "wholesaleDiscountParam": "MIN",
+    "pickupPointCode": "PP-3482691",
+    "categoryNameHierarchy": [
+     "Bliblimart",
+     "Sayuran & Buah - buahan",
+     "Buah - buahan",
+     "Buah Lokal"
+    ],
+    "variant": "1/2 kg",
+    "freshnessDaysCount": 0,
+    "hasVariants": true,
+    "additionalProperties": {},
+    "hasPalingTopBoostWithoutTag": false,
+    "trackerFields": {
+     "score": "4.235464",
+     "prod_gender": "OTHER",
+     "distance": "661.53235",
+     "prod_price_segment": "MIXED",
+     "user_affinity": "null",
+     "prod_score": "0.0",
+     "prod_price": "13000.0",
+     "prod_is_1p": "false",
+     "eligible_tags": "REGULAR_SHIPPING_ETD,REGULAR,XTRA_PROMO,FREE_SHIPPING",
+     "prod_discount": "0",
+     "is_vector_search_applied": "false"
+    },
+    "destinationPageType": "BLIBLIMART",
+    "uspLabelsTags": [
+     "XTRA_PROMO",
+     "FREE_SHIPPING"
+    ],
+    "productLabelTags": [],
+    "titleLabelTags": [],
+    "contextualLabelTags": [],
+    "statusLabelTags": [],
+    "promoLabelTags": [],
+    "specialAttributesTags": [
+     "SHIPPING_ETD"
+    ],
+    "masterCategoryIds": [
+     "BU-1000186",
+     "BU-1000096",
+     "SA-1000179",
+     "BL-1000030"
+    ],
+    "officialMerchant": false,
+    "officialBrand": false,
+    "exclusiveProduct": false,
+    "merchantCommissionType": "CM",
+    "groceryBuyAgain": false,
+    "buyable": true,
+    "preorder": false,
+    "addToCartEligible": true,
+    "official": false
+   },
+   {
+    "id": "HYP-60026-23787",
+    "sku": "HYP-60026-23787",
+    "merchantCode": "HYP-60026",
+    "status": "AVAILABLE",
+    "name": "SEMANGKA KUNING 4950 - 5500 GR",
+    "price": {
+     "priceDisplay": "Rp114.950",
+     "discount": 0,
+     "discountPrice": 0.0,
+     "minPrice": 114950.0,
+     "offerPriceDisplay": "Rp114.950",
+     "isPriceRange": false,
+     "listPrice": 114950,
+     "salePrice": 114950
+    },
+    "images": [
+     "https://www.static-src.com/wcsstore/Indraprastha/images/catalog/medium/catalog-image/101/MTA-185431807/hypermart_full01.webp"
+    ],
+    "rootCategory": {
+     "id": "53400",
+     "name": "Bliblimart"
+    },
+    "brand": "Hypermart",
+    "review": {
+     "rating": 0,
+     "count": 0,
+     "absoluteRating": 0.0,
+     "sellerRating": 4.8,
+     "isNewSeller": false
+    },
+    "itemCount": 46,
+    "defaultSku": "HYP-60026-23787-00001-PP-3538870",
+    "itemSku": "HYP-60026-23787-00001",
+    "tags": [
+     "REGULAR",
+     "SHIPPING_ETD",
+     "MERCHANT_VOUCHER",
+     "FREE_SHIPPING"
+    ],
+    "formattedId": "ps--HYP-60026-23787",
+    "url": "/p/semangka-kuning-4950-5500-gr/ps--HYP-60026-23787?ds=HYP-60026-23787-00001&source=CATEGORY&sid=8bbd84bb371ddadb&metaData=SnHZRCX7NPLsJ+ExPEFNC8SIe2ciyRlMxs7fEcgiIOTNxYbLHQXPNRiHIOMs3XaNzzZ/8U3KjGLexZ+hPeKg01esavfRnEsmWNUn9y9IGTPNbQv3e9jt8aL3d1v2xu9D3zP/3jXSVAsNO6CVkKiBbHhwvx3ifXg1BsOX37zBUHKUQClr5YmKvA7ri1YPmGZnjr01T/BnCzjkJqTnWpCfkQJCTBwTHVyvb/E3SqOaA2wCfnxO/OLVh/G8jMckEdODYLr4A5vTLj/brYnKeyKJ1Q==&cnc=false&pickupPointCode=PP-3538870&pid1=HYP-60026-23787",
+    "attributes": [],
+    "productFeatures": "",
+    "storeClosingInfo": {
+     "storeClosed": false,
+     "endDate": 0,
+     "delayShipping": false
+    },
+    "promoEndTime": 0,
+    "debugData": {},
+    "allCategories": [
+     "53400",
+     "SA-1000187",
+     "BU-1000105",
+     "BU-1000190"
+    ],
+    "merchantVoucherCount": 1,
+    "expandedProducts": [],
+    "location": "Kota Surabaya",
+    "numLocations": 30,
+    "badge": {
+     "merchantBadgeUrl": "https://www.static-src.com//siva/asset/06_2025/seller-diamond.png",
+     "merchantBadge": "Diamond"
+    },
+    "size": [
+     ""
+    ],
+    "level0Id": "MTA-185431807",
+    "uniqueSellingPoint": "",
+    "merchantName": "Hypermart Flagship Store",
+    "soldRangeCount": {
+     "en": "1",
+     "id": "1"
+    },
+    "soldCountTotal": 1,
+    "categoryIdHierarchy": [
+     "53400",
+     "SA-1000187",
+     "BU-1000105",
+     "BU-1000190"
+    ],
+    "cartLogisticOptions": [],
+    "deliveryEstimate": "Hari ini",
+    "showShippingEtdBackground": false,
+    "merchantVoucherMessage": "Diskon maks. 25rb",
+    "wholesaleMinQuantity": 0,
+    "wholesaleDiscountPercentage": 0.0,
+    "wholesaleDiscountParam": "MIN",
+    "pickupPointCode": "PP-3538870",
+    "categoryNameHierarchy": [
+     "Bliblimart",
+     "Sayuran & Buah - buahan",
+     "Buah - buahan",
+     "Buah Lokal"
+    ],
+    "freshnessDaysCount": 0,
+    "hasVariants": false,
+    "additionalProperties": {},
+    "hasPalingTopBoostWithoutTag": false,
+    "trackerFields": {
+     "score": "404.27094",
+     "prod_gender": "OTHER",
+     "distance": "5.9899807",
+     "prod_price_segment": "MIXED",
+     "user_affinity": "null",
+     "prod_score": "0.0",
+     "prod_price": "114950.0",
+     "prod_is_1p": "false",
+     "eligible_tags": "FAST_SHIPPING_ETD,REGULAR,MERCHANT_VOUCHER,FREE_SHIPPING",
+     "prod_discount": "0",
+     "is_vector_search_applied": "false"
+    },
+    "destinationPageType": "BLIBLIMART",
+    "uspLabelsTags": [
+     "FREE_SHIPPING"
+    ],
+    "productLabelTags": [],
+    "titleLabelTags": [],
+    "contextualLabelTags": [],
+    "statusLabelTags": [],
+    "promoLabelTags": [
+     "MERCHANT_VOUCHER"
+    ],
+    "specialAttributesTags": [
+     "SHIPPING_ETD"
+    ],
+    "contextualPrice": {
+     "priceDisplay": "Rp112.950",
+     "strikeThroughPriceDisplay": "Rp114.950",
+     "discount": 2,
+     "cashback": 0
+    },
+    "masterCategoryIds": [
+     "BU-1000186",
+     "BU-1000096",
+     "SA-1000179",
+     "BL-1000030"
+    ],
+    "officialMerchant": true,
+    "officialBrand": false,
+    "exclusiveProduct": false,
+    "merchantCommissionType": "CM",
+    "groceryBuyAgain": false,
+    "buyable": true,
+    "preorder": false,
+    "official": true,
+    "addToCartEligible": true
+   },
+   {
+    "id": "RAM-70107-19892",
+    "sku": "RAM-70107-19892",
+    "merchantCode": "RAM-70107",
+    "status": "AVAILABLE",
+    "name": "ALPUKAT MENTEGA R",
+    "price": {
+     "priceDisplay": "Rp32.000",
+     "strikeThroughPriceDisplay": "Rp42.400",
+     "discount": 25,
+     "discountPrice": 10400.0,
+     "minPrice": 32000.0,
+     "offerPriceDisplay": "Rp32.000",
+     "isPriceRange": false,
+     "listPrice": 42400,
+     "salePrice": 32000
+    },
+    "images": [
+     "https://www.static-src.com/wcsstore/Indraprastha/images/catalog/medium//96/MTA-21820487/ranch-market_alpukat-mentega-600gr_full01.jpg"
+    ],
+    "rootCategory": {
+     "id": "53400",
+     "name": "Bliblimart"
+    },
+    "brand": "Ranch Market",
+    "review": {
+     "rating": 4,
+     "count": 61,
+     "absoluteRating": 4.6,
+     "sellerRating": 4.8,
+     "isNewSeller": false
+    },
+    "itemCount": 3,
+    "defaultSku": "RAM-70107-19892-00001-PP-3507461",
+    "itemSku": "RAM-70107-19892-00001",
+    "tags": [
+     "CNC_AVAILABLE",
+     "REGULAR",
+     "SHIPPING_ETD",
+     "EXCLUSIVE_CAMPAIGN",
+     "MERCHANT_VOUCHER",
+     "FREE_SHIPPING"
+    ],
+    "formattedId": "ps--RAM-70107-19892",
+    "url": "/p/alpukat-mentega-r/ps--RAM-70107-19892?ds=RAM-70107-19892-00001&source=CATEGORY&sid=8bbd84bb371ddadb&metaData=SnHZRCX7NPLsJ+ExPEFNCy2vnCdR/EtZOI/3G854fFqT2r7fOYNS0fn24lYkspaBWZWSyyWXXT47vAe2aWNfy1X6YqNL/N38iJlYkQlI2HD9cnB7A9Br96VNOoae/H1+UvM5rYQ2b7sWjAIjInNGf5TeSJUNa0QXXAdB+szRDN92gNMGFcfbof284avA3NXExRezECNSLh634gglw76ihax+uKVinvAYuh0JcHgdtcBui9actaID3S9Uw1dMyC6959yTYZBJCKOLMD9wDSDGqYzbNPvd1k9UO64+uEiF2NZDV7pUyt43bVg5VAaAF3pti5eFiZrk8zBqWRj9nzDtRaW5KjKTcjR12Ng/vzUKFcA=&cnc=false&pickupPointCode=PP-3507461&pid1=RAM-70107-19892&tag=2HD",
+    "attributes": [],
+    "productFeatures": "",
+    "storeClosingInfo": {
+     "storeClosed": false,
+     "endDate": 0,
+     "delayShipping": false
+    },
+    "promoBadgeUrl": "https://www.static-src.com/fs/asset/10_2026/badge-web-65864d68a34f.png",
+    "promoEndTime": 1794589140000,
+    "debugData": {},
+    "campaignInfo": {
+     "name": "Campaign 11.11",
+     "code": "CAMP-03348"
+    },
+    "allCategories": [
+     "53400",
+     "MA-1000295",
+     "MA-1000331",
+     "MA-1000330",
+     "BU-1000155",
+     "SA-1000187",
+     "BU-1000105",
+     "BU-1000190"
+    ],
+    "merchantVoucherCount": 1,
+    "expandedProducts": [],
+    "location": "Kota Surabaya",
+    "numLocations": 1,
+    "badge": {
+     "logisticBadge_stock": "2HD",
+     "merchantBadgeUrl": "https://www.static-src.com//siva/asset/06_2025/seller-gold.png",
+     "merchantBadge": "Gold",
+     "logisticBadge": "2HD"
+    },
+    "size": [
+     ""
+    ],
+    "level0Id": "MTA-21820487",
+    "uniqueSellingPoint": "• Alpukat mentega 600gr",
+    "merchantName": "Ranch Market Flagship Store",
+    "soldRangeCount": {
+     "en": "532",
+     "id": "532"
+    },
+    "soldCountTotal": 532,
+    "categoryIdHierarchy": [
+     "53400",
+     "SA-1000187",
+     "BU-1000105",
+     "BU-1000190"
+    ],
+    "cartLogisticOptions": [],
+    "deliveryEstimate": "2 jam",
+    "showShippingEtdBackground": false,
+    "merchantVoucherMessage": "Diskon maks. 15rb",
+    "wholesaleMinQuantity": 0,
+    "wholesaleDiscountPercentage": 0.0,
+    "wholesaleDiscountParam": "MIN",
+    "pickupPointCode": "PP-3507461",
+    "categoryNameHierarchy": [
+     "Bliblimart",
+     "Sayuran & Buah - buahan",
+     "Buah - buahan",
+     "Buah Lokal"
+    ],
+    "freshnessDaysCount": 0,
+    "hasVariants": false,
+    "additionalProperties": {},
+    "hasPalingTopBoostWithoutTag": false,
+    "trackerFields": {
+     "score": "404.23547",
+     "prod_gender": "OTHER",
+     "distance": "4.4627748",
+     "prod_price_segment": "MIXED",
+     "user_affinity": "null",
+     "prod_score": "0.0",
+     "prod_price": "32000.0",
+     "prod_is_1p": "false",
+     "eligible_tags": "FAST_SHIPPING_ETD,CNC_AVAILABLE,REGULAR,EXCLUSIVE_CAMPAIGN,MERCHANT_VOUCHER,FREE_SHIPPING,2HD",
+     "prod_discount": "0",
+     "is_vector_search_applied": "false"
+    },
+    "destinationPageType": "BLIBLIMART",
+    "uspLabelsTags": [
+     "CAMPAIGN",
+     "FREE_SHIPPING",
+     "CNC_AVAILABLE",
+     "2HD"
+    ],
+    "productLabelTags": [],
+    "titleLabelTags": [],
+    "contextualLabelTags": [],
+    "statusLabelTags": [],
+    "promoLabelTags": [
+     "EXCLUSIVE_CAMPAIGN",
+     "MERCHANT_VOUCHER"
+    ],
+    "specialAttributesTags": [
+     "SHIPPING_ETD"
+    ],
+    "masterCategoryIds": [
+     "BU-1000186",
+     "BU-1000096",
+     "SA-1000179",
+     "BL-1000030"
+    ],
+    "officialMerchant": true,
+    "officialBrand": false,
+    "exclusiveProduct": false,
+    "merchantCommissionType": "CM",
+    "campaignCodeWithoutSession": "CAMP-03348",
+    "groceryBuyAgain": false,
+    "buyable": true,
+    "preorder": false,
+    "official": true,
+    "addToCartEligible": true
+   },
+   {
+    "id": "HYP-60026-02571",
+    "sku": "HYP-60026-02571",
+    "merchantCode": "HYP-60026",
+    "status": "AVAILABLE",
+    "name": "PEPAYA CALIFORNIA 1300 - 1500 GR",
+    "price": {
+     "priceDisplay": "Rp20.850",
+     "discount": 0,
+     "discountPrice": 0.0,
+     "minPrice": 20850.0,
+     "offerPriceDisplay": "Rp20.850",
+     "isPriceRange": false,
+     "listPrice": 20850,
+     "salePrice": 20850
+    },
+    "images": [
+     "https://www.static-src.com/wcsstore/Indraprastha/images/catalog/medium/catalog-image/MTA-10881321/hypermart_pepaya_california_1400_gr_-_buah_full02_vs7jzf78.jpeg"
+    ],
+    "rootCategory": {
+     "id": "53400",
+     "name": "Bliblimart"
+    },
+    "brand": "Hypermart",
+    "review": {
+     "rating": 4,
+     "count": 882,
+     "absoluteRating": 4.7,
+     "sellerRating": 4.8,
+     "isNewSeller": false
+    },
+    "itemCount": 51,
+    "defaultSku": "HYP-60026-02571-00001-PP-3538870",
+    "itemSku": "HYP-60026-02571-00001",
+    "tags": [
+     "REGULAR",
+     "XXX_BOUGHT_IN_LAST_MONTH",
+     "SHIPPING_ETD",
+     "MERCHANT_VOUCHER",
+     "BEST_SELLING",
+     "FREE_SHIPPING"
+    ],
+    "formattedId": "ps--HYP-60026-02571",
+    "url": "/p/pepaya-california-1300-1500-gr/ps--HYP-60026-02571?ds=HYP-60026-02571-00001&source=CATEGORY&sid=8bbd84bb371ddadb&metaData=SnHZRCX7NPLsJ+ExPEFNCxzohPZzaxyiJv5ug5c6gt09E3Zp1v8dT+Qszy5qCkiek6b1IchyWUeLIMLLHOA9pJbKIFVX5lKVfE28/P1rwwdP0HfjxNkfgWHG5INuEdtbni/RfXtjO+mLEBi1JvU4oOf9OamnFrvil6IltQoJVV7iE5cHrZhoFX1pemZdQez8pEy/P1T63N5zHaxVlGzAWSxgHaTZ3lVPoQZxWHewZW6OAVZX4v80DmS2KisxzHFKa4PLgXKeye38lQ8USEDz3OAE8t7fb9LdIBIY70qi4QugaagsDIjFOfIQC0TvpqQTeGZgTzImsuTn3/9btYf6Nw==&cnc=false&pickupPointCode=PP-3538870&pid1=HYP-60026-02571",
+    "attributes": [],
+    "productFeatures": "",
+    "storeClosingInfo": {
+     "storeClosed": false,
+     "endDate": 0,
+     "delayShipping": false
+    },
+    "promoEndTime": 0,
+    "debugData": {},
+    "allCategories": [
+     "53400",
+     "MA-1000295",
+     "MA-1000331",
+     "MA-1000330",
+     "BU-1000155",
+     "SA-1000187",
+     "BU-1000105",
+     "BU-1000190"
+    ],
+    "merchantVoucherCount": 1,
+    "expandedProducts": [],
+    "location": "Kota Surabaya",
+    "numLocations": 34,
+    "badge": {
+     "merchantBadgeUrl": "https://www.static-src.com//siva/asset/06_2025/seller-diamond.png",
+     "merchantBadge": "Diamond"
+    },
+    "size": [
+     ""
+    ],
+    "level0Id": "MTA-10881321",
+    "uniqueSellingPoint": "• Buah Pepaya adalah buah yang dapat dimakan dagingnya Buah ini juga biasa diberikan untuk pakan binatang piaraan seperti pakan burung",
+    "merchantName": "Hypermart Flagship Store",
+    "soldRangeCount": {
+     "en": "7 k",
+     "id": "7 rb"
+    },
+    "soldCountTotal": 6956,
+    "categoryIdHierarchy": [
+     "53400",
+     "SA-1000187",
+     "BU-1000105",
+     "BU-1000190"
+    ],
+    "cartLogisticOptions": [],
+    "deliveryEstimate": "Hari ini",
+    "showShippingEtdBackground": false,
+    "monthlySoldCountLabel": "Dibeli 50+ kali bulan ini",
+    "merchantVoucherMessage": "Diskon maks. 25rb",
+    "wholesaleMinQuantity": 0,
+    "wholesaleDiscountPercentage": 0.0,
+    "wholesaleDiscountParam": "MIN",
+    "pickupPointCode": "PP-3538870",
+    "categoryNameHierarchy": [
+     "Bliblimart",
+     "Sayuran & Buah - buahan",
+     "Buah - buahan",
+     "Buah Lokal"
+    ],
+    "freshnessDaysCount": 0,
+    "hasVariants": false,
+    "additionalProperties": {},
+    "hasPalingTopBoostWithoutTag": false,
+    "trackerFields": {
+     "score": "404.27094",
+     "prod_gender": "OTHER",
+     "distance": "5.9899807",
+     "prod_price_segment": "MIXED",
+     "user_affinity": "null",
+     "prod_score": "0.0",
+     "prod_price": "20850.0",
+     "prod_is_1p": "false",
+     "eligible_tags": "FAST_SHIPPING_ETD,REGULAR,XXX_BOUGHT_IN_LAST_MONTH,MERCHANT_VOUCHER,BEST_SELLING,FREE_SHIPPING",
+     "prod_discount": "0",
+     "is_vector_search_applied": "false"
+    },
+    "destinationPageType": "BLIBLIMART",
+    "uspLabelsTags": [
+     "FREE_SHIPPING"
+    ],
+    "productLabelTags": [
+     "BEST_SELLING"
+    ],
+    "titleLabelTags": [],
+    "contextualLabelTags": [],
+    "statusLabelTags": [],
+    "promoLabelTags": [
+     "MERCHANT_VOUCHER"
+    ],
+    "specialAttributesTags": [
+     "SHIPPING_ETD",
+     "XXX_BOUGHT_IN_LAST_MONTH"
+    ],
+    "masterCategoryIds": [
+     "BU-1000186",
+     "BU-1000096",
+     "SA-1000179",
+     "BL-1000030"
+    ],
+    "officialMerchant": true,
+    "officialBrand": false,
+    "exclusiveProduct": false,
+    "merchantCommissionType": "CM",
+    "groceryBuyAgain": false,
+    "buyable": true,
+    "preorder": false,
+    "official": true,
+    "addToCartEligible": true
+   },
+   {
+    "id": "RAM-70107-10697",
+    "sku": "RAM-70107-10697",
+    "merchantCode": "RAM-70107",
+    "status": "AVAILABLE",
+    "name": "DRAGON FRUIT RED",
+    "price": {
+     "priceDisplay": "Rp38.400",
+     "discount": 0,
+     "discountPrice": 0.0,
+     "minPrice": 38400.0,
+     "offerPriceDisplay": "Rp38.400",
+     "isPriceRange": false,
+     "listPrice": 38400,
+     "salePrice": 38400
+    },
+    "images": [
+     "https://www.static-src.com/wcsstore/Indraprastha/images/catalog/medium//92/MTA-21637352/ranch-market_dragon-fruit-red-lokal-500gr_full01.jpg"
+    ],
+    "rootCategory": {
+     "id": "53400",
+     "name": "Bliblimart"
+    },
+    "brand": "Ranch Market",
+    "review": {
+     "rating": 4,
+     "count": 148,
+     "absoluteRating": 4.8,
+     "sellerRating": 4.8,
+     "isNewSeller": false
+    },
+    "itemCount": 19,
+    "defaultSku": "RAM-70107-10697-00001-PP-3507461",
+    "itemSku": "RAM-70107-10697-00001",
+    "tags": [
+     "CNC_AVAILABLE",
+     "REGULAR",
+     "SHIPPING_ETD",
+     "MERCHANT_VOUCHER",
+     "FREE_SHIPPING"
+    ],
+    "formattedId": "ps--RAM-70107-10697",
+    "url": "/p/dragon-fruit-red/ps--RAM-70107-10697?ds=RAM-70107-10697-00001&source=CATEGORY&sid=8bbd84bb371ddadb&metaData=SnHZRCX7NPLsJ+ExPEFNCzrqhn2WeenYl70j0tMOsyiX0LAHVJZ7EB+ox4oiZlNaezW1oQ98QMUAjwO0y7Ut9JbKIFVX5lKVfE28/P1rwwdP0HfjxNkfgWHG5INuEdtbni/RfXtjO+mLEBi1JvU4oOf9OamnFrvil6IltQoJVV7iE5cHrZhoFX1pemZdQez8pEy/P1T63N5zHaxVlGzAWSxgHaTZ3lVPoQZxWHewZW6OAVZX4v80DmS2KisxzHFKa4PLgXKeye38lQ8USEDz3OAE8t7fb9LdIBIY70qi4QugaagsDIjFOfIQC0TvpqQTWYajAPTbe3JjwgYUCp6AoA==&cnc=false&pickupPointCode=PP-3507461&pid1=RAM-70107-10697&tag=2HD",
+    "attributes": [],
+    "productFeatures": "",
+    "storeClosingInfo": {
+     "storeClosed": false,
+     "endDate": 0,
+     "delayShipping": false
+    },
+    "promoEndTime": 0,
+    "debugData": {},
+    "allCategories": [
+     "53400",
+     "MA-1000295",
+     "MA-1000331",
+     "MA-1000330",
+     "BU-1000155",
+     "SA-1000187",
+     "BU-1000105",
+     "BU-1000190"
+    ],
+    "merchantVoucherCount": 1,
+    "expandedProducts": [],
+    "location": "Kota Surabaya",
+    "numLocations": 6,
+    "badge": {
+     "logisticBadge_stock": "2HD",
+     "merchantBadgeUrl": "https://www.static-src.com//siva/asset/06_2025/seller-gold.png",
+     "merchantBadge": "Gold",
+     "logisticBadge": "2HD"
+    },
+    "size": [
+     ""
+    ],
+    "level0Id": "MTA-21637352",
+    "uniqueSellingPoint": "• Produk berkualitas dan bermutu",
+    "merchantName": "Ranch Market Flagship Store",
+    "soldRangeCount": {
+     "en": "1,5 k",
+     "id": "1,5 rb"
+    },
+    "soldCountTotal": 1544,
+    "categoryIdHierarchy": [
+     "53400",
+     "SA-1000187",
+     "BU-1000105",
+     "BU-1000190"
+    ],
+    "cartLogisticOptions": [],
+    "deliveryEstimate": "2 jam",
+    "showShippingEtdBackground": false,
+    "merchantVoucherMessage": "Diskon maks. 15rb",
+    "wholesaleMinQuantity": 0,
+    "wholesaleDiscountPercentage": 0.0,
+    "wholesaleDiscountParam": "MIN",
+    "pickupPointCode": "PP-3507461",
+    "categoryNameHierarchy": [
+     "Bliblimart",
+     "Sayuran & Buah - buahan",
+     "Buah - buahan",
+     "Buah Lokal"
+    ],
+    "freshnessDaysCount": 0,
+    "hasVariants": false,
+    "additionalProperties": {},
+    "hasPalingTopBoostWithoutTag": false,
+    "trackerFields": {
+     "score": "404.27094",
+     "prod_gender": "OTHER",
+     "distance": "4.4627748",
+     "prod_price_segment": "MIXED",
+     "user_affinity": "null",
+     "prod_score": "0.0",
+     "prod_price": "38400.0",
+     "prod_is_1p": "false",
+     "eligible_tags": "FAST_SHIPPING_ETD,CNC_AVAILABLE,REGULAR,MERCHANT_VOUCHER,FREE_SHIPPING,2HD",
+     "prod_discount": "0",
+     "is_vector_search_applied": "false"
+    },
+    "destinationPageType": "BLIBLIMART",
+    "uspLabelsTags": [
+     "FREE_SHIPPING",
+     "CNC_AVAILABLE",
+     "2HD"
+    ],
+    "productLabelTags": [],
+    "titleLabelTags": [],
+    "contextualLabelTags": [],
+    "statusLabelTags": [],
+    "promoLabelTags": [
+     "MERCHANT_VOUCHER"
+    ],
+    "specialAttributesTags": [
+     "SHIPPING_ETD"
+    ],
+    "masterCategoryIds": [
+     "BU-1000186",
+     "BU-1000096",
+     "SA-1000179",
+     "BL-1000030"
+    ],
+    "officialMerchant": true,
+    "officialBrand": false,
+    "exclusiveProduct": false,
+    "merchantCommissionType": "CM",
+    "groceryBuyAgain": false,
+    "buyable": true,
+    "preorder": false,
+    "official": true,
+    "addToCartEligible": true
+   },
+   {
+    "id": "HYP-60026-23815",
+    "sku": "HYP-60026-23815",
+    "merchantCode": "HYP-60026",
+    "status": "AVAILABLE",
+    "name": "JERUK CARACARA 540 - 600 GR",
+    "price": {
+     "priceDisplay": "Rp24.300",
+     "discount": 0,
+     "discountPrice": 0.0,
+     "minPrice": 24300.0,
+     "offerPriceDisplay": "Rp24.300",
+     "isPriceRange": false,
+     "listPrice": 24300,
+     "salePrice": 24300
+    },
+    "images": [
+     "https://www.static-src.com/wcsstore/Indraprastha/images/catalog/medium/catalog-image/101/MTA-185431835/hypermart_full01.webp"
+    ],
+    "rootCategory": {
+     "id": "53400",
+     "name": "Bliblimart"
+    },
+    "brand": "Hypermart",
+    "review": {
+     "rating": 5,
+     "count": 2,
+     "absoluteRating": 5.0,
+     "sellerRating": 4.8,
+     "isNewSeller": false
+    },
+    "itemCount": 40,
+    "defaultSku": "HYP-60026-23815-00001-PP-3538939",
+    "itemSku": "HYP-60026-23815-00001",
+    "tags": [
+     "REGULAR",
+     "SHIPPING_ETD",
+     "MERCHANT_VOUCHER",
+     "FREE_SHIPPING"
+    ],
+    "formattedId": "ps--HYP-60026-23815",
+    "url": "/p/jeruk-caracara-540-600-gr/ps--HYP-60026-23815?ds=HYP-60026-23815-00001&source=CATEGORY&sid=8bbd84bb371ddadb&metaData=SnHZRCX7NPLsJ+ExPEFNC0rd1rndxbAlG8VCZRwhI4YPkCU6Vf0gJqVxNGwMfC4mrRTSJJgoCBzWBWaf/y5AO1esavfRnEsmWNUn9y9IGTPNbQv3e9jt8aL3d1v2xu9D3zP/3jXSVAsNO6CVkKiBbHhwvx3ifXg1BsOX37zBUHKUQClr5YmKvA7ri1YPmGZnjr01T/BnCzjkJqTnWpCfkQJCTBwTHVyvb/E3SqOaA2wCfnxO/OLVh/G8jMckEdODYLr4A5vTLj/brYnKeyKJ1Q==&cnc=false&pickupPointCode=PP-3538939&pid1=HYP-60026-23815",
+    "attributes": [],
+    "productFeatures": "",
+    "storeClosingInfo": {
+     "storeClosed": false,
+     "endDate": 0,
+     "delayShipping": false
+    },
+    "promoEndTime": 0,
+    "debugData": {},
+    "allCategories": [
+     "53400",
+     "SA-1000187",
+     "BU-1000105",
+     "BU-1000190"
+    ],
+    "merchantVoucherCount": 1,
+    "expandedProducts": [],
+    "location": "Kota Surabaya",
+    "numLocations": 29,
+    "badge": {
+     "merchantBadgeUrl": "https://www.static-src.com//siva/asset/06_2025/seller-diamond.png",
+     "merchantBadge": "Diamond"
+    },
+    "size": [
+     ""
+    ],
+    "level0Id": "MTA-185431835",
+    "uniqueSellingPoint": "",
+    "merchantName": "Hypermart Flagship Store",
+    "soldRangeCount": {
+     "en": "13",
+     "id": "13"
+    },
+    "soldCountTotal": 13,
+    "categoryIdHierarchy": [
+     "53400",
+     "SA-1000187",
+     "BU-1000105",
+     "BU-1000190"
+    ],
+    "cartLogisticOptions": [],
+    "deliveryEstimate": "Hari ini",
+    "showShippingEtdBackground": false,
+    "merchantVoucherMessage": "Diskon maks. 25rb",
+    "wholesaleMinQuantity": 0,
+    "wholesaleDiscountPercentage": 0.0,
+    "wholesaleDiscountParam": "MIN",
+    "pickupPointCode": "PP-3538939",
+    "categoryNameHierarchy": [
+     "Bliblimart",
+     "Sayuran & Buah - buahan",
+     "Buah - buahan",
+     "Buah Lokal"
+    ],
+    "freshnessDaysCount": 0,
+    "hasVariants": false,
+    "additionalProperties": {},
+    "hasPalingTopBoostWithoutTag": false,
+    "trackerFields": {
+     "score": "404.27094",
+     "prod_gender": "OTHER",
+     "distance": "6.945255",
+     "prod_price_segment": "MIXED",
+     "user_affinity": "null",
+     "prod_score": "0.0",
+     "prod_price": "24300.0",
+     "prod_is_1p": "false",
+     "eligible_tags": "FAST_SHIPPING_ETD,REGULAR,MERCHANT_VOUCHER,FREE_SHIPPING",
+     "prod_discount": "0",
+     "is_vector_search_applied": "false"
+    },
+    "destinationPageType": "BLIBLIMART",
+    "uspLabelsTags": [
+     "FREE_SHIPPING"
+    ],
+    "productLabelTags": [],
+    "titleLabelTags": [],
+    "contextualLabelTags": [],
+    "statusLabelTags": [],
+    "promoLabelTags": [
+     "MERCHANT_VOUCHER"
+    ],
+    "specialAttributesTags": [
+     "SHIPPING_ETD"
+    ],
+    "masterCategoryIds": [
+     "BU-1000186",
+     "BU-1000096",
+     "SA-1000179",
+     "BL-1000030"
+    ],
+    "officialMerchant": true,
+    "officialBrand": false,
+    "exclusiveProduct": false,
+    "merchantCommissionType": "CM",
+    "groceryBuyAgain": false,
+    "buyable": true,
+    "preorder": false,
+    "official": true,
+    "addToCartEligible": true
+   },
+   {
+    "id": "RAM-70107-29314",
+    "sku": "RAM-70107-29314",
+    "merchantCode": "RAM-70107",
+    "status": "AVAILABLE",
+    "name": "MANGGA MANALAGI 170 - 180 G",
+    "price": {
+     "priceDisplay": "Rp6.800",
+     "discount": 0,
+     "discountPrice": 0.0,
+     "minPrice": 6800.0,
+     "offerPriceDisplay": "Rp6.800",
+     "isPriceRange": false,
+     "listPrice": 6800,
+     "salePrice": 6800
+    },
+    "images": [
+     "https://www.static-src.com/wcsstore/Indraprastha/images/catalog/medium//catalog-image/97/MTA-144209804/no-brand_mangga-manalagi_full01-7d395b55.jpg"
+    ],
+    "rootCategory": {
+     "id": "53400",
+     "name": "Bliblimart"
+    },
+    "brand": "no brand",
+    "review": {
+     "rating": 4,
+     "count": 9,
+     "absoluteRating": 4.2,
+     "sellerRating": 4.8,
+     "isNewSeller": false
+    },
+    "itemCount": 9,
+    "defaultSku": "RAM-70107-29314-00001-PP-3507457",
+    "itemSku": "RAM-70107-29314-00001",
+    "tags": [
+     "CNC_AVAILABLE",
+     "REGULAR",
+     "SHIPPING_ETD",
+     "MERCHANT_VOUCHER",
+     "FREE_SHIPPING"
+    ],
+    "formattedId": "ps--RAM-70107-29314",
+    "url": "/p/mangga-manalagi-170-180-g/ps--RAM-70107-29314?ds=RAM-70107-29314-00001&source=CATEGORY&sid=8bbd84bb371ddadb&metaData=SnHZRCX7NPLsJ+ExPEFNC4tTCBijc70K03wpOh0TemG3VQ2WlzHp9deWrxqynfgSY1Lp+vmVgLvxAQyhePI+5lesavfRnEsmWNUn9y9IGTPNbQv3e9jt8aL3d1v2xu9D3zP/3jXSVAsNO6CVkKiBbHhwvx3ifXg1BsOX37zBUHKUQClr5YmKvA7ri1YPmGZnjr01T/BnCzjkJqTnWpCfkQJCTBwTHVyvb/E3SqOaA2yaNnpcWSO8NdJ4uY4f8r+nWEX+5g+N8K9DItchFl0mLTHTQaAC7XCTsOA4uXxo5zSmHNSfRwMD5qJvmi9gjAIhxtvbk2Z/XH/bvRW3rR/E1A==&cnc=false&pickupPointCode=PP-3507457&pid1=RAM-70107-29314",
+    "attributes": [],
+    "productFeatures": "",
+    "storeClosingInfo": {
+     "storeClosed": false,
+     "endDate": 0,
+     "delayShipping": false
+    },
+    "promoEndTime": 0,
+    "debugData": {},
+    "allCategories": [
+     "53400",
+     "MA-1000295",
+     "MA-1000331",
+     "MA-1000330",
+     "BU-1000155",
+     "SA-1000187",
+     "BU-1000105",
+     "BU-1000190"
+    ],
+    "merchantVoucherCount": 1,
+    "expandedProducts": [],
+    "location": "Kota Surabaya",
+    "numLocations": 4,
+    "badge": {
+     "merchantBadgeUrl": "https://www.static-src.com//siva/asset/06_2025/seller-gold.png",
+     "merchantBadge": "Gold"
+    },
+    "size": [
+     ""
+    ],
+    "level0Id": "MTA-144209804",
+    "uniqueSellingPoint": "",
+    "merchantName": "Ranch Market Flagship Store",
+    "soldRangeCount": {
+     "en": "157",
+     "id": "157"
+    },
+    "soldCountTotal": 157,
+    "categoryIdHierarchy": [
+     "53400",
+     "SA-1000187",
+     "BU-1000105",
+     "BU-1000190"
+    ],
+    "cartLogisticOptions": [],
+    "deliveryEstimate": "Hari ini",
+    "showShippingEtdBackground": false,
+    "merchantVoucherMessage": "Diskon maks. 15rb",
+    "wholesaleMinQuantity": 0,
+    "wholesaleDiscountPercentage": 0.0,
+    "wholesaleDiscountParam": "MIN",
+    "pickupPointCode": "PP-3507457",
+    "categoryNameHierarchy": [
+     "Bliblimart",
+     "Sayuran & Buah - buahan",
+     "Buah - buahan",
+     "Buah Lokal"
+    ],
+    "freshnessDaysCount": 0,
+    "hasVariants": false,
+    "additionalProperties": {},
+    "hasPalingTopBoostWithoutTag": false,
+    "trackerFields": {
+     "score": "404.27094",
+     "prod_gender": "OTHER",
+     "distance": "4.477739",
+     "prod_price_segment": "MIXED",
+     "user_affinity": "null",
+     "prod_score": "0.0",
+     "prod_price": "6800.0",
+     "prod_is_1p": "false",
+     "eligible_tags": "FAST_SHIPPING_ETD,CNC_AVAILABLE,REGULAR,MERCHANT_VOUCHER,FREE_SHIPPING",
+     "prod_discount": "0",
+     "is_vector_search_applied": "false"
+    },
+    "destinationPageType": "BLIBLIMART",
+    "uspLabelsTags": [
+     "FREE_SHIPPING",
+     "CNC_AVAILABLE"
+    ],
+    "productLabelTags": [],
+    "titleLabelTags": [],
+    "contextualLabelTags": [],
+    "statusLabelTags": [],
+    "promoLabelTags": [
+     "MERCHANT_VOUCHER"
+    ],
+    "specialAttributesTags": [
+     "SHIPPING_ETD"
+    ],
+    "masterCategoryIds": [
+     "BU-1000186",
+     "BU-1000096",
+     "SA-1000179",
+     "BL-1000030"
+    ],
+    "officialMerchant": true,
+    "officialBrand": false,
+    "exclusiveProduct": false,
+    "merchantCommissionType": "CM",
+    "groceryBuyAgain": false,
+    "buyable": true,
+    "preorder": false,
+    "official": true,
+    "addToCartEligible": true
+   },
+   {
+    "id": "HYP-60026-23829",
+    "sku": "HYP-60026-23829",
+    "merchantCode": "HYP-60026",
+    "status": "AVAILABLE",
+    "name": "JERUK CLEMENGOLD 540 - 600 GR",
+    "price": {
+     "priceDisplay": "Rp53.940",
+     "discount": 0,
+     "discountPrice": 0.0,
+     "minPrice": 53940.0,
+     "offerPriceDisplay": "Rp53.940",
+     "isPriceRange": false,
+     "listPrice": 53940,
+     "salePrice": 53940
+    },
+    "images": [
+     "https://www.static-src.com/wcsstore/Indraprastha/images/catalog/medium/catalog-image/106/MTA-185431849/hypermart_full01.webp"
+    ],
+    "rootCategory": {
+     "id": "53400",
+     "name": "Bliblimart"
+    },
+    "brand": "Hypermart",
+    "review": {
+     "rating": 1,
+     "count": 1,
+     "absoluteRating": 1.0,
+     "sellerRating": 4.8,
+     "isNewSeller": false
+    },
+    "itemCount": 53,
+    "defaultSku": "HYP-60026-23829-00001-PP-3538870",
+    "itemSku": "HYP-60026-23829-00001",
+    "tags": [
+     "REGULAR",
+     "SHIPPING_ETD",
+     "MERCHANT_VOUCHER",
+     "FREE_SHIPPING"
+    ],
+    "formattedId": "ps--HYP-60026-23829",
+    "url": "/p/jeruk-clemengold-540-600-gr/ps--HYP-60026-23829?ds=HYP-60026-23829-00001&source=CATEGORY&sid=8bbd84bb371ddadb&metaData=SnHZRCX7NPLsJ+ExPEFNCxaO742P7KkmPAljo7+jfY8wk8CX/Te4pVPRERV2oiruFhINu7KG/mRyFCDgrR/WUVesavfRnEsmWNUn9y9IGTPNbQv3e9jt8aL3d1v2xu9D3zP/3jXSVAsNO6CVkKiBbHhwvx3ifXg1BsOX37zBUHKUQClr5YmKvA7ri1YPmGZnjr01T/BnCzjkJqTnWpCfkQJCTBwTHVyvb/E3SqOaA2wCfnxO/OLVh/G8jMckEdODYLr4A5vTLj/brYnKeyKJ1Q==&cnc=false&pickupPointCode=PP-3538870&pid1=HYP-60026-23829",
+    "attributes": [],
+    "productFeatures": "",
+    "storeClosingInfo": {
+     "storeClosed": false,
+     "endDate": 0,
+     "delayShipping": false
+    },
+    "promoEndTime": 0,
+    "debugData": {},
+    "allCategories": [
+     "53400",
+     "SA-1000187",
+     "BU-1000105",
+     "BU-1000190"
+    ],
+    "merchantVoucherCount": 1,
+    "expandedProducts": [],
+    "location": "Kota Surabaya",
+    "numLocations": 38,
+    "badge": {
+     "merchantBadgeUrl": "https://www.static-src.com//siva/asset/06_2025/seller-diamond.png",
+     "merchantBadge": "Diamond"
+    },
+    "size": [
+     ""
+    ],
+    "level0Id": "MTA-185431849",
+    "uniqueSellingPoint": "",
+    "merchantName": "Hypermart Flagship Store",
+    "soldRangeCount": {
+     "en": "11",
+     "id": "11"
+    },
+    "soldCountTotal": 11,
+    "categoryIdHierarchy": [
+     "53400",
+     "SA-1000187",
+     "BU-1000105",
+     "BU-1000190"
+    ],
+    "cartLogisticOptions": [],
+    "deliveryEstimate": "Hari ini",
+    "showShippingEtdBackground": false,
+    "merchantVoucherMessage": "Diskon maks. 25rb",
+    "wholesaleMinQuantity": 0,
+    "wholesaleDiscountPercentage": 0.0,
+    "wholesaleDiscountParam": "MIN",
+    "pickupPointCode": "PP-3538870",
+    "categoryNameHierarchy": [
+     "Bliblimart",
+     "Sayuran & Buah - buahan",
+     "Buah - buahan",
+     "Buah Lokal"
+    ],
+    "freshnessDaysCount": 0,
+    "hasVariants": false,
+    "additionalProperties": {},
+    "hasPalingTopBoostWithoutTag": false,
+    "trackerFields": {
+     "score": "404.27094",
+     "prod_gender": "OTHER",
+     "distance": "5.9899807",
+     "prod_price_segment": "MIXED",
+     "user_affinity": "null",
+     "prod_score": "0.0",
+     "prod_price": "53940.0",
+     "prod_is_1p": "false",
+     "eligible_tags": "FAST_SHIPPING_ETD,REGULAR,MERCHANT_VOUCHER,FREE_SHIPPING",
+     "prod_discount": "0",
+     "is_vector_search_applied": "false"
+    },
+    "destinationPageType": "BLIBLIMART",
+    "uspLabelsTags": [
+     "FREE_SHIPPING"
+    ],
+    "productLabelTags": [],
+    "titleLabelTags": [],
+    "contextualLabelTags": [],
+    "statusLabelTags": [],
+    "promoLabelTags": [
+     "MERCHANT_VOUCHER"
+    ],
+    "specialAttributesTags": [
+     "SHIPPING_ETD"
+    ],
+    "masterCategoryIds": [
+     "BU-1000186",
+     "BU-1000096",
+     "SA-1000179",
+     "BL-1000030"
+    ],
+    "officialMerchant": true,
+    "officialBrand": false,
+    "exclusiveProduct": false,
+    "merchantCommissionType": "CM",
+    "groceryBuyAgain": false,
+    "buyable": true,
+    "preorder": false,
+    "official": true,
+    "addToCartEligible": true
+   },
+   {
+    "id": "HYP-60026-14414",
+    "sku": "HYP-60026-14414",
+    "merchantCode": "HYP-60026",
+    "status": "AVAILABLE",
+    "name": "MANGGA BUDIRAJA 880-890 GR",
+    "price": {
+     "priceDisplay": "Rp22.160",
+     "discount": 0,
+     "discountPrice": 0.0,
+     "minPrice": 22160.0,
+     "offerPriceDisplay": "Rp22.160",
+     "isPriceRange": false,
+     "listPrice": 22160,
+     "salePrice": 22160
+    },
+    "images": [
+     "https://www.static-src.com/wcsstore/Indraprastha/images/catalog/medium/catalog-image/105/MTA-157419249/fruit_mangga-budiraja-880-gr_full01.jpg"
+    ],
+    "rootCategory": {
+     "id": "53400",
+     "name": "Bliblimart"
+    },
+    "brand": "FRUIT",
+    "review": {
+     "rating": 5,
+     "count": 3,
+     "absoluteRating": 5.0,
+     "sellerRating": 4.8,
+     "isNewSeller": false
+    },
+    "itemCount": 48,
+    "defaultSku": "HYP-60026-14414-00001-PP-3538939",
+    "itemSku": "HYP-60026-14414-00001",
+    "tags": [
+     "REGULAR",
+     "SHIPPING_ETD",
+     "MERCHANT_VOUCHER",
+     "FREE_SHIPPING"
+    ],
+    "formattedId": "ps--HYP-60026-14414",
+    "url": "/p/mangga-budiraja-880-890-gr/ps--HYP-60026-14414?ds=HYP-60026-14414-00001&source=CATEGORY&sid=8bbd84bb371ddadb&metaData=SnHZRCX7NPLsJ+ExPEFNCzcTLm2yJwfE+vqixRWQ5q8AvbvfrroxmEd6v8sjxHVcrVzZFNnZARq6G0YTEYsvOlesavfRnEsmWNUn9y9IGTPNbQv3e9jt8aL3d1v2xu9D3zP/3jXSVAsNO6CVkKiBbHhwvx3ifXg1BsOX37zBUHKUQClr5YmKvA7ri1YPmGZnjr01T/BnCzjkJqTnWpCfkQJCTBwTHVyvb/E3SqOaA2wCfnxO/OLVh/G8jMckEdODYLr4A5vTLj/brYnKeyKJ1Q==&cnc=false&pickupPointCode=PP-3538939&pid1=HYP-60026-14414",
+    "attributes": [],
+    "productFeatures": "",
+    "storeClosingInfo": {
+     "storeClosed": false,
+     "endDate": 0,
+     "delayShipping": false
+    },
+    "promoEndTime": 0,
+    "debugData": {},
+    "allCategories": [
+     "53400",
+     "SA-1000187",
+     "BU-1000105",
+     "BU-1000190"
+    ],
+    "merchantVoucherCount": 1,
+    "expandedProducts": [],
+    "location": "Kota Surabaya",
+    "numLocations": 33,
+    "badge": {
+     "merchantBadgeUrl": "https://www.static-src.com//siva/asset/06_2025/seller-diamond.png",
+     "merchantBadge": "Diamond"
+    },
+    "size": [
+     ""
+    ],
+    "level0Id": "MTA-157419249",
+    "uniqueSellingPoint": "<p></p>",
+    "merchantName": "Hypermart Flagship Store",
+    "soldRangeCount": {
+     "en": "44",
+     "id": "44"
+    },
+    "soldCountTotal": 44,
+    "categoryIdHierarchy": [
+     "53400",
+     "SA-1000187",
+     "BU-1000105",
+     "BU-1000190"
+    ],
+    "cartLogisticOptions": [],
+    "deliveryEstimate": "Hari ini",
+    "showShippingEtdBackground": false,
+    "merchantVoucherMessage": "Diskon maks. 25rb",
+    "wholesaleMinQuantity": 0,
+    "wholesaleDiscountPercentage": 0.0,
+    "wholesaleDiscountParam": "MIN",
+    "pickupPointCode": "PP-3538939",
+    "categoryNameHierarchy": [
+     "Bliblimart",
+     "Sayuran & Buah - buahan",
+     "Buah - buahan",
+     "Buah Lokal"
+    ],
+    "freshnessDaysCount": 0,
+    "hasVariants": false,
+    "additionalProperties": {},
+    "hasPalingTopBoostWithoutTag": false,
+    "trackerFields": {
+     "score": "404.27094",
+     "prod_gender": "OTHER",
+     "distance": "6.945255",
+     "prod_price_segment": "MIXED",
+     "user_affinity": "null",
+     "prod_score": "0.0",
+     "prod_price": "22160.0",
+     "prod_is_1p": "false",
+     "eligible_tags": "FAST_SHIPPING_ETD,REGULAR,MERCHANT_VOUCHER,FREE_SHIPPING",
+     "prod_discount": "0",
+     "is_vector_search_applied": "false"
+    },
+    "destinationPageType": "BLIBLIMART",
+    "uspLabelsTags": [
+     "FREE_SHIPPING"
+    ],
+    "productLabelTags": [],
+    "titleLabelTags": [],
+    "contextualLabelTags": [],
+    "statusLabelTags": [],
+    "promoLabelTags": [
+     "MERCHANT_VOUCHER"
+    ],
+    "specialAttributesTags": [
+     "SHIPPING_ETD"
+    ],
+    "masterCategoryIds": [
+     "BU-1000186",
+     "BU-1000096",
+     "SA-1000179",
+     "BL-1000030"
+    ],
+    "officialMerchant": true,
+    "officialBrand": false,
+    "exclusiveProduct": false,
+    "merchantCommissionType": "CM",
+    "groceryBuyAgain": false,
+    "buyable": true,
+    "preorder": false,
+    "official": true,
+    "addToCartEligible": true
+   },
+   {
+    "id": "HYP-60026-23761",
+    "sku": "HYP-60026-23761",
+    "merchantCode": "HYP-60026",
+    "status": "AVAILABLE",
+    "name": "ALPUKAT RAJA 1125 - 1250 GR",
+    "price": {
+     "priceDisplay": "Rp61.120",
+     "discount": 0,
+     "discountPrice": 0.0,
+     "minPrice": 61120.0,
+     "offerPriceDisplay": "Rp61.120",
+     "isPriceRange": false,
+     "listPrice": 61120,
+     "salePrice": 61120
+    },
+    "images": [
+     "https://www.static-src.com/wcsstore/Indraprastha/images/catalog/medium/catalog-image/103/MTA-185431783/hypermart_full01.webp"
+    ],
+    "rootCategory": {
+     "id": "53400",
+     "name": "Bliblimart"
+    },
+    "brand": "Hypermart",
+    "review": {
+     "rating": 0,
+     "count": 0,
+     "absoluteRating": 0.0,
+     "sellerRating": 4.8,
+     "isNewSeller": false
+    },
+    "itemCount": 50,
+    "defaultSku": "HYP-60026-23761-00001-PP-3538870",
+    "itemSku": "HYP-60026-23761-00001",
+    "tags": [
+     "REGULAR",
+     "SHIPPING_ETD",
+     "MERCHANT_VOUCHER",
+     "FREE_SHIPPING"
+    ],
+    "formattedId": "ps--HYP-60026-23761",
+    "url": "/p/alpukat-raja-1125-1250-gr/ps--HYP-60026-23761?ds=HYP-60026-23761-00001&source=CATEGORY&sid=8bbd84bb371ddadb&metaData=SnHZRCX7NPLsJ+ExPEFNC8wDol3ZkqhTHXjds9fEyH5lsd21bdJ1IvdkJrTpfQHOA+hoPN7IuiYgrYrEmVR4uujqrM/mjls6JQDzIHvTluMiB4zoBbkTKkiVxxU6hr74PdxTHKZBV9wukrN4w82/yWp5HoWHuYDNl07Gpt+tmXf2vEy5kryDw6vLV+IXhJsvX9iVWePpnlR0dXZ34fvxIfXF/Vt7VzEl9iEZSAOJWOGpKUSXHo8Kja42OQCefwTifCBMNBBc+YAiqLnAmzZ+hg==&cnc=false&pickupPointCode=PP-3538870&pid1=HYP-60026-23761",
+    "attributes": [],
+    "productFeatures": "",
+    "storeClosingInfo": {
+     "storeClosed": false,
+     "endDate": 0,
+     "delayShipping": false
+    },
+    "promoEndTime": 0,
+    "debugData": {},
+    "allCategories": [
+     "53400",
+     "SA-1000187",
+     "BU-1000105",
+     "BU-1000190"
+    ],
+    "merchantVoucherCount": 1,
+    "expandedProducts": [],
+    "location": "Kota Surabaya",
+    "numLocations": 34,
+    "badge": {
+     "merchantBadgeUrl": "https://www.static-src.com//siva/asset/06_2025/seller-diamond.png",
+     "merchantBadge": "Diamond"
+    },
+    "size": [
+     ""
+    ],
+    "level0Id": "MTA-185431783",
+    "uniqueSellingPoint": "",
+    "merchantName": "Hypermart Flagship Store",
+    "soldRangeCount": {
+     "en": "2",
+     "id": "2"
+    },
+    "soldCountTotal": 2,
+    "categoryIdHierarchy": [
+     "53400",
+     "SA-1000187",
+     "BU-1000105",
+     "BU-1000190"
+    ],
+    "cartLogisticOptions": [],
+    "deliveryEstimate": "Hari ini",
+    "showShippingEtdBackground": false,
+    "merchantVoucherMessage": "Diskon maks. 25rb",
+    "wholesaleMinQuantity": 0,
+    "wholesaleDiscountPercentage": 0.0,
+    "wholesaleDiscountParam": "MIN",
+    "pickupPointCode": "PP-3538870",
+    "categoryNameHierarchy": [
+     "Bliblimart",
+     "Sayuran & Buah - buahan",
+     "Buah - buahan",
+     "Buah Lokal"
+    ],
+    "freshnessDaysCount": 0,
+    "hasVariants": false,
+    "additionalProperties": {},
+    "hasPalingTopBoostWithoutTag": false,
+    "trackerFields": {
+     "score": "404.27094",
+     "prod_gender": "OTHER",
+     "distance": "5.9899807",
+     "prod_price_segment": "MIXED",
+     "user_affinity": "null",
+     "prod_score": "0.0",
+     "prod_price": "61120.0",
+     "prod_is_1p": "false",
+     "eligible_tags": "FAST_SHIPPING_ETD,REGULAR,MERCHANT_VOUCHER,FREE_SHIPPING",
+     "prod_discount": "0",
+     "is_vector_search_applied": "false"
+    },
+    "destinationPageType": "BLIBLIMART",
+    "uspLabelsTags": [
+     "FREE_SHIPPING"
+    ],
+    "productLabelTags": [],
+    "titleLabelTags": [],
+    "contextualLabelTags": [],
+    "statusLabelTags": [],
+    "promoLabelTags": [
+     "MERCHANT_VOUCHER"
+    ],
+    "specialAttributesTags": [
+     "SHIPPING_ETD"
+    ],
+    "masterCategoryIds": [
+     "BU-1000186",
+     "BU-1000096",
+     "SA-1000179",
+     "BL-1000030"
+    ],
+    "officialMerchant": true,
+    "officialBrand": false,
+    "exclusiveProduct": false,
+    "merchantCommissionType": "CM",
+    "groceryBuyAgain": false,
+    "buyable": true,
+    "preorder": false,
+    "official": true,
+    "addToCartEligible": true
+   },
+   {
+    "id": "RAM-70107-17478",
+    "sku": "RAM-70107-17478",
+    "merchantCode": "RAM-70107",
+    "status": "AVAILABLE",
+    "name": "MANGGA BUDIRAJA 470 - 500 G",
+    "price": {
+     "priceDisplay": "Rp26.500",
+     "discount": 0,
+     "discountPrice": 0.0,
+     "minPrice": 26500.0,
+     "offerPriceDisplay": "Rp26.500",
+     "isPriceRange": false,
+     "listPrice": 26500,
+     "salePrice": 26500
+    },
+    "images": [
+     "https://www.static-src.com/wcsstore/Indraprastha/images/catalog/medium//91/MTA-21706515/ranch-market_mangga-budiraja-450gr_full01.jpg"
+    ],
+    "rootCategory": {
+     "id": "53400",
+     "name": "Bliblimart"
+    },
+    "brand": "Ranch Market",
+    "review": {
+     "rating": 5,
+     "count": 3,
+     "absoluteRating": 5.0,
+     "sellerRating": 4.8,
+     "isNewSeller": false
+    },
+    "itemCount": 13,
+    "defaultSku": "RAM-70107-17478-00001-PP-3507457",
+    "itemSku": "RAM-70107-17478-00001",
+    "tags": [
+     "CNC_AVAILABLE",
+     "REGULAR",
+     "SHIPPING_ETD",
+     "MERCHANT_VOUCHER",
+     "FREE_SHIPPING"
+    ],
+    "formattedId": "ps--RAM-70107-17478",
+    "url": "/p/mangga-budiraja-470-500-g/ps--RAM-70107-17478?ds=RAM-70107-17478-00001&source=CATEGORY&sid=8bbd84bb371ddadb&metaData=SnHZRCX7NPLsJ+ExPEFNCwR0bgev9saiJ9QpuPsgXPy/HAkxoVke7cxJ4LyInlLeTwV2wi/WgIu36XET8QmhnFesavfRnEsmWNUn9y9IGTPNbQv3e9jt8aL3d1v2xu9D3zP/3jXSVAsNO6CVkKiBbHhwvx3ifXg1BsOX37zBUHKUQClr5YmKvA7ri1YPmGZnjr01T/BnCzjkJqTnWpCfkQJCTBwTHVyvb/E3SqOaA2yaNnpcWSO8NdJ4uY4f8r+nWEX+5g+N8K9DItchFl0mLTHTQaAC7XCTsOA4uXxo5zSmHNSfRwMD5qJvmi9gjAIhxtvbk2Z/XH/bvRW3rR/E1A==&cnc=false&pickupPointCode=PP-3507457&pid1=RAM-70107-17478",
+    "attributes": [],
+    "productFeatures": "",
+    "storeClosingInfo": {
+     "storeClosed": false,
+     "endDate": 0,
+     "delayShipping": false
+    },
+    "promoEndTime": 0,
+    "debugData": {},
+    "allCategories": [
+     "53400",
+     "MA-1000295",
+     "MA-1000331",
+     "MA-1000330",
+     "BU-1000155",
+     "SA-1000187",
+     "BU-1000105",
+     "BU-1000190"
+    ],
+    "merchantVoucherCount": 1,
+    "expandedProducts": [],
+    "location": "Kota Surabaya",
+    "numLocations": 6,
+    "badge": {
+     "merchantBadgeUrl": "https://www.static-src.com//siva/asset/06_2025/seller-gold.png",
+     "merchantBadge": "Gold"
+    },
+    "size": [
+     ""
+    ],
+    "level0Id": "MTA-21706515",
+    "uniqueSellingPoint": "",
+    "merchantName": "Ranch Market Flagship Store",
+    "soldRangeCount": {
+     "en": "71",
+     "id": "71"
+    },
+    "soldCountTotal": 71,
+    "categoryIdHierarchy": [
+     "53400",
+     "SA-1000187",
+     "BU-1000105",
+     "BU-1000190"
+    ],
+    "cartLogisticOptions": [],
+    "deliveryEstimate": "Hari ini",
+    "showShippingEtdBackground": false,
+    "merchantVoucherMessage": "Diskon maks. 15rb",
+    "wholesaleMinQuantity": 0,
+    "wholesaleDiscountPercentage": 0.0,
+    "wholesaleDiscountParam": "MIN",
+    "pickupPointCode": "PP-3507457",
+    "categoryNameHierarchy": [
+     "Bliblimart",
+     "Sayuran & Buah - buahan",
+     "Buah - buahan",
+     "Buah Lokal"
+    ],
+    "freshnessDaysCount": 0,
+    "hasVariants": false,
+    "additionalProperties": {},
+    "hasPalingTopBoostWithoutTag": false,
+    "trackerFields": {
+     "score": "404.27094",
+     "prod_gender": "OTHER",
+     "distance": "4.477739",
+     "prod_price_segment": "MIXED",
+     "user_affinity": "null",
+     "prod_score": "0.0",
+     "prod_price": "26500.0",
+     "prod_is_1p": "false",
+     "eligible_tags": "FAST_SHIPPING_ETD,CNC_AVAILABLE,REGULAR,MERCHANT_VOUCHER,FREE_SHIPPING",
+     "prod_discount": "0",
+     "is_vector_search_applied": "false"
+    },
+    "destinationPageType": "BLIBLIMART",
+    "uspLabelsTags": [
+     "FREE_SHIPPING",
+     "CNC_AVAILABLE"
+    ],
+    "productLabelTags": [],
+    "titleLabelTags": [],
+    "contextualLabelTags": [],
+    "statusLabelTags": [],
+    "promoLabelTags": [
+     "MERCHANT_VOUCHER"
+    ],
+    "specialAttributesTags": [
+     "SHIPPING_ETD"
+    ],
+    "masterCategoryIds": [
+     "BU-1000186",
+     "BU-1000096",
+     "SA-1000179",
+     "BL-1000030"
+    ],
+    "officialMerchant": true,
+    "officialBrand": false,
+    "exclusiveProduct": false,
+    "merchantCommissionType": "CM",
+    "groceryBuyAgain": false,
+    "buyable": true,
+    "preorder": false,
+    "official": true,
+    "addToCartEligible": true
+   },
+   {
+    "id": "RAM-70107-32567",
+    "sku": "RAM-70107-32567",
+    "merchantCode": "RAM-70107",
+    "status": "AVAILABLE",
+    "name": "BUAH LONTAR",
+    "price": {
+     "priceDisplay": "Rp46.500",
+     "discount": 0,
+     "discountPrice": 0.0,
+     "minPrice": 46500.0,
+     "offerPriceDisplay": "Rp46.500",
+     "isPriceRange": false,
+     "listPrice": 46500,
+     "salePrice": 46500
+    },
+    "images": [
+     "https://www.static-src.com/wcsstore/Indraprastha/images/catalog/medium/catalog-image/MTA-180743128/no_brand_buah_lontar_full01_gaphx7kb.jpg"
+    ],
+    "rootCategory": {
+     "id": "53400",
+     "name": "Bliblimart"
+    },
+    "brand": "no brand",
+    "review": {
+     "rating": 0,
+     "count": 0,
+     "absoluteRating": 0.0,
+     "sellerRating": 4.8,
+     "isNewSeller": false
+    },
+    "itemCount": 2,
+    "defaultSku": "RAM-70107-32567-00001-PP-3507461",
+    "itemSku": "RAM-70107-32567-00001",
+    "tags": [
+     "CNC_AVAILABLE",
+     "REGULAR",
+     "SHIPPING_ETD",
+     "MERCHANT_VOUCHER",
+     "FREE_SHIPPING"
+    ],
+    "formattedId": "ps--RAM-70107-32567",
+    "url": "/p/buah-lontar/ps--RAM-70107-32567?ds=RAM-70107-32567-00001&source=CATEGORY&sid=8bbd84bb371ddadb&metaData=SnHZRCX7NPLsJ+ExPEFNCxMBO06F3DG/I/RxYUVI14u/HAkxoVke7cxJ4LyInlLeKJn9h4w27QeeplXx/bodWejqrM/mjls6JQDzIHvTluMiB4zoBbkTKkiVxxU6hr74PdxTHKZBV9wukrN4w82/yWp5HoWHuYDNl07Gpt+tmXf2vEy5kryDw6vLV+IXhJsvX9iVWePpnlR0dXZ34fvxIfXF/Vt7VzEl9iEZSAOJWOGpKUSXHo8Kja42OQCefwTiD5rTzrLF9sJ9Ez91V43tcw==&cnc=false&pickupPointCode=PP-3507461&pid1=RAM-70107-32567&tag=2HD",
+    "attributes": [],
+    "productFeatures": "",
+    "storeClosingInfo": {
+     "storeClosed": false,
+     "endDate": 0,
+     "delayShipping": false
+    },
+    "promoEndTime": 0,
+    "debugData": {},
+    "allCategories": [
+     "53400",
+     "SA-1000187",
+     "BU-1000105",
+     "BU-1000190"
+    ],
+    "merchantVoucherCount": 1,
+    "expandedProducts": [],
+    "location": "Kota Surabaya",
+    "numLocations": 1,
+    "badge": {
+     "logisticBadge_stock": "2HD",
+     "merchantBadgeUrl": "https://www.static-src.com//siva/asset/06_2025/seller-gold.png",
+     "merchantBadge": "Gold",
+     "logisticBadge": "2HD"
+    },
+    "size": [
+     ""
+    ],
+    "level0Id": "MTA-180743128",
+    "uniqueSellingPoint": "•",
+    "merchantName": "Ranch Market Flagship Store",
+    "soldRangeCount": {
+     "en": "3",
+     "id": "3"
+    },
+    "soldCountTotal": 3,
+    "categoryIdHierarchy": [
+     "53400",
+     "SA-1000187",
+     "BU-1000105",
+     "BU-1000190"
+    ],
+    "cartLogisticOptions": [],
+    "deliveryEstimate": "2 jam",
+    "showShippingEtdBackground": false,
+    "merchantVoucherMessage": "Diskon maks. 15rb",
+    "wholesaleMinQuantity": 0,
+    "wholesaleDiscountPercentage": 0.0,
+    "wholesaleDiscountParam": "MIN",
+    "pickupPointCode": "PP-3507461",
+    "categoryNameHierarchy": [
+     "Bliblimart",
+     "Sayuran & Buah - buahan",
+     "Buah - buahan",
+     "Buah Lokal"
+    ],
+    "freshnessDaysCount": 0,
+    "hasVariants": false,
+    "additionalProperties": {},
+    "hasPalingTopBoostWithoutTag": false,
+    "trackerFields": {
+     "score": "404.27094",
+     "prod_gender": "OTHER",
+     "distance": "4.4627748",
+     "prod_price_segment": "MIXED",
+     "user_affinity": "null",
+     "prod_score": "0.0",
+     "prod_price": "46500.0",
+     "prod_is_1p": "false",
+     "eligible_tags": "FAST_SHIPPING_ETD,CNC_AVAILABLE,REGULAR,MERCHANT_VOUCHER,FREE_SHIPPING,2HD",
+     "prod_discount": "0",
+     "is_vector_search_applied": "false"
+    },
+    "destinationPageType": "BLIBLIMART",
+    "uspLabelsTags": [
+     "FREE_SHIPPING",
+     "CNC_AVAILABLE",
+     "2HD"
+    ],
+    "productLabelTags": [],
+    "titleLabelTags": [],
+    "contextualLabelTags": [],
+    "statusLabelTags": [],
+    "promoLabelTags": [
+     "MERCHANT_VOUCHER"
+    ],
+    "specialAttributesTags": [
+     "SHIPPING_ETD"
+    ],
+    "masterCategoryIds": [
+     "BU-1000186",
+     "BU-1000096",
+     "SA-1000179",
+     "BL-1000030"
+    ],
+    "officialMerchant": true,
+    "officialBrand": false,
+    "exclusiveProduct": false,
+    "merchantCommissionType": "CM",
+    "groceryBuyAgain": false,
+    "buyable": true,
+    "preorder": false,
+    "official": true,
+    "addToCartEligible": true
+   },
+   {
+    "id": "RAM-70107-26508",
+    "sku": "RAM-70107-26508",
+    "merchantCode": "RAM-70107",
+    "status": "AVAILABLE",
+    "name": "KELAPA KOPYOR",
+    "price": {
+     "priceDisplay": "Rp54.900",
+     "discount": 0,
+     "discountPrice": 0.0,
+     "minPrice": 54900.0,
+     "offerPriceDisplay": "Rp54.900",
+     "isPriceRange": false,
+     "listPrice": 54900,
+     "salePrice": 54900
+    },
+    "images": [
+     "https://www.static-src.com/wcsstore/Indraprastha/images/catalog/medium//catalog-image/91/MTA-121809132/no-brand_kelapa-kopyor_full01-4d296981.jpg"
+    ],
+    "rootCategory": {
+     "id": "53400",
+     "name": "Bliblimart"
+    },
+    "brand": "no brand",
+    "review": {
+     "rating": 0,
+     "count": 0,
+     "absoluteRating": 0.0,
+     "sellerRating": 4.8,
+     "isNewSeller": false
+    },
+    "itemCount": 3,
+    "defaultSku": "RAM-70107-26508-00001-PP-3507461",
+    "itemSku": "RAM-70107-26508-00001",
+    "tags": [
+     "CNC_AVAILABLE",
+     "REGULAR",
+     "SHIPPING_ETD",
+     "MERCHANT_VOUCHER",
+     "FREE_SHIPPING"
+    ],
+    "formattedId": "ps--RAM-70107-26508",
+    "url": "/p/kelapa-kopyor/ps--RAM-70107-26508?ds=RAM-70107-26508-00001&source=CATEGORY&sid=8bbd84bb371ddadb&metaData=SnHZRCX7NPLsJ+ExPEFNC9AkQpPvNielOwWvOvbJVJWIIGmm33viDj/+hYQaGlpdEg3X3jytsJx+M8M3Wz5HMejqrM/mjls6JQDzIHvTluMiB4zoBbkTKkiVxxU6hr74PdxTHKZBV9wukrN4w82/yWp5HoWHuYDNl07Gpt+tmXfbnCFt4kFrrl28bZUXV6P5zbt6KfaI2viI0IDlkoxrpktaLX/qohS6kSpXDH9jwBVR0VnPGvXMOwsXVC5riSVAHBoP1CVeq8z76GnlqIKVQWyXNQ108Ltw9p4MtP1ybwnM54X1hTFdmW9QpBy1pNNbyb2ZCeRSGf03AFaj+6cnsQ==&cnc=false&pickupPointCode=PP-3507461&pid1=RAM-70107-26508&tag=2HD",
+    "attributes": [],
+    "productFeatures": "",
+    "storeClosingInfo": {
+     "storeClosed": false,
+     "endDate": 0,
+     "delayShipping": false
+    },
+    "promoEndTime": 0,
+    "debugData": {},
+    "allCategories": [
+     "53400",
+     "MA-1000295",
+     "MA-1000331",
+     "MA-1000330",
+     "BU-1000155",
+     "SA-1000187",
+     "BU-1000105",
+     "BU-1000190"
+    ],
+    "merchantVoucherCount": 1,
+    "expandedProducts": [],
+    "location": "Kota Surabaya",
+    "numLocations": 1,
+    "badge": {
+     "logisticBadge_stock": "2HD",
+     "merchantBadgeUrl": "https://www.static-src.com//siva/asset/06_2025/seller-gold.png",
+     "merchantBadge": "Gold",
+     "logisticBadge": "2HD"
+    },
+    "size": [
+     ""
+    ],
+    "level0Id": "MTA-121809132",
+    "uniqueSellingPoint": "• KELAPA KOPYOR \n<br>• Kisaran berat 1.5 - 2 KG",
+    "merchantName": "Ranch Market Flagship Store",
+    "soldRangeCount": {
+     "en": "1",
+     "id": "1"
+    },
+    "soldCountTotal": 1,
+    "categoryIdHierarchy": [
+     "53400",
+     "MA-1000330",
+     "MA-1000331",
+     "MA-1000295",
+     "BU-1000155"
+    ],
+    "cartLogisticOptions": [],
+    "deliveryEstimate": "2 jam",
+    "showShippingEtdBackground": false,
+    "merchantVoucherMessage": "Diskon maks. 15rb",
+    "wholesaleMinQuantity": 0,
+    "wholesaleDiscountPercentage": 0.0,
+    "wholesaleDiscountParam": "MIN",
+    "pickupPointCode": "PP-3507461",
+    "categoryNameHierarchy": [
+     "Bliblimart",
+     "Makanan & Minuman Halal",
+     "Makanan Halal",
+     "Fresh Produk",
+     "Buah"
+    ],
+    "freshnessDaysCount": 0,
+    "hasVariants": false,
+    "additionalProperties": {},
+    "hasPalingTopBoostWithoutTag": false,
+    "trackerFields": {
+     "score": "404.27094",
+     "prod_gender": "OTHER",
+     "distance": "4.4627748",
+     "prod_price_segment": "MIXED",
+     "user_affinity": "null",
+     "prod_score": "0.0",
+     "prod_price": "54900.0",
+     "prod_is_1p": "false",
+     "eligible_tags": "FAST_SHIPPING_ETD,CNC_AVAILABLE,REGULAR,MERCHANT_VOUCHER,FREE_SHIPPING,2HD",
+     "prod_discount": "0",
+     "is_vector_search_applied": "false"
+    },
+    "destinationPageType": "BLIBLIMART",
+    "uspLabelsTags": [
+     "FREE_SHIPPING",
+     "CNC_AVAILABLE",
+     "2HD"
+    ],
+    "productLabelTags": [],
+    "titleLabelTags": [],
+    "contextualLabelTags": [],
+    "statusLabelTags": [],
+    "promoLabelTags": [
+     "MERCHANT_VOUCHER"
+    ],
+    "specialAttributesTags": [
+     "SHIPPING_ETD"
+    ],
+    "masterCategoryIds": [
+     "BU-1000186",
+     "BU-1000096",
+     "SA-1000179",
+     "BL-1000030"
+    ],
+    "officialMerchant": true,
+    "officialBrand": false,
+    "exclusiveProduct": false,
+    "merchantCommissionType": "CM",
+    "groceryBuyAgain": false,
+    "buyable": true,
+    "preorder": false,
+    "official": true,
+    "addToCartEligible": true
+   },
+   {
+    "id": "RAM-70107-28773",
+    "sku": "RAM-70107-28773",
+    "merchantCode": "RAM-70107",
+    "status": "AVAILABLE",
+    "name": "DRAGON FRUIT RED JELLY",
+    "price": {
+     "priceDisplay": "Rp82.500",
+     "discount": 0,
+     "discountPrice": 0.0,
+     "minPrice": 82500.0,
+     "offerPriceDisplay": "Rp82.500",
+     "isPriceRange": false,
+     "listPrice": 82500,
+     "salePrice": 82500
+    },
+    "images": [
+     "https://www.static-src.com/wcsstore/Indraprastha/images/catalog/medium//catalog-image/99/MTA-137722536/ranch-market_dragon-fruit-red-jelly_full01.jpg"
+    ],
+    "rootCategory": {
+     "id": "53400",
+     "name": "Bliblimart"
+    },
+    "brand": "Ranch Market",
+    "review": {
+     "rating": 0,
+     "count": 0,
+     "absoluteRating": 0.0,
+     "sellerRating": 4.8,
+     "isNewSeller": false
+    },
+    "itemCount": 3,
+    "defaultSku": "RAM-70107-28773-00001-PP-3507461",
+    "itemSku": "RAM-70107-28773-00001",
+    "tags": [
+     "CNC_AVAILABLE",
+     "REGULAR",
+     "SHIPPING_ETD",
+     "MERCHANT_VOUCHER",
+     "FREE_SHIPPING"
+    ],
+    "formattedId": "ps--RAM-70107-28773",
+    "url": "/p/dragon-fruit-red-jelly/ps--RAM-70107-28773?ds=RAM-70107-28773-00001&source=CATEGORY&sid=8bbd84bb371ddadb&metaData=SnHZRCX7NPLsJ+ExPEFNC8tpUbp7kIfoUBwX3mSt48W/HAkxoVke7cxJ4LyInlLeJpxUsLAohHVwJa3vwtOUsujqrM/mjls6JQDzIHvTluMiB4zoBbkTKkiVxxU6hr74PdxTHKZBV9wukrN4w82/yWp5HoWHuYDNl07Gpt+tmXf2vEy5kryDw6vLV+IXhJsvX9iVWePpnlR0dXZ34fvxIUOlHPk6pzDlDInI5C9oafXDheG3QXH0j+lhGINmJkRFTSq+Dm5aJIUpxYynI3smjfWFw0G0bRYtdhzVZ651XA5h7O6vYje4WTacdNnA+ifXyb2ZCeRSGf03AFaj+6cnsQ==&cnc=false&pickupPointCode=PP-3507461&pid1=RAM-70107-28773&tag=2HD",
+    "attributes": [],
+    "productFeatures": "",
+    "storeClosingInfo": {
+     "storeClosed": false,
+     "endDate": 0,
+     "delayShipping": false
+    },
+    "promoEndTime": 0,
+    "debugData": {},
+    "allCategories": [
+     "53400",
+     "MA-1000295",
+     "MA-1000331",
+     "MA-1000330",
+     "BU-1000155",
+     "SA-1000187",
+     "BU-1000105",
+     "BU-1000190"
+    ],
+    "merchantVoucherCount": 1,
+    "expandedProducts": [],
+    "location": "Kota Surabaya",
+    "numLocations": 1,
+    "badge": {
+     "logisticBadge_stock": "2HD",
+     "merchantBadgeUrl": "https://www.static-src.com//siva/asset/06_2025/seller-gold.png",
+     "merchantBadge": "Gold",
+     "logisticBadge": "2HD"
+    },
+    "size": [
+     ""
+    ],
+    "level0Id": "MTA-137722536",
+    "uniqueSellingPoint": "• Dragon fruit red jelly",
+    "merchantName": "Ranch Market Flagship Store",
+    "categoryIdHierarchy": [
+     "53400",
+     "SA-1000187",
+     "BU-1000105",
+     "BU-1000190"
+    ],
+    "cartLogisticOptions": [],
+    "deliveryEstimate": "2 jam",
+    "showShippingEtdBackground": false,
+    "merchantVoucherMessage": "Diskon maks. 15rb",
+    "wholesaleMinQuantity": 0,
+    "wholesaleDiscountPercentage": 0.0,
+    "wholesaleDiscountParam": "MIN",
+    "pickupPointCode": "PP-3507461",
+    "categoryNameHierarchy": [
+     "Bliblimart",
+     "Sayuran & Buah - buahan",
+     "Buah - buahan",
+     "Buah Lokal"
+    ],
+    "freshnessDaysCount": 0,
+    "hasVariants": false,
+    "additionalProperties": {},
+    "hasPalingTopBoostWithoutTag": false,
+    "trackerFields": {
+     "score": "404.27094",
+     "prod_gender": "OTHER",
+     "distance": "4.4627748",
+     "prod_price_segment": "MIXED",
+     "user_affinity": "null",
+     "prod_score": "0.0",
+     "prod_price": "82500.0",
+     "prod_is_1p": "false",
+     "eligible_tags": "FAST_SHIPPING_ETD,CNC_AVAILABLE,REGULAR,MERCHANT_VOUCHER,FREE_SHIPPING,2HD",
+     "prod_discount": "0",
+     "is_vector_search_applied": "false"
+    },
+    "destinationPageType": "BLIBLIMART",
+    "uspLabelsTags": [
+     "FREE_SHIPPING",
+     "CNC_AVAILABLE",
+     "2HD"
+    ],
+    "productLabelTags": [],
+    "titleLabelTags": [],
+    "contextualLabelTags": [],
+    "statusLabelTags": [],
+    "promoLabelTags": [
+     "MERCHANT_VOUCHER"
+    ],
+    "specialAttributesTags": [
+     "SHIPPING_ETD"
+    ],
+    "masterCategoryIds": [
+     "BU-1000186",
+     "BU-1000096",
+     "SA-1000179",
+     "BL-1000030"
+    ],
+    "officialMerchant": true,
+    "officialBrand": false,
+    "exclusiveProduct": false,
+    "merchantCommissionType": "CM",
+    "groceryBuyAgain": false,
+    "buyable": true,
+    "preorder": false,
+    "official": true,
+    "addToCartEligible": true
+   },
+   {
+    "id": "FRM-70003-02629",
+    "sku": "FRM-70003-02629",
+    "merchantCode": "FRM-70003",
+    "status": "AVAILABLE",
+    "name": "SEMANGKA MERAH",
+    "price": {
+     "priceDisplay": "Rp22.500",
+     "discount": 0,
+     "discountPrice": 0.0,
+     "minPrice": 22500.0,
+     "offerPriceDisplay": "Rp22.500",
+     "isPriceRange": false,
+     "listPrice": 22500,
+     "salePrice": 22500
+    },
+    "images": [
+     "https://www.static-src.com/wcsstore/Indraprastha/images/catalog/medium//105/MTA-92683167/semangka_semangka-merah_full01.jpg"
+    ],
+    "rootCategory": {
+     "id": "53400",
+     "name": "Bliblimart"
+    },
+    "brand": "SEMANGKA",
+    "review": {
+     "rating": 0,
+     "count": 0,
+     "absoluteRating": 0.0,
+     "sellerRating": 4.7,
+     "isNewSeller": false
+    },
+    "itemCount": 1,
+    "defaultSku": "FRM-70003-02629-00001-PP-3169016",
+    "itemSku": "FRM-70003-02629-00001",
+    "tags": [
+     "REGULAR",
+     "SHIPPING_ETD",
+     "FREE_SHIPPING"
+    ],
+    "formattedId": "ps--FRM-70003-02629",
+    "url": "/p/semangka-merah/ps--FRM-70003-02629?ds=FRM-70003-02629-00001&source=CATEGORY&sid=8bbd84bb371ddadb&metaData=SnHZRCX7NPLsJ+ExPEFNCzcTLm2yJwfE+vqixRWQ5q+/HAkxoVke7cxJ4LyInlLeJpxUsLAohHVwJa3vwtOUsujqrM/mjls6JQDzIHvTluMiB4zoBbkTKkiVxxU6hr74PdxTHKZBV9wukrN4w82/yWp5HoWHuYDNl07Gpt+tmXf2vEy5kryDw6vLV+IXhJsvX9iVWePpnlR0dXZ34fvxIUOlHPk6pzDlDInI5C9oafXDheG3QXH0j+lhGINmJkRFTSq+Dm5aJIUpxYynI3smjfWFw0G0bRYtdhzVZ651XA5h7O6vYje4WTacdNnA+ifXeKeJuuSSYmwKSN738q3Mzw==&cnc=false&pickupPointCode=PP-3169016&pid1=FRM-70003-02629",
+    "attributes": [],
+    "productFeatures": "",
+    "storeClosingInfo": {
+     "storeClosed": false,
+     "endDate": 0,
+     "delayShipping": false
+    },
+    "promoEndTime": 0,
+    "debugData": {},
+    "allCategories": [
+     "53400",
+     "MA-1000295",
+     "MA-1000331",
+     "MA-1000330",
+     "BU-1000155",
+     "SA-1000187",
+     "BU-1000105",
+     "BU-1000190"
+    ],
+    "merchantVoucherCount": 0,
+    "expandedProducts": [],
+    "location": "Kota Surabaya",
+    "numLocations": 0,
+    "badge": {
+     "merchantBadgeUrl": "https://www.static-src.com//siva/asset/06_2025/seller-bronze.png",
+     "merchantBadge": "Bronze"
+    },
+    "size": [
+     ""
+    ],
+    "level0Id": "MTA-92683167",
+    "uniqueSellingPoint": "<p></p>",
+    "merchantName": "freshco market",
+    "categoryIdHierarchy": [
+     "53400",
+     "SA-1000187",
+     "BU-1000105",
+     "BU-1000190"
+    ],
+    "cartLogisticOptions": [],
+    "deliveryEstimate": "Hari ini",
+    "showShippingEtdBackground": false,
+    "merchantVoucherMessage": "No voucher available",
+    "wholesaleMinQuantity": 0,
+    "wholesaleDiscountPercentage": 0.0,
+    "wholesaleDiscountParam": "MIN",
+    "pickupPointCode": "PP-3169016",
+    "categoryNameHierarchy": [
+     "Bliblimart",
+     "Sayuran & Buah - buahan",
+     "Buah - buahan",
+     "Buah Lokal"
+    ],
+    "freshnessDaysCount": 0,
+    "hasVariants": false,
+    "additionalProperties": {},
+    "hasPalingTopBoostWithoutTag": false,
+    "trackerFields": {
+     "score": "404.27094",
+     "prod_gender": "OTHER",
+     "distance": "1.4271874",
+     "prod_price_segment": "MIXED",
+     "user_affinity": "null",
+     "prod_score": "0.0",
+     "prod_price": "22500.0",
+     "prod_is_1p": "false",
+     "eligible_tags": "FAST_SHIPPING_ETD,REGULAR,FREE_SHIPPING",
+     "prod_discount": "0",
+     "is_vector_search_applied": "false"
+    },
+    "destinationPageType": "BLIBLIMART",
+    "uspLabelsTags": [
+     "FREE_SHIPPING"
+    ],
+    "productLabelTags": [],
+    "titleLabelTags": [],
+    "contextualLabelTags": [],
+    "statusLabelTags": [],
+    "promoLabelTags": [],
+    "specialAttributesTags": [
+     "SHIPPING_ETD"
+    ],
+    "masterCategoryIds": [
+     "BU-1000186",
+     "BU-1000096",
+     "SA-1000179",
+     "BL-1000030"
+    ],
+    "officialMerchant": false,
+    "officialBrand": false,
+    "exclusiveProduct": false,
+    "merchantCommissionType": "CM",
+    "groceryBuyAgain": false,
+    "buyable": true,
+    "preorder": false,
+    "official": false,
+    "addToCartEligible": true
+   }
+  ],
+  "sorting": {
+   "parameter": "sort",
+   "options": [
+    {
+     "label": "Terlaris",
+     "name": "terlaris",
+     "value": 16,
+     "selected": false,
+     "visibility": true
+    },
+    {
+     "label": "Termurah",
+     "name": "cheapest",
+     "value": 3,
+     "selected": false,
+     "visibility": true
+    },
+    {
+     "label": "Termahal",
+     "name": "expensive",
+     "value": 4,
+     "selected": false,
+     "visibility": true
+    },
+    {
+     "label": "Terpopuler",
+     "name": "popular",
+     "value": 7,
+     "selected": true,
+     "visibility": true
+    },
+    {
+     "label": "Terbaru",
+     "name": "newest",
+     "value": 1,
+     "selected": false,
+     "visibility": true
+    },
+    {
+     "label": "Terdekat",
+     "name": "nearby_product",
+     "value": 20,
+     "selected": false,
+     "visibility": false
+    }
+   ]
+  },
+  "filters": [
+   {
+    "name": "Rasa",
+    "label": "Rasa",
+    "type": "MULTIPLE_SELECT",
+    "searchable": false,
+    "parameter": "flavour",
+    "theme": "theme4",
+    "data": [
+     {
+      "label": "Sweet",
+      "value": "Sweet",
+      "selected": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Sour",
+      "value": "Sour",
+      "selected": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Umami",
+      "value": "Umami",
+      "selected": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Manis",
+      "value": "Manis",
+      "selected": false,
+      "valid": false,
+      "popular": false
+     }
+    ],
+    "grouped": false,
+    "horizontal": false
+   },
+   {
+    "name": "Layanan Blibli",
+    "type": "MULTIPLE_SELECT",
+    "searchable": false,
+    "parameter": "blibliService",
+    "theme": "theme4",
+    "data": [
+     {
+      "label": "Disediakan Blibli",
+      "value": "blibli",
+      "selected": false,
+      "tooltipText": "Produk Disediakan Blibli berarti disimpan, disiapkan, dan dikirim dari gudang Blibli.",
+      "valid": false,
+      "popular": false
+     }
+    ],
+    "toolTipUrl": "layanan-blibli-filter-tooltip-id",
+    "grouped": false,
+    "horizontal": false
+   },
+   {
+    "name": "Rating",
+    "type": "SINGLE_SELECT",
+    "searchable": false,
+    "parameter": "rating",
+    "theme": "theme4",
+    "data": [
+     {
+      "label": "4 ke atas",
+      "value": "4",
+      "selected": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "3 ke atas",
+      "value": "3",
+      "selected": false,
+      "valid": false,
+      "popular": false
+     }
+    ],
+    "grouped": false,
+    "horizontal": false
+   },
+   {
+    "name": "Lokasi toko",
+    "type": "MULTIPLE_SELECT_WITH_SUBLIST",
+    "searchable": true,
+    "parameter": "location",
+    "theme": "DEFAULT_THEME",
+    "data": [
+     {
+      "label": "Kota Ambon",
+      "value": "Kota Ambon",
+      "indexName": "Ambon",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kab. Badung",
+      "value": "Kab. Badung",
+      "indexName": "Badung",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Bali",
+      "value": "Bali",
+      "indexName": "Bali",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kota Balikpapan",
+      "value": "Kota Balikpapan",
+      "indexName": "Balikpapan",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kota Bandar Lampung",
+      "value": "Kota Bandar Lampung",
+      "indexName": "Bandar Lampung",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kab. Bandung",
+      "value": "Kab. Bandung",
+      "indexName": "Bandung",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kota Bandung",
+      "value": "Kota Bandung",
+      "indexName": "Bandung",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": true
+     },
+     {
+      "label": "Kab. Bandung Barat",
+      "value": "Kab. Bandung Barat",
+      "indexName": "Bandung Barat",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Bangka Belitung",
+      "value": "Bangka Belitung",
+      "indexName": "Bangka Belitung",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kab. Bangkalan",
+      "value": "Kab. Bangkalan",
+      "indexName": "Bangkalan",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kota Banjarbaru",
+      "value": "Kota Banjarbaru",
+      "indexName": "Banjarbaru",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kota Banjarmasin",
+      "value": "Kota Banjarmasin",
+      "indexName": "Banjarmasin",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Banten",
+      "value": "Banten",
+      "indexName": "Banten",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kab. Bantul",
+      "value": "Kab. Bantul",
+      "indexName": "Bantul",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kab. Banyumas",
+      "value": "Kab. Banyumas",
+      "indexName": "Banyumas",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kota Batam",
+      "value": "Kota Batam",
+      "indexName": "Batam",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kota Batu",
+      "value": "Kota Batu",
+      "indexName": "Batu",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kab. Bekasi",
+      "value": "Kab. Bekasi",
+      "indexName": "Bekasi",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kota Bekasi",
+      "value": "Kota Bekasi",
+      "indexName": "Bekasi",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kab. Bengkalis",
+      "value": "Kab. Bengkalis",
+      "indexName": "Bengkalis",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Bengkulu",
+      "value": "Bengkulu",
+      "indexName": "Bengkulu",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kota Bengkulu",
+      "value": "Kota Bengkulu",
+      "indexName": "Bengkulu",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kota Binjai",
+      "value": "Kota Binjai",
+      "indexName": "Binjai",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kota Blitar",
+      "value": "Kota Blitar",
+      "indexName": "Blitar",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kab. Bogor",
+      "value": "Kab. Bogor",
+      "indexName": "Bogor",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kota Bogor",
+      "value": "Kota Bogor",
+      "indexName": "Bogor",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kab. Bondowoso",
+      "value": "Kab. Bondowoso",
+      "indexName": "Bondowoso",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kab. Bone",
+      "value": "Kab. Bone",
+      "indexName": "Bone",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kab. Ciamis",
+      "value": "Kab. Ciamis",
+      "indexName": "Ciamis",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kab. Cianjur",
+      "value": "Kab. Cianjur",
+      "indexName": "Cianjur",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kota Cilegon",
+      "value": "Kota Cilegon",
+      "indexName": "Cilegon",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kota Cirebon",
+      "value": "Kota Cirebon",
+      "indexName": "Cirebon",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kota Denpasar",
+      "value": "Kota Denpasar",
+      "indexName": "Denpasar",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kota Depok",
+      "value": "Kota Depok",
+      "indexName": "Depok",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "DI Yogyakarta",
+      "value": "DI Yogyakarta",
+      "indexName": "DI Yogyakarta",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "DKI Jakarta",
+      "value": "DKI Jakarta",
+      "indexName": "DKI Jakarta",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": true
+     },
+     {
+      "label": "Kota Dumai",
+      "value": "Kota Dumai",
+      "indexName": "Dumai",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Gorontalo",
+      "value": "Gorontalo",
+      "indexName": "Gorontalo",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kota Gorontalo",
+      "value": "Kota Gorontalo",
+      "indexName": "Gorontalo",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kab. Gresik",
+      "value": "Kab. Gresik",
+      "indexName": "Gresik",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Jabodetabek",
+      "value": "Jabodetabek",
+      "indexName": "Jabodetabek",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": true
+     },
+     {
+      "label": "Kota Jakarta Barat",
+      "value": "Kota Jakarta Barat",
+      "indexName": "Jakarta Barat",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kota Jakarta Pusat",
+      "value": "Kota Jakarta Pusat",
+      "indexName": "Jakarta Pusat",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kota Jakarta Selatan",
+      "value": "Kota Jakarta Selatan",
+      "indexName": "Jakarta Selatan",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kota Jakarta Timur",
+      "value": "Kota Jakarta Timur",
+      "indexName": "Jakarta Timur",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kota Jakarta Utara",
+      "value": "Kota Jakarta Utara",
+      "indexName": "Jakarta Utara",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Jambi",
+      "value": "Jambi",
+      "indexName": "Jambi",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kota Jambi",
+      "value": "Kota Jambi",
+      "indexName": "Jambi",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Jawa Barat",
+      "value": "Jawa Barat",
+      "indexName": "Jawa Barat",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Jawa Tengah",
+      "value": "Jawa Tengah",
+      "indexName": "Jawa Tengah",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Jawa Timur",
+      "value": "Jawa Timur",
+      "indexName": "Jawa Timur",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kota Jayapura",
+      "value": "Kota Jayapura",
+      "indexName": "Jayapura",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kab. Jember",
+      "value": "Kab. Jember",
+      "indexName": "Jember",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Joglosemar",
+      "value": "Joglosemar",
+      "indexName": "Joglosemar",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kalimantan Barat",
+      "value": "Kalimantan Barat",
+      "indexName": "Kalimantan Barat",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kalimantan Selatan",
+      "value": "Kalimantan Selatan",
+      "indexName": "Kalimantan Selatan",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kalimantan Tengah",
+      "value": "Kalimantan Tengah",
+      "indexName": "Kalimantan Tengah",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kalimantan Timur",
+      "value": "Kalimantan Timur",
+      "indexName": "Kalimantan Timur",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kab. Karangasem",
+      "value": "Kab. Karangasem",
+      "indexName": "Karangasem",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kab. Karawang",
+      "value": "Kab. Karawang",
+      "indexName": "Karawang",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kab. Kebumen",
+      "value": "Kab. Kebumen",
+      "indexName": "Kebumen",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kota Kediri",
+      "value": "Kota Kediri",
+      "indexName": "Kediri",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kota Kendari",
+      "value": "Kota Kendari",
+      "indexName": "Kendari",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kepulauan Riau",
+      "value": "Kepulauan Riau",
+      "indexName": "Kepulauan Riau",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kab. Kotawaringin Barat",
+      "value": "Kab. Kotawaringin Barat",
+      "indexName": "Kotawaringin Barat",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kab. Kotawaringin Timur",
+      "value": "Kab. Kotawaringin Timur",
+      "indexName": "Kotawaringin Timur",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kab. Kudus",
+      "value": "Kab. Kudus",
+      "indexName": "Kudus",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kota Kupang",
+      "value": "Kota Kupang",
+      "indexName": "Kupang",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kab. Lahat",
+      "value": "Kab. Lahat",
+      "indexName": "Lahat",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Lampung",
+      "value": "Lampung",
+      "indexName": "Lampung",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kab. Lampung Timur",
+      "value": "Kab. Lampung Timur",
+      "indexName": "Lampung Timur",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kota Lubuk Linggau",
+      "value": "Kota Lubuk Linggau",
+      "indexName": "Lubuk Linggau",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kota Madiun",
+      "value": "Kota Madiun",
+      "indexName": "Madiun",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kota Makassar",
+      "value": "Kota Makassar",
+      "indexName": "Makassar",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kab. Malang",
+      "value": "Kab. Malang",
+      "indexName": "Malang",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kota Malang",
+      "value": "Kota Malang",
+      "indexName": "Malang",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Maluku",
+      "value": "Maluku",
+      "indexName": "Maluku",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Maluku Utara",
+      "value": "Maluku Utara",
+      "indexName": "Maluku Utara",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kota Manado",
+      "value": "Kota Manado",
+      "indexName": "Manado",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kota Mataram",
+      "value": "Kota Mataram",
+      "indexName": "Mataram",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kota Medan",
+      "value": "Kota Medan",
+      "indexName": "Medan",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Nusa Tenggara Barat (NTB)",
+      "value": "Nusa Tenggara Barat (NTB)",
+      "indexName": "Nusa Tenggara Barat (NTB)",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Nusa Tenggara Timur (NTT)",
+      "value": "Nusa Tenggara Timur (NTT)",
+      "indexName": "Nusa Tenggara Timur (NTT)",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kota Padang",
+      "value": "Kota Padang",
+      "indexName": "Padang",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kota Palangka Raya",
+      "value": "Kota Palangka Raya",
+      "indexName": "Palangka Raya",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kota Palembang",
+      "value": "Kota Palembang",
+      "indexName": "Palembang",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kota Palopo",
+      "value": "Kota Palopo",
+      "indexName": "Palopo",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kota Palu",
+      "value": "Kota Palu",
+      "indexName": "Palu",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kab. Pangandaran",
+      "value": "Kab. Pangandaran",
+      "indexName": "Pangandaran",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kota Pangkal Pinang",
+      "value": "Kota Pangkal Pinang",
+      "indexName": "Pangkal Pinang",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Papua",
+      "value": "Papua",
+      "indexName": "Papua",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kab. Pasuruan",
+      "value": "Kab. Pasuruan",
+      "indexName": "Pasuruan",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kota Pekalongan",
+      "value": "Kota Pekalongan",
+      "indexName": "Pekalongan",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kota Pekanbaru",
+      "value": "Kota Pekanbaru",
+      "indexName": "Pekanbaru",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kota Pematang Siantar",
+      "value": "Kota Pematang Siantar",
+      "indexName": "Pematang Siantar",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kab. Ponorogo",
+      "value": "Kab. Ponorogo",
+      "indexName": "Ponorogo",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kota Pontianak",
+      "value": "Kota Pontianak",
+      "indexName": "Pontianak",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kota Prabumulih",
+      "value": "Kota Prabumulih",
+      "indexName": "Prabumulih",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Riau",
+      "value": "Riau",
+      "indexName": "Riau",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kota Samarinda",
+      "value": "Kota Samarinda",
+      "indexName": "Samarinda",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kota Semarang",
+      "value": "Kota Semarang",
+      "indexName": "Semarang",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kota Serang",
+      "value": "Kota Serang",
+      "indexName": "Serang",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kab. Sidoarjo",
+      "value": "Kab. Sidoarjo",
+      "indexName": "Sidoarjo",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kota Singkawang",
+      "value": "Kota Singkawang",
+      "indexName": "Singkawang",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kab. Situbondo",
+      "value": "Kab. Situbondo",
+      "indexName": "Situbondo",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kab. Sleman",
+      "value": "Kab. Sleman",
+      "indexName": "Sleman",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kab. Subang",
+      "value": "Kab. Subang",
+      "indexName": "Subang",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kab. Sukoharjo",
+      "value": "Kab. Sukoharjo",
+      "indexName": "Sukoharjo",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Sulawesi Selatan",
+      "value": "Sulawesi Selatan",
+      "indexName": "Sulawesi Selatan",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Sulawesi Tengah",
+      "value": "Sulawesi Tengah",
+      "indexName": "Sulawesi Tengah",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Sulawesi Tenggara",
+      "value": "Sulawesi Tenggara",
+      "indexName": "Sulawesi Tenggara",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Sulawesi Utara",
+      "value": "Sulawesi Utara",
+      "indexName": "Sulawesi Utara",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Sumatera Barat",
+      "value": "Sumatera Barat",
+      "indexName": "Sumatera Barat",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Sumatera Selatan",
+      "value": "Sumatera Selatan",
+      "indexName": "Sumatera Selatan",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Sumatera Utara",
+      "value": "Sumatera Utara",
+      "indexName": "Sumatera Utara",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kota Surabaya",
+      "value": "Kota Surabaya",
+      "indexName": "Surabaya",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": true
+     },
+     {
+      "label": "Kota Surakarta (Solo)",
+      "value": "Kota Surakarta (Solo)",
+      "indexName": "Surakarta (Solo)",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kab. Tangerang",
+      "value": "Kab. Tangerang",
+      "indexName": "Tangerang",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kota Tangerang",
+      "value": "Kota Tangerang",
+      "indexName": "Tangerang",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": true
+     },
+     {
+      "label": "Kota Tangerang Selatan",
+      "value": "Kota Tangerang Selatan",
+      "indexName": "Tangerang Selatan",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kota Tanjung Pinang",
+      "value": "Kota Tanjung Pinang",
+      "indexName": "Tanjung Pinang",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kab. Tasikmalaya",
+      "value": "Kab. Tasikmalaya",
+      "indexName": "Tasikmalaya",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kota Tasikmalaya",
+      "value": "Kota Tasikmalaya",
+      "indexName": "Tasikmalaya",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kota Ternate",
+      "value": "Kota Ternate",
+      "indexName": "Ternate",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kab. Tuban",
+      "value": "Kab. Tuban",
+      "indexName": "Tuban",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kota Yogyakarta",
+      "value": "Kota Yogyakarta",
+      "indexName": "Yogyakarta",
+      "selected": false,
+      "international": false,
+      "valid": false,
+      "popular": false
+     }
+    ],
+    "sublist": [
+     {
+      "title": "Kota Terpopuler",
+      "parameter": "popularLocation",
+      "data": [
+       {
+        "label": "Kota Bandung",
+        "value": "Kota Bandung",
+        "indexName": "Bandung",
+        "selected": false,
+        "international": false,
+        "valid": false,
+        "popular": true
+       },
+       {
+        "label": "DKI Jakarta",
+        "value": "DKI Jakarta",
+        "indexName": "DKI Jakarta",
+        "selected": false,
+        "international": false,
+        "valid": false,
+        "popular": true
+       },
+       {
+        "label": "Jabodetabek",
+        "value": "Jabodetabek",
+        "indexName": "Jabodetabek",
+        "selected": false,
+        "international": false,
+        "valid": false,
+        "popular": true
+       },
+       {
+        "label": "Kota Surabaya",
+        "value": "Kota Surabaya",
+        "indexName": "Surabaya",
+        "selected": false,
+        "international": false,
+        "valid": false,
+        "popular": true
+       },
+       {
+        "label": "Kota Tangerang",
+        "value": "Kota Tangerang",
+        "indexName": "Tangerang",
+        "selected": false,
+        "international": false,
+        "valid": false,
+        "popular": true
+       }
+      ]
+     }
+    ],
+    "groupName": "Jarak & Lokasi Toko",
+    "grouped": true,
+    "horizontal": false
+   },
+   {
+    "name": "Jarak",
+    "label": "Jarak",
+    "type": "SINGLE_SELECT",
+    "searchable": false,
+    "parameter": "nearAddress",
+    "theme": "DEFAULT_THEME",
+    "data": [
+     {
+      "label": "Dalam 4 km",
+      "value": "4",
+      "selected": false,
+      "query": "4",
+      "disabled": true,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Dalam 8 km",
+      "value": "8",
+      "selected": false,
+      "query": "8",
+      "disabled": true,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kota yang sama",
+      "value": "withinCity",
+      "selected": false,
+      "query": "withinCity",
+      "disabled": true,
+      "valid": false,
+      "popular": false
+     }
+    ],
+    "groupName": "Jarak & Lokasi Toko",
+    "grouped": true,
+    "horizontal": false
+   },
+   {
+    "name": "Promo",
+    "label": "Promo",
+    "type": "MULTIPLE_SELECT",
+    "searchable": false,
+    "parameter": "promo",
+    "theme": "theme4",
+    "data": [
+     {
+      "label": "XTRA promo",
+      "value": "extraPromo",
+      "selected": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Hadiah gratis",
+      "value": "FREE_GIFT",
+      "selected": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Campaign 11.11",
+      "value": "campaign_CAMP-03348",
+      "selected": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Flash Sale",
+      "value": "campaign_CAMP-03349_5619631_FLASHSALE",
+      "selected": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Grosir",
+      "value": "WHOLESALE",
+      "selected": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Voucher seller",
+      "value": "merchantVoucher",
+      "selected": false,
+      "valid": false,
+      "popular": false
+     }
+    ],
+    "grouped": false,
+    "horizontal": false
+   },
+   {
+    "name": "Harga",
+    "label": "Harga",
+    "type": "PRICE_RANGE",
+    "searchable": false,
+    "parameter": "price",
+    "theme": "DEFAULT_THEME",
+    "data": [
+     {
+      "label": "minPrice",
+      "value": "",
+      "selected": false,
+      "parameter": "minPrice",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "maxPrice",
+      "value": "",
+      "selected": false,
+      "parameter": "maxPrice",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "selectedMinPrice",
+      "value": "",
+      "selected": false,
+      "parameter": "minPrice",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "selectedMaxPrice",
+      "value": "",
+      "selected": false,
+      "parameter": "maxPrice",
+      "valid": false,
+      "popular": false
+     }
+    ],
+    "groupName": "Harga & Diskon",
+    "grouped": true,
+    "horizontal": false
+   },
+   {
+    "name": "Diskon",
+    "type": "SINGLE_SELECT",
+    "searchable": false,
+    "parameter": "discount",
+    "theme": "DEFAULT_THEME",
+    "data": [
+     {
+      "label": "10% atau lebih",
+      "value": "10",
+      "selected": false,
+      "query": "10",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "25% atau lebih",
+      "value": "25",
+      "selected": false,
+      "query": "25",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "50% atau lebih",
+      "value": "50",
+      "selected": false,
+      "query": "50",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "75% atau lebih",
+      "value": "75",
+      "selected": false,
+      "query": "75",
+      "valid": false,
+      "popular": false
+     }
+    ],
+    "groupName": "Harga & Diskon",
+    "grouped": true,
+    "horizontal": false
+   },
+   {
+    "name": "Kategori",
+    "label": "Kategori terkait",
+    "type": "TREE",
+    "searchable": false,
+    "parameter": "category",
+    "theme": "theme2",
+    "data": [],
+    "parentFacets": [
+     {
+      "label": "Bliblimart",
+      "value": "53400",
+      "selected": false,
+      "id": "bliblimart",
+      "level": 1,
+      "categoryUrl": "/c/1/bliblimart/53400/53400",
+      "imageUrl": "",
+      "displayChildren": false,
+      "improvedCategory": false,
+      "subCategorySelected": false,
+      "restrictedCategory": false,
+      "display": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Sayuran & Buah - buahan",
+      "value": "SA-1000187",
+      "selected": false,
+      "id": "sayuran-buah-buahan",
+      "level": 2,
+      "imageUrl": "",
+      "displayChildren": false,
+      "improvedCategory": false,
+      "subCategorySelected": false,
+      "restrictedCategory": false,
+      "display": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Buah - buahan",
+      "value": "BU-1000105",
+      "selected": false,
+      "id": "buah-buahan",
+      "level": 3,
+      "imageUrl": "",
+      "displayChildren": false,
+      "improvedCategory": false,
+      "subCategorySelected": false,
+      "restrictedCategory": false,
+      "display": false,
+      "valid": false,
+      "popular": false
+     }
+    ],
+    "grouped": false,
+    "horizontal": false
+   },
+   {
+    "name": "Brand",
+    "type": "MULTIPLE_SELECT_WITH_SUBLIST",
+    "searchable": true,
+    "parameter": "brand",
+    "theme": "theme2",
+    "data": [
+     {
+      "label": "3M",
+      "value": "3M",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BR-M036969-00007/3m-logo.jpg",
+      "valid": true,
+      "popular": false
+     },
+     {
+      "label": "Avocadron",
+      "value": "Avocadron",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-15702/avocadron-logo.png",
+      "valid": true,
+      "popular": false
+     },
+     {
+      "label": "bohopanna",
+      "value": "bohopanna",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-81002/bohopanna-2ec2ab7b-36ce-41e0-b06a-1ca90e57d63f.png",
+      "valid": true,
+      "popular": false
+     },
+     {
+      "label": "Duku",
+      "value": "Duku",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-03040/duku-logo.png",
+      "valid": true,
+      "popular": false
+     },
+     {
+      "label": "FRESHGO",
+      "value": "FRESHGO",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-30318/freshgo-logo.png",
+      "valid": true,
+      "popular": false
+     },
+     {
+      "label": "Golden",
+      "value": "Golden",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BR-M036969-04880/golden-logo.jpg",
+      "valid": true,
+      "popular": false
+     },
+     {
+      "label": "Kara",
+      "value": "Kara",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-01763/Kara",
+      "valid": true,
+      "popular": false
+     },
+     {
+      "label": "Kelly",
+      "value": "Kelly",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-00246/kelly-logo.png",
+      "valid": true,
+      "popular": false
+     },
+     {
+      "label": "KK",
+      "value": "KK",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BR-M036969-10092/kk-logo.jpg",
+      "valid": true,
+      "popular": false
+     },
+     {
+      "label": "MUNIK",
+      "value": "MUNIK",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-26035/munik-logo.png",
+      "valid": true,
+      "popular": false
+     },
+     {
+      "label": "NANAS",
+      "value": "NANAS",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BR-M036969-06712/nanas-logo.png",
+      "valid": true,
+      "popular": false
+     },
+     {
+      "label": "PISANG",
+      "value": "PISANG",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-45422/pisang-logo.jpg",
+      "valid": true,
+      "popular": false
+     },
+     {
+      "label": "PRIMA",
+      "value": "PRIMA",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BR-M036969-07345/prima-logo.png",
+      "valid": true,
+      "popular": false
+     },
+     {
+      "label": "QV",
+      "value": "QV",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-05633/qv-logo.png",
+      "valid": true,
+      "popular": false
+     },
+     {
+      "label": "Raspberry",
+      "value": "Raspberry",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BR-M036969-04266/raspberry-logo.png",
+      "valid": true,
+      "popular": false
+     },
+     {
+      "label": "Ricoman",
+      "value": "Ricoman",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-52222/ricoman-logo.png",
+      "valid": true,
+      "popular": false
+     },
+     {
+      "label": "Sunpride",
+      "value": "Sunpride",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-22958/sunpride-logo.jpg",
+      "valid": true,
+      "popular": false
+     },
+     {
+      "label": "A",
+      "value": "A",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-13175/a-logo.jpg",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "AAA",
+      "value": "AAA",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BR-M036969-04800/aaa-logo.jpg",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "A Beautiful Legend",
+      "value": "A Beautiful Legend",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-114541/a-beautiful-legend-585dd6bd-8400-49f1-8296-8c89b0733c8e.png",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "A Body Shop",
+      "value": "A Body Shop",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-21188/a-body-shop-logo.png",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "afcbandung",
+      "value": "afcbandung",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-46174/afcbandung-logo.jpg",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Alpukat Lampung Timur",
+      "value": "Alpukat Lampung Timur",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-87287/alpukat-lampung-timur.png",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "A & M",
+      "value": "A & M",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-128357/a---m-records-inc.png",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Amazing Farm",
+      "value": "Amazing Farm",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-38309/amazing-farm-logo.png",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "ASSALAAM",
+      "value": "ASSALAAM",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-27571/assalaam-logo.PNG",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "A & Y",
+      "value": "A & Y",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-32286/a---y-logo.png",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Babay!Farm",
+      "value": "Babay!Farm",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-54901/babay-farm-logo.jpg",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Bawangbagus",
+      "value": "Bawangbagus",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-81282/bawangbagus-logo.jpg",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Becky Lemon",
+      "value": "Becky Lemon",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-66544/becky-lemon-logo.jpg",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "BERRY LICIOUS",
+      "value": "BERRY LICIOUS",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-48903/berry-licious-logo.png",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Bionic Farm",
+      "value": "Bionic Farm",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BR-M036969-05886/bionic-farm-logo.jpeg",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "BLIBLI",
+      "value": "BLIBLI",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BR-M036969-04566/blibli-logo.png",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Buah Grosir",
+      "value": "Buah Grosir",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-53613/buah-grosir-logo.jpg",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "buah & mayur",
+      "value": "buah & mayur",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-48472/buah-mayur-logo.jpg",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Cap Kapal Terbang",
+      "value": "Cap Kapal Terbang",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BR-M036969-18000/cap-kapal-terbang-logo.jpg",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Cari Sayur",
+      "value": "Cari Sayur",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-19733/cari-sayur-logo.png",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Cavendish & Harvey",
+      "value": "Cavendish & Harvey",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-07432/cavendish---harvey-logo.JPG",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "CFI Fresh",
+      "value": "CFI Fresh",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-139057/cfi-fresh.png",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "CHEN LIANG JI",
+      "value": "CHEN LIANG JI",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-27124/chen-liang-ji-logo.png",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "CLUB SEHAT",
+      "value": "CLUB SEHAT",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-57507/club-sehat-logo.jpg",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Cocco",
+      "value": "Cocco",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BR-M036969-05673/cocco-logo.jpg",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Country Choice",
+      "value": "Country Choice",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-19483/country-choice-logo.jpg",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Dannherl",
+      "value": "Dannherl",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-13949/dannherl-logo.png",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Date Crown",
+      "value": "Date Crown",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BR-M036969-04585/date-crown-logo.jpg",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "DELIFRU",
+      "value": "DELIFRU",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-59052/delifru-logo.JPG",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Driscoll's",
+      "value": "Driscoll's",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-107710/driscoll-s.jpg",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Dunia Sayur Online",
+      "value": "Dunia Sayur Online",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-65136/dunia-sayur-online-logo.jpeg",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Durian Medan",
+      "value": "Durian Medan",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-10002/durian-medan-logo.jpg",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Duta Buah",
+      "value": "Duta Buah",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-13734/duta-buah-logo.jpg",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Enpe Jaya",
+      "value": "Enpe Jaya",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-139079/enpe-jaya.jpg",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Farmers Market",
+      "value": "Farmers Market",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-42283/farmers-market-logo.jpg",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Fresh",
+      "value": "Fresh",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-03455/fresh-logo.jpg",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Fresh box",
+      "value": "Fresh box",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-85438/fresh-box-logo.png",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "FRUIT",
+      "value": "FRUIT",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-28219/fruit-logo.png",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "FRUITAHOLIC",
+      "value": "FRUITAHOLIC",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-67510/fruitaholic-logo.jpeg",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "HALO MURAH",
+      "value": "HALO MURAH",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-57985/halo-murah-logo.png",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "HasilSumberalaM",
+      "value": "HasilSumberalaM",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-74877/hasilsumberalam-logo.jpg",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Healthy Pick",
+      "value": "Healthy Pick",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-60018/healthy-pick-logo.jpeg",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Hypermart",
+      "value": "Hypermart",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BR-M036969-08635/hypermart-logo.png",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "IBAZA fruitsBOX",
+      "value": "IBAZA fruitsBOX",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-45738/ibaza-fruitsbox-logo.jpg",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Inagreen Farm",
+      "value": "Inagreen Farm",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-97047/inagreen-farm.png",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Jamu Gendul 88",
+      "value": "Jamu Gendul 88",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-81021/jamu-gendul-88-logo.jpg",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Java Fish",
+      "value": "Java Fish",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-46734/java-fish-logo.jpg",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Jeruk",
+      "value": "Jeruk",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-40428/jeruk-logo.JPG",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kerokoo",
+      "value": "Kerokoo",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-110631/kerokoo-86d1112a-c173-4e18-923e-bc2df21b3ced.png",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "KING FRUIT",
+      "value": "KING FRUIT",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-54299/king-fruit-logo.PNG",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Klik Sayur",
+      "value": "Klik Sayur",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-138839/klik-sayur.jpg",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "LA FRESA",
+      "value": "LA FRESA",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-51848/la-fresa-logo.png",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Lemon",
+      "value": "Lemon",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-08662/lemon-logo.jpeg",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "LO HAN KUO",
+      "value": "LO HAN KUO",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BR-M036969-09462/lo-han-kuo-logo.jpg",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Mako by Seris",
+      "value": "Mako by Seris",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-67115/mako-by-seris-logo.png",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "MANGGA",
+      "value": "MANGGA",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BR-M036969-06713/mangga-logo.png",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Masada",
+      "value": "Masada",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BR-M036969-05934/masada-logo.png",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "My Fruit",
+      "value": "My Fruit",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-19000/my-fruit-logo.png",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "no brand",
+      "value": "no brand",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-44261/no-brand-logo.png",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Nyonya Sayur",
+      "value": "Nyonya Sayur",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-59412/nyonya-sayur-logo.png",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "OEM",
+      "value": "OEM",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BR-M036969-02424/oem-ceea58f2-7906-4ba6-a0d0-4d5b1aefe476.png",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Paksayur",
+      "value": "Paksayur",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-23037/paksayur-logo.jpg",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Palm Fruit",
+      "value": "Palm Fruit",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BR-M036969-11204/palm-fruit-logo.png",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Parcel",
+      "value": "Parcel",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BR-M036969-12924/parcel-logo.png",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "PASAR BADUNG",
+      "value": "PASAR BADUNG",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-92063/pasar-badung.png",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "PEDAGANG SAYUR",
+      "value": "PEDAGANG SAYUR",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-44393/pedagang-sayur-logo.png",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Presiden Ceker",
+      "value": "Presiden Ceker",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-59261/presiden-ceker-logo.png",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Ranch Market",
+      "value": "Ranch Market",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-77082/ranch-market-logo.png",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Ranch Market Pesanggrahan",
+      "value": "Ranch Market Pesanggrahan",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-77080/ranch-market-pesanggrahan-logo.png",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "RANCH ORGANIC",
+      "value": "RANCH ORGANIC",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-95232/ranch-organic-logo.jpg",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "RASY",
+      "value": "RASY",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-144039/rasy.png",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "RATU DEGAN",
+      "value": "RATU DEGAN",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-144036/ratu-degan.png",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Rempah Rempah",
+      "value": "Rempah Rempah",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BR-M036969-07708/rempah-rempah-logo.png",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Rumah Sayur",
+      "value": "Rumah Sayur",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-45226/rumah-sayur-logo.png",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Sahabatdapur",
+      "value": "Sahabatdapur",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-79224/sahabatdapur-logo.jpg",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Sayurbox",
+      "value": "Sayurbox",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-13400/sayurbox-logo.png",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Sayur Home Delivery",
+      "value": "Sayur Home Delivery",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-43729/sayur-home-delivery-logo.png",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "sayur kita",
+      "value": "sayur kita",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-59925/sayur-kita-logo.jpeg",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "SEGAR",
+      "value": "SEGAR",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-97130/segar.jpg",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Segari",
+      "value": "Segari",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-60848/segari-logo.png",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Segari's Kitchen",
+      "value": "Segari's Kitchen",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-136256/segari-s-kitchen.jpg",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "SEMANGKA",
+      "value": "SEMANGKA",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-96996/semangka.jpg",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Zespri",
+      "value": "Zespri",
+      "selected": false,
+      "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-59158/zespri-logo.jpg",
+      "valid": false,
+      "popular": false
+     }
+    ],
+    "sublist": [
+     {
+      "title": "Brand Terpopuler",
+      "parameter": "brand",
+      "data": [
+       {
+        "label": "Sunpride",
+        "value": "Sunpride",
+        "selected": false,
+        "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-22958/sunpride-logo.jpg",
+        "valid": true,
+        "popular": false
+       },
+       {
+        "label": "FRESHGO",
+        "value": "FRESHGO",
+        "selected": false,
+        "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-30318/freshgo-logo.png",
+        "valid": true,
+        "popular": false
+       },
+       {
+        "label": "NANAS",
+        "value": "NANAS",
+        "selected": false,
+        "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BR-M036969-06712/nanas-logo.png",
+        "valid": true,
+        "popular": false
+       },
+       {
+        "label": "Avocadron",
+        "value": "Avocadron",
+        "selected": false,
+        "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-15702/avocadron-logo.png",
+        "valid": true,
+        "popular": false
+       },
+       {
+        "label": "MUNIK",
+        "value": "MUNIK",
+        "selected": false,
+        "logoUrl": "https://www.static-src.com/wcsstore/Indraprastha/images/brandlogo/BRD-26035/munik-logo.png",
+        "valid": true,
+        "popular": false
+       }
+      ]
+     }
+    ],
+    "grouped": false,
+    "horizontal": false
+   },
+   {
+    "name": "Pengiriman",
+    "label": "Pengiriman",
+    "type": "MULTIPLE_SELECT",
+    "searchable": false,
+    "parameter": "logisticOption",
+    "theme": "theme3",
+    "data": [
+     {
+      "label": "Prioritas",
+      "value": "BLITZ_PRIORITAS",
+      "selected": false,
+      "tooltip": "tooltip-content-for-logistic-option-",
+      "tooltipUrl": "https://www.blibli.com/pages/tooltip-content-for-logistic-option-blitz-prioritas",
+      "tooltipText": "",
+      "disabled": true,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "2 jam sampai",
+      "value": "HOUR_DEL",
+      "selected": false,
+      "tooltip": "tooltip-content-for-logistic-option-",
+      "tooltipUrl": "https://www.blibli.com/pages/tooltip-content-for-logistic-option-hour-del",
+      "tooltipText": "Produk akan sampai dalam 0-2 jam sejak pembayaran selesai.",
+      "disabled": true,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Green delivery - Instant",
+      "value": "GREEN_INSTANT",
+      "selected": false,
+      "tooltip": "tooltip-content-for-logistic-option-",
+      "tooltipUrl": "https://www.blibli.com/pages/tooltip-content-for-logistic-option-green-instant",
+      "tooltipText": "Pengiriman 3-4 jam sejak paket diserahkan ke kurir armada listrik.",
+      "disabled": true,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Green delivery - Same day",
+      "value": "GREEN_SAME_DAY",
+      "selected": false,
+      "tooltip": "tooltip-content-for-logistic-option-",
+      "tooltipUrl": "https://www.blibli.com/pages/tooltip-content-for-logistic-option-green-same-day",
+      "tooltipText": "Pengiriman 6-8 jam sejak paket diserahkan ke kurir armada listrik.",
+      "disabled": true,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Instant",
+      "value": "INSTANT",
+      "selected": false,
+      "tooltip": "tooltip-content-for-logistic-option-",
+      "tooltipUrl": "https://www.blibli.com/pages/tooltip-content-for-logistic-option-instant",
+      "tooltipText": "Produk akan sampai dalam 4-6 jam sejak diterima oleh kurir GoSend/Grab.",
+      "disabled": true,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Same day",
+      "value": "SAME_DAY",
+      "selected": false,
+      "tooltip": "tooltip-content-for-logistic-option-",
+      "tooltipUrl": "https://www.blibli.com/pages/tooltip-content-for-logistic-option-same-day",
+      "tooltipText": "Produk akan sampai dalam 6-8 jam sejak diterima oleh kurir Blibli Express/GoSend/Grab.",
+      "disabled": true,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Ambil di toko",
+      "value": "cnc",
+      "selected": false,
+      "tooltip": "tooltip-content-for-logistic-option-",
+      "tooltipUrl": "https://www.blibli.com/pages/tooltip-content-for-logistic-option-cnc",
+      "tooltipText": "Beli online, lalu ambil produknya di toko pilihanmu.",
+      "disabled": false,
+      "valid": false,
+      "popular": false
+     }
+    ],
+    "toolTipUrl": "pengiriman-filter-tooltip-id",
+    "grouped": false,
+    "horizontal": false
+   },
+   {
+    "name": "Product Stock",
+    "type": "MULTIPLE_SELECT",
+    "searchable": false,
+    "parameter": "oos",
+    "theme": "pristine",
+    "data": [
+     {
+      "label": "Pre-order",
+      "value": "Preorder",
+      "selected": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Stok tersedia",
+      "value": "ReadyStock",
+      "selected": false,
+      "valid": false,
+      "popular": false
+     }
+    ],
+    "grouped": false,
+    "horizontal": false
+   },
+   {
+    "name": "Tipe seller",
+    "type": "MULTIPLE_SELECT",
+    "searchable": false,
+    "parameter": "seller",
+    "theme": "theme2",
+    "data": [
+     {
+      "label": "Flagship Store",
+      "value": "Flagship Store",
+      "selected": false,
+      "toolTipUrl": "https://www.blibli.com/pages/",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Top rated seller",
+      "value": "Top rated seller",
+      "selected": false,
+      "toolTipUrl": "https://www.blibli.com/pages/merchant-badge-info-id",
+      "valid": false,
+      "popular": false
+     }
+    ],
+    "grouped": false,
+    "horizontal": false
+   }
+  ],
+  "brandFilterCount": {
+   "invalid": 83,
+   "valid": 17
+  },
+  "quickFilters": [
+   {
+    "name": "Promo",
+    "label": "Campaign 11.11",
+    "type": "SINGLE_SELECT",
+    "searchable": false,
+    "parameter": "promo",
+    "theme": "quickFilter",
+    "data": [
+     {
+      "label": "Campaign 11.11",
+      "value": "campaign_CAMP-03348",
+      "selected": false,
+      "valid": false,
+      "popular": false
+     }
+    ],
+    "grouped": false,
+    "horizontal": true
+   },
+   {
+    "name": "Layanan Blibli",
+    "label": "Disediakan Blibli",
+    "type": "SINGLE_SELECT",
+    "searchable": false,
+    "parameter": "blibliService",
+    "theme": "quickFilter",
+    "data": [
+     {
+      "label": "Disediakan Blibli",
+      "value": "blibli",
+      "selected": false,
+      "tooltipText": "Produk Disediakan Blibli berarti disimpan, disiapkan, dan dikirim dari gudang Blibli.",
+      "valid": false,
+      "popular": false
+     }
+    ],
+    "toolTipUrl": "layanan-blibli-filter-tooltip-id",
+    "grouped": false,
+    "horizontal": true
+   },
+   {
+    "name": "Jarak",
+    "label": "Jarak",
+    "type": "SINGLE_SELECT",
+    "searchable": false,
+    "parameter": "nearAddress",
+    "theme": "DEFAULT_THEME",
+    "data": [
+     {
+      "label": "Dalam 4 km",
+      "value": "4",
+      "selected": false,
+      "query": "4",
+      "disabled": true,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Dalam 8 km",
+      "value": "8",
+      "selected": false,
+      "query": "8",
+      "disabled": true,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Kota yang sama",
+      "value": "withinCity",
+      "selected": false,
+      "query": "withinCity",
+      "disabled": true,
+      "valid": false,
+      "popular": false
+     }
+    ],
+    "groupName": "Jarak & Lokasi Toko",
+    "grouped": true,
+    "horizontal": false
+   },
+   {
+    "name": "Promo",
+    "label": "Promo",
+    "type": "MULTIPLE_SELECT",
+    "searchable": false,
+    "parameter": "promo",
+    "theme": "theme4",
+    "data": [
+     {
+      "label": "XTRA promo",
+      "value": "extraPromo",
+      "selected": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Hadiah gratis",
+      "value": "FREE_GIFT",
+      "selected": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Campaign 11.11",
+      "value": "campaign_CAMP-03348",
+      "selected": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Flash Sale",
+      "value": "campaign_CAMP-03349_5619631_FLASHSALE",
+      "selected": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Grosir",
+      "value": "WHOLESALE",
+      "selected": false,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Voucher seller",
+      "value": "merchantVoucher",
+      "selected": false,
+      "valid": false,
+      "popular": false
+     }
+    ],
+    "grouped": false,
+    "horizontal": false
+   },
+   {
+    "name": "Pengiriman",
+    "label": "Pengiriman",
+    "type": "MULTIPLE_SELECT",
+    "searchable": false,
+    "parameter": "logisticOption",
+    "theme": "theme3",
+    "data": [
+     {
+      "label": "Prioritas",
+      "value": "BLITZ_PRIORITAS",
+      "selected": false,
+      "tooltip": "tooltip-content-for-logistic-option-",
+      "tooltipUrl": "https://www.blibli.com/pages/tooltip-content-for-logistic-option-blitz-prioritas",
+      "tooltipText": "",
+      "disabled": true,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "2 jam sampai",
+      "value": "HOUR_DEL",
+      "selected": false,
+      "tooltip": "tooltip-content-for-logistic-option-",
+      "tooltipUrl": "https://www.blibli.com/pages/tooltip-content-for-logistic-option-hour-del",
+      "tooltipText": "Produk akan sampai dalam 0-2 jam sejak pembayaran selesai.",
+      "disabled": true,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Green delivery - Instant",
+      "value": "GREEN_INSTANT",
+      "selected": false,
+      "tooltip": "tooltip-content-for-logistic-option-",
+      "tooltipUrl": "https://www.blibli.com/pages/tooltip-content-for-logistic-option-green-instant",
+      "tooltipText": "Pengiriman 3-4 jam sejak paket diserahkan ke kurir armada listrik.",
+      "disabled": true,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Green delivery - Same day",
+      "value": "GREEN_SAME_DAY",
+      "selected": false,
+      "tooltip": "tooltip-content-for-logistic-option-",
+      "tooltipUrl": "https://www.blibli.com/pages/tooltip-content-for-logistic-option-green-same-day",
+      "tooltipText": "Pengiriman 6-8 jam sejak paket diserahkan ke kurir armada listrik.",
+      "disabled": true,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Instant",
+      "value": "INSTANT",
+      "selected": false,
+      "tooltip": "tooltip-content-for-logistic-option-",
+      "tooltipUrl": "https://www.blibli.com/pages/tooltip-content-for-logistic-option-instant",
+      "tooltipText": "Produk akan sampai dalam 4-6 jam sejak diterima oleh kurir GoSend/Grab.",
+      "disabled": true,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Same day",
+      "value": "SAME_DAY",
+      "selected": false,
+      "tooltip": "tooltip-content-for-logistic-option-",
+      "tooltipUrl": "https://www.blibli.com/pages/tooltip-content-for-logistic-option-same-day",
+      "tooltipText": "Produk akan sampai dalam 6-8 jam sejak diterima oleh kurir Blibli Express/GoSend/Grab.",
+      "disabled": true,
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "Ambil di toko",
+      "value": "cnc",
+      "selected": false,
+      "tooltip": "tooltip-content-for-logistic-option-",
+      "tooltipUrl": "https://www.blibli.com/pages/tooltip-content-for-logistic-option-cnc",
+      "tooltipText": "Beli online, lalu ambil produknya di toko pilihanmu.",
+      "disabled": false,
+      "valid": false,
+      "popular": false
+     }
+    ],
+    "toolTipUrl": "pengiriman-filter-tooltip-id",
+    "grouped": false,
+    "horizontal": false
+   },
+   {
+    "name": "Rating",
+    "label": "4 ke atas",
+    "type": "SINGLE_SELECT",
+    "searchable": false,
+    "parameter": "rating",
+    "theme": "quickFilter",
+    "data": [
+     {
+      "label": "4 ke atas",
+      "value": "4",
+      "selected": false,
+      "valid": false,
+      "popular": false
+     }
+    ],
+    "grouped": false,
+    "horizontal": true
+   },
+   {
+    "name": "Tipe seller",
+    "label": "Flagship Store",
+    "type": "SINGLE_SELECT",
+    "searchable": false,
+    "parameter": "seller",
+    "theme": "quickFilter",
+    "data": [
+     {
+      "label": "Flagship Store",
+      "value": "Flagship Store",
+      "selected": false,
+      "toolTipUrl": "https://www.blibli.com/pages/",
+      "valid": false,
+      "popular": false
+     }
+    ],
+    "grouped": false,
+    "horizontal": true
+   },
+   {
+    "name": "Harga",
+    "label": "Harga",
+    "type": "PRICE_RANGE",
+    "searchable": false,
+    "parameter": "price",
+    "theme": "DEFAULT_THEME",
+    "data": [
+     {
+      "label": "minPrice",
+      "value": "",
+      "selected": false,
+      "parameter": "minPrice",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "maxPrice",
+      "value": "",
+      "selected": false,
+      "parameter": "maxPrice",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "selectedMinPrice",
+      "value": "",
+      "selected": false,
+      "parameter": "minPrice",
+      "valid": false,
+      "popular": false
+     },
+     {
+      "label": "selectedMaxPrice",
+      "value": "",
+      "selected": false,
+      "parameter": "maxPrice",
+      "valid": false,
+      "popular": false
+     }
+    ],
+    "groupName": "Harga & Diskon",
+    "grouped": true,
+    "horizontal": false
+   }
+  ],
+  "paging": {
+   "page": 1,
+   "total_page": 1,
+   "item_per_page": 15
+  },
+  "maxOffers": 50,
+  "serverCurrentTime": 1794118911130,
+  "productInfo": {
+   "RAM-70107-32567": {
+    "tags": [
+     "MERCHANT_VOUCHER"
+    ]
+   },
+   "RAM-70107-29314": {
+    "tags": [
+     "MERCHANT_VOUCHER"
+    ]
+   },
+   "RAM-70107-10697": {
+    "tags": [
+     "MERCHANT_VOUCHER"
+    ]
+   },
+   "RAM-70107-11600": {
+    "tags": [
+     "MERCHANT_VOUCHER"
+    ]
+   },
+   "HYP-60026-11159": {
+    "tags": [
+     "MERCHANT_VOUCHER"
+    ]
+   },
+   "HYP-60026-02560": {
+    "tags": [
+     "MERCHANT_VOUCHER"
+    ]
+   },
+   "RAM-70107-19152": {
+    "tags": [
+     "MERCHANT_VOUCHER"
+    ]
+   },
+   "RAM-70107-19157": {
+    "tags": [
+     "MERCHANT_VOUCHER"
+    ]
+   },
+   "RAM-70107-20913": {
+    "tags": [
+     "MERCHANT_VOUCHER"
+    ]
+   },
+   "RAM-70107-19892": {
+    "campaign_name": [
+     "Campaign 11.11"
+    ],
+    "campaign_code": [
+     "CAMP-03348"
+    ],
+    "tags": [
+     "EXCLUSIVE_CAMPAIGN"
+    ]
+   },
+   "HYP-60026-23761": {
+    "tags": [
+     "MERCHANT_VOUCHER"
+    ]
+   },
+   "RAM-70107-26508": {
+    "tags": [
+     "MERCHANT_VOUCHER"
+    ]
+   },
+   "RAM-70107-17478": {
+    "tags": [
+     "MERCHANT_VOUCHER"
+    ]
+   },
+   "HYP-60026-23800": {
+    "tags": [
+     "MERCHANT_VOUCHER"
+    ]
+   },
+   "RAM-70107-26627": {
+    "tags": [
+     "MERCHANT_VOUCHER"
+    ]
+   },
+   "HYP-60026-23787": {
+    "tags": [
+     "MERCHANT_VOUCHER"
+    ]
+   },
+   "HYP-60026-23788": {
+    "tags": [
+     "MERCHANT_VOUCHER"
+    ]
+   },
+   "RAM-70107-83322": {
+    "tags": [
+     "MERCHANT_VOUCHER"
+    ]
+   },
+   "RAM-70107-28584": {
+    "tags": [
+     "MERCHANT_VOUCHER"
+    ]
+   },
+   "RAM-70107-28860": {
+    "tags": [
+     "MERCHANT_VOUCHER"
+    ]
+   },
+   "HYP-60026-23829": {
+    "tags": [
+     "MERCHANT_VOUCHER"
+    ]
+   },
+   "RAM-70107-28773": {
+    "tags": [
+     "MERCHANT_VOUCHER"
+    ]
+   },
+   "RAM-70107-04265": {
+    "campaign_name": [
+     "Campaign 11.11"
+    ],
+    "campaign_code": [
+     "CAMP-03348"
+    ],
+    "tags": [
+     "EXCLUSIVE_CAMPAIGN"
+    ]
+   },
+   "HYP-60026-14414": {
+    "tags": [
+     "MERCHANT_VOUCHER"
+    ]
+   },
+   "HYP-60026-02574": {
+    "tags": [
+     "MERCHANT_VOUCHER"
+    ]
+   },
+   "HYP-60026-02571": {
+    "tags": [
+     "MERCHANT_VOUCHER"
+    ]
+   },
+   "RAM-70107-00987": {
+    "tags": [
+     "MERCHANT_VOUCHER"
+    ]
+   },
+   "HYP-60026-23815": {
+    "tags": [
+     "MERCHANT_VOUCHER"
+    ]
+   },
+   "HYP-60026-00638": {
+    "tags": [
+     "MERCHANT_VOUCHER"
+    ]
+   }
+  },
+  "code": "OK",
+  "selectedCategoryIds": [
+   "BU-1000190"
+  ],
+  "visibleCategoryIds": [
+   "BU-1000190"
+  ],
+  "exclusiveCampResponse": {
+   "exclusiveCampRow": 0,
+   "promoBgImage": "https://www.static-src.com/siva/asset//01_2022/22campaign-951x489.jpg",
+   "promoTitleImage": "https://www.static-src.com/fs/asset/10_2026/tag-label-b9fb4f71111e.png",
+   "campaignCode": "CAMP-03348"
+  },
+  "similarProductsMerchantSearch": {
+   "similarProductList": [],
+   "seeAllVisible": false
+  },
+  "responseFlags": [],
+  "showRestrictedMsg": false,
+  "redirectionUrl": "",
+  "trackerFields": {
+   "corrected_search_term": "",
+   "ds_category_ids": "NA",
+   "algoId": "SEARCH_WINNER_BASELINE_PT_ON",
+   "is_ner_eligible": "false",
+   "group_type": "L3",
+   "queryFeatureTags": "NER_FEATURE_ENABLED,NER_RELAXED_FEATURE_ENABLED",
+   "categoryAffinityC1List": "",
+   "bliklanPositionConfig": "1,2,7,8,16,17,18,19,20"
+  },
+  "countExceedsLimit": [
+   "brandExact"
+  ],
+  "productsPerRow": 5,
+  "needMoreSearchResponse": false,
+  "pageMetadata": {
+   "productComparisonOverriddenC2s": "TA-1000003;HA-1000002;TU-1000021;KA-1000004;KA-1000002",
+   "categoryWithMaxProductCount": "BU-1000105",
+   "isEligibleForSellerAds": "true",
+   "productComparisonAllowedC1s": "54593;53184;53270;JA-1000225;54650",
+   "showProductComparison": "false",
+   "newTagsFlowEnabled": "false",
+   "categoryCode": "BU-1000190",
+   "categoryName": "Buah Lokal",
+   "enableMiniProductCard": "false",
+   "contextualPriceEnabled": "true",
+   "numProductsContactedForPriceResolver": "24",
+   "contextualPriceBatchSize": "24",
+   "queryFilterSuggestionGridPosition": "4",
+   "queryFilterSuggestionListPosition": "21",
+   "queryFilterSuggestionGridIncrement": "4",
+   "queryFilterSuggestionListIncrement": "20",
+   "isSpellCheckResponseEnabled": "false",
+   "officialSponsorProductSortOrder": "{TD=1, TC=1, CC=1, CM=1}"
+  },
+  "pageMetaDataResponse": {
+   "c2SimilarityMap": {
+    "KA-1000004": [
+     "KA-1000002"
+    ],
+    "KA-1000002": [
+     "KA-1000004"
+    ],
+    "TA-1000003": [
+     "HA-1000002",
+     "TU-1000021"
+    ],
+    "HA-1000002": [
+     "TA-1000003",
+     "TU-1000021"
+    ],
+    "TU-1000021": [
+     "TA-1000003",
+     "HA-1000002"
+    ]
+   },
+   "c3SimilarityMap": {
+    "UL-1000001": [
+     "KO-1000005",
+     "GA-1000002"
+    ],
+    "GA-1000002": [
+     "LA-1000004",
+     "LA-1000005",
+     "UL-1000001",
+     "SM-1000002",
+     "DE-1000004",
+     "MO-1000003",
+     "KO-1000005"
+    ],
+    "LA-1000005": [
+     "KO-1000005",
+     "GA-1000002"
+    ],
+    "LA-1000004": [
+     "KO-1000005",
+     "GA-1000002"
+    ],
+    "KA-1000009": [
+     "KA-1000004",
+     "KA-1000002"
+    ],
+    "KA-1000006": [
+     "KA-1000004",
+     "KA-1000002"
+    ],
+    "SM-1000002": [
+     "KO-1000005",
+     "GA-1000002"
+    ],
+    "KA-1000007": [
+     "KA-1000004",
+     "KA-1000002"
+    ],
+    "KA-1000005": [
+     "KA-1000004",
+     "KA-1000002"
+    ],
+    "DE-1000004": [
+     "KO-1000005",
+     "GA-1000002"
+    ],
+    "MO-1000003": [
+     "KO-1000005",
+     "GA-1000002"
+    ],
+    "KA-1000010": [
+     "KA-1000004",
+     "KA-1000002"
+    ],
+    "JA-1000111": [
+     "SM-1000001",
+     "AC-1000002",
+     "JA-1000008"
+    ],
+    "DE-1000010": [
+     "SC-1000001"
+    ],
+    "PO-1000015": [
+     "SC-1000001"
+    ],
+    "JA-1000120": [
+     "SM-1000001",
+     "AC-1000002",
+     "JA-1000008"
+    ],
+    "AC-1000001": [
+     "KA-1000004",
+     "KA-1000002"
+    ],
+    "JA-1000110": [
+     "SM-1000001",
+     "AC-1000002",
+     "JA-1000008"
+    ],
+    "JA-1000121": [
+     "SM-1000001",
+     "AC-1000002",
+     "JA-1000008"
+    ]
+   },
+   "buyAgainSecRow": 0
+  },
+  "selectedFilters": [],
+  "uspTrustBadgeTags": [],
+  "intentAttributes": {},
+  "personalizedAttributes": {},
+  "intentApplied": false,
+  "bliklanIntentFailed": false,
+  "nerApplied": false,
+  "showAllCategories": false,
+  "searchPageUrl": "",
+  "catIntentFailed": false,
+  "sellerAdsPosition": [
+   16,
+   17,
+   18,
+   19,
+   20
+  ],
+  "sellerAdsPositionWebListView": [
+   16,
+   17,
+   18
+  ],
+  "sponsorProducts": [],
+  "officialSponsorAdsPosition": [
+   1,
+   2,
+   7,
+   8
+  ],
+  "officialSponsorTopPosition": 8,
+  "flagForOfficialSponsorAds": "OVERALL_DEDUPLICATE",
+  "officialSponsorProducts": [],
+  "nearbyLocationFailed": false,
+  "correctedNearbyLocation": "",
+  "interspersedCardFilters": [],
+  "materiallResponse": false,
+  "interspersedCardPos": {
+   "Lokasi toko": 9,
+   "RAM": 18
+  },
+  "queryIntentCardConfig": {
+   "grid": {
+    "refineSearch": {
+     "enabled": true,
+     "position": [
+      21
+     ],
+     "maxPerRow": 10
+    },
+    "filter": {
+     "enabled": false,
+     "position": [
+      10,
+      20,
+      30
+     ],
+     "maxCount": 3
+    },
+    "relatedSearch": {
+     "enabled": true,
+     "position": [
+      36
+     ],
+     "maxPerRow": 10
+    }
+   },
+   "list": {
+    "refineSearch": {
+     "enabled": true,
+     "position": [
+      6
+     ],
+     "maxPerRow": 10
+    },
+    "filter": {
+     "enabled": false,
+     "position": [
+      10,
+      20,
+      30
+     ],
+     "maxCount": 3
+    },
+    "relatedSearch": {
+     "enabled": true,
+     "position": [
+      36
+     ],
+     "maxPerRow": 10
+    }
+   }
+  },
+  "topRatedProduct": {
+   "itemCount": 0,
+   "merchantVoucherCount": 0,
+   "numLocations": 0,
+   "showShippingEtdBackground": false,
+   "wholesaleMinQuantity": 0,
+   "wholesaleDiscountPercentage": 0.0,
+   "freshnessDaysCount": 0,
+   "hasVariants": false,
+   "hasPalingTopBoostWithoutTag": false,
+   "uspLabelsTags": [],
+   "productLabelTags": [],
+   "titleLabelTags": [],
+   "contextualLabelTags": [],
+   "statusLabelTags": [],
+   "promoLabelTags": [],
+   "specialAttributesTags": [],
+   "officialMerchant": false,
+   "officialBrand": false,
+   "exclusiveProduct": false,
+   "groceryBuyAgain": false,
+   "buyable": false,
+   "preorder": false,
+   "official": false,
+   "addToCartEligible": false
+  },
+  "correctedContextualSearchTerm": "",
+  "normalizationScoreValues": [],
+  "ltrFields": {},
+  "vectorZeroResultResponses": []
+ }
+}

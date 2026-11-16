@@ -1,6 +1,14 @@
 .venv/
 data_lake/
+data_lake_vps/
 warehouse/
 logs/
 __pycache__/
 .pytest_cache/
+# arsip 27 Sep (data besar, tidak masuk git; skripnya masuk)
+arsip/**/*.json
+arsip/**/*.csv
+arsip/**/*.pdf
+arsip/**/*.html
+arsip/**/*.js
+arsip/**/*.bin
