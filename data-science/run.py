@@ -203,19 +203,25 @@ def tanggal_tertinggal(
     """(tanggal, sumber) sebelum hari ini yang punya folder `_SUKSES` tetapi belum pernah dimuat.
 
     "Sudah dimuat" = ada baris pipeline_runs `berhasil`/`sebagian` dengan baris_dimuat > 0.
+    Kalau folder laptop tidak bertanda `_SUKSES` tetapi salinan VPS bertanda, yang dihitung hanya
+    muatan DARI salinan VPS: muatan sebelumnya dari folder laptop itu adalah tarikan yang putus
+    (16 Nov 2026: 68 dari 100 halaman), jadi tanggal itu dimuat ulang dari VPS.
     """
-    sudah = set()
+    sudah, dari_vps = set(), set()
     if Path(db).exists():
         with duckdb.connect(str(db), read_only=True) as con:
             ada = con.execute("SELECT count(*) FROM information_schema.tables "
                               "WHERE table_name = 'pipeline_runs'").fetchone()[0]
             if ada:
-                sudah = set(con.execute(
-                    "SELECT DISTINCT tanggal, sumber FROM pipeline_runs "
-                    "WHERE status IN ('berhasil', 'sebagian') AND baris_dimuat > 0").fetchall())
+                for t, s, vps in con.execute(
+                        "SELECT DISTINCT tanggal, sumber, coalesce(pesan_galat LIKE 'data dari data_lake_vps%', false) "
+                        "FROM pipeline_runs WHERE status IN ('berhasil', 'sebagian') AND baris_dimuat > 0").fetchall():
+                    sudah.add((t, s))
+                    if vps:
+                        dari_vps.add((t, s))
     hasil = set()
     for s in sumber:
-        for a in (akar, akar_vps):
+        for a, adalah_vps in ((akar, False), (akar_vps, True)):
             if a is None:
                 continue
             for penanda in (Path(a) / "raw" / s).glob(f"date=*/{PENANDA}"):
@@ -223,7 +229,8 @@ def tanggal_tertinggal(
                     t = date.fromisoformat(penanda.parent.name.removeprefix("date="))
                 except ValueError:
                     continue
-                if mulai[s] <= t < hari_ini and (t, s) not in sudah:
+                vps_saja = adalah_vps and not (folder_tanggal(akar, s, t) / PENANDA).exists()
+                if mulai[s] <= t < hari_ini and (t, s) not in (dari_vps if vps_saja else sudah):
                     hasil.add((t, s))
     return sorted(hasil)
 
@@ -300,7 +307,7 @@ def main() -> int:
     if a.tanggal is None:
         runs = jalankan_harian(a.sumber, date.today(), a.tahap, a.akar, a.db, folder_log=DASAR / "logs")
     else:
-        runs = jalankan(a.sumber, a.tanggal, a.tahap, a.akar, a.db, folder_log=DASAR / "logs")
+        runs = jalankan(a.sumber, a.tanggal, a.tahap, a.akar, a.db, folder_log=DASAR / "logs", akar_vps=AKAR_VPS)
     return 1 if any(r["status"] == "gagal" for r in runs) else 0
 
 

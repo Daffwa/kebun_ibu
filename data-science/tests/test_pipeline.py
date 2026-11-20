@@ -324,3 +324,35 @@ def test_tanggal_tertinggal_tidak_sebelum_mulai_gudang(akar, db, tmp_path):
     mulai = {"blibli": TANGGAL + timedelta(days=1), "tokopedia": TANGGAL}
 
     assert run.tanggal_tertinggal(db, ["blibli"], TANGGAL + timedelta(days=3), akar, None, mulai) == []
+
+
+# --- 16 Nov 2026: tarikan laptop putus di halaman 68, salinan VPS lengkap datang besoknya tapi tidak dimuat ---
+
+def test_harian_memuat_ulang_dari_vps_kalau_yang_dimuat_tarikan_laptop_sebagian(akar, db, tmp_path):
+    # Hari itu: folder laptop tanpa _SUKSES (tarikan putus) tetap dimuat, salinan VPS belum ada.
+    (folder_mentah(akar, "blibli") / "_SUKSES").touch()
+    (pertama,) = run.jalankan(["tokopedia"], TANGGAL, TL, akar, db, akar_vps=tmp_path / "data_lake_vps")
+    assert pertama["pesan_galat"] is None and pertama["baris_dimuat"] > 0
+    # Besoknya sinkron_vps.py membawa salinan VPS yang lengkap.
+    akar_vps = salin_ke_vps(tmp_path, "tokopedia")
+    besok = TANGGAL + timedelta(days=1)
+    mulai = {"blibli": TANGGAL, "tokopedia": TANGGAL}
+    run.jalankan(["blibli"], TANGGAL, TL, akar, db)
+
+    assert run.tanggal_tertinggal(db, KEDUANYA, besok, akar, akar_vps, mulai) == [(TANGGAL, "tokopedia")]
+
+    runs = run.jalankan_harian(KEDUANYA, besok, TL, akar, db, akar_vps=akar_vps, mulai=mulai)
+
+    (susulan,) = [r for r in runs if r["tanggal"] == TANGGAL]
+    assert "data_lake_vps" in susulan["pesan_galat"]
+    assert run.tanggal_tertinggal(db, KEDUANYA, besok, akar, akar_vps, mulai) == []
+
+
+def test_tanggal_manual_memakai_salinan_vps(monkeypatch):
+    # `python run.py --tanggal X` dulu tidak pernah melihat data_lake_vps/
+    dipanggil = {}
+    monkeypatch.setattr(run, "jalankan", lambda *a, **k: dipanggil.update(k) or [])
+    monkeypatch.setattr(sys, "argv", ["run.py", "--tahap", "transform,load", "--tanggal", "2026-11-16"])
+
+    assert run.main() == 0
+    assert dipanggil["akar_vps"] == run.AKAR_VPS
