@@ -4,13 +4,10 @@ import {
   NAMA_PASAR,
   bacaFilter,
   deret,
-  geserIndeks,
   histogram,
   pilihRentang,
   rentangTeks,
   ringkasProduk,
-  ringkasTren,
-  labelSumbu,
   selisihHari,
   statusPreset,
   tanggalPanjang,
@@ -18,11 +15,9 @@ import {
 import { ambilBatas, ambilDaftarWilayah, ambilHarian, ambilLonjakanHalaman, ambilProdukRentang } from "@/lib/pasarData";
 import { bacaTabel } from "@/lib/tabelLonjakan";
 import { pilihWilayah, saringanProduk } from "@/lib/wilayah";
-import { rupiah } from "@/lib/format";
 import AngkaUtama from "./AngkaUtama";
 import GrafikHistogram from "./GrafikHistogram";
 import GrafikLonjakan from "./GrafikLonjakan";
-import GrafikTren from "./GrafikTren";
 import Saringan from "./Saringan";
 import TabelLonjakan, { type PropsTabel } from "./TabelLonjakan";
 
@@ -45,9 +40,6 @@ function Kartu({ judul, children }: { judul: string; children: React.ReactNode }
     </section>
   );
 }
-
-const persen = (v: number) =>
-  `${v > 0 ? "+" : ""}${(v * 100).toLocaleString("id-ID", { maximumFractionDigits: 1, minimumFractionDigits: 1 })}%`;
 
 type Sp = Record<string, string | string[] | undefined>;
 type SupabaseServer = Awaited<ReturnType<typeof supabaseServer>>;
@@ -153,8 +145,6 @@ export default async function Pasar({
   const barisProduk = await ambilProdukRentang(sb, filter.pasar, mulai, akhir, saringWilayah);
   const produk = ringkasProduk(barisProduk);
 
-  const indeks = geserIndeks(titik);
-  const tren = ringkasTren(indeks, titik.map((t) => t.tanggal));
   const nLonjak = titik.filter((t) => t.lonjak_pasar === 1).length;
   const hist = produk.length ? histogram(produk.map((p) => p.harga_per_kg)) : null;
 
@@ -187,27 +177,6 @@ export default async function Pasar({
           <Kosong judul="Tidak ada data harga di rentang ini." />
         </div>
       )}
-
-      <Kartu
-        judul={
-          // 16 Nov: "Harga per kg produk yang sama: Rp 30.000" terbaca sebagai harga produk; angka itu
-          // adalah median titik terakhir, jadi judul menyebutnya begitu.
-          tren
-            ? `Median ${satuan === "hari" ? tanggalPanjang(tren.sampai) : labelSumbu(tren.sampai, satuan)}: ${rupiah(tren.akhir)} · ` +
-              `produk yang sama berubah ${persen(tren.ubah)} sejak ${tanggalPanjang(tren.sejak)}`
-            : "Harga per kg: produk yang sama vs semua produk"
-        }
-      >
-        <GrafikTren
-          titik={titik.map((t, i) => ({ tanggal: t.tanggal, indeks: indeks[i], median: t.median }))}
-          satuan={satuan}
-        />
-        <p className="mt-2 text-sm text-daun">
-          Garis biru bukan harga satu produk. Garis itu hanya bergerak kalau produk yang sama berubah harga, dan ujung
-          kanannya disamakan dengan median terakhir. Kalau garis oranye bergerak tapi biru datar, perubahannya datang dari
-          produk yang muncul berganti, bukan dari penjual yang mengubah harga.
-        </p>
-      </Kartu>
 
       <Kartu
         judul={`Harga pasar vs ${JENDELA_HARI} hari sebelumnya (per ${satuan}): ${

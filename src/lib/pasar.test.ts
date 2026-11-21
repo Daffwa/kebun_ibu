@@ -3,12 +3,10 @@ import fixture from "./pasar.fixture.json";
 import {
   angkaUtama,
   bacaFilter,
-  geserIndeks,
   histogram,
   kerapatan,
   labelSumbu,
   tanggalPanjang,
-  ringkasTren,
   type Produk,
   deret,
   pilihRentang,
@@ -130,15 +128,6 @@ test("histogram: kelompok Rp5.000, kelompok terakhir menutup kanan", () => {
 
 test("histogram: satu harga saja tetap satu kelompok", () => {
   expect(histogram([30000, 30000]).kelompok).toEqual([{ dari: 30000, sampai: 35000, jumlah: 2 }]);
-});
-
-test("geserIndeks: ujung kanan = median hari terakhir yang punya keduanya", () => {
-  const t = (indeks: number | null, median: number | null) => ({ indeks_berantai: indeks, median }) as Titik;
-  expect(geserIndeks([t(100, 30000), t(110, 33000), t(null, null)])).toEqual([30000, 33000, null]);
-  const r = ringkasTren([30000, 33000, null], ["2026-11-07", "2026-11-08", "2026-11-09"])!;
-  expect([r.akhir, r.sejak, r.sampai]).toEqual([33000, "2026-11-07", "2026-11-08"]);
-  expect(r.ubah).toBeCloseTo(0.1, 10);
-  expect(ringkasTren([null, 33000], ["a", "b"])).toBeNull();
 });
 
 test("kerapatan: ≤90 hari per hari, lebih panjang per bulan (tidak ada minggu)", () => {
