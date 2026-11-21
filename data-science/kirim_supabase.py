@@ -42,7 +42,7 @@ log = logging.getLogger("kirim_supabase")
 # Baris harian per wilayah (selain `semua`) dan daftar wilayah baru dikirim kalau True. Nyalakan
 # HANYA sesudah web membaca `.eq("wilayah", "semua")`, lalu jalankan `--semua` sekali
 # (docs/superpowers/specs/2026-11-14-filter-wilayah-design.md, "Urutan supaya tidak ada yang rusak").
-KIRIM_PER_WILAYAH = False
+KIRIM_PER_WILAYAH = True
 
 # Kolom yang disetujui 13 Nov (spec "Tabel Supabase") + kode wilayah 14 Nov; sisanya langkah
 # antara, tetap di laptop. Kolom yang belum ada di Supabase diabaikan jsonb_populate_recordset.
