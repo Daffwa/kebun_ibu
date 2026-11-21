@@ -327,30 +327,6 @@ export function histogram(
   };
 }
 
-// ---------------------------------------------------------------- tren (grafik 3)
-
-/**
- * Indeks berantai digeser supaya ujung kanannya = median hari terakhir yang punya keduanya:
- * garis = "harga pasar sekarang, mundur hanya mengikuti perubahan harga produk yang sama".
- */
-export function geserIndeks(titik: Titik[]): (number | null)[] {
-  const jangkar = titik.findLastIndex((t) => t.indeks_berantai !== null && t.median !== null);
-  if (jangkar < 0) return titik.map(() => null);
-  const faktor = titik[jangkar].median! / titik[jangkar].indeks_berantai!;
-  return titik.map((t) => (t.indeks_berantai === null ? null : t.indeks_berantai * faktor));
-}
-
-/** Judul grafik 3: nilai terakhir (dan tanggalnya) serta perubahan sejak titik berdata pertama; null kalau < 2 titik. */
-export function ringkasTren(
-  nilai: (number | null)[],
-  tanggal: string[],
-): { akhir: number; ubah: number; sejak: string; sampai: string } | null {
-  const ada = nilai.flatMap((v, i) => (v === null ? [] : [{ v, t: tanggal[i] }]));
-  if (ada.length < 2) return null;
-  const akhir = ada[ada.length - 1].v;
-  return { akhir, ubah: akhir / ada[0].v - 1, sejak: ada[0].t, sampai: ada[ada.length - 1].t };
-}
-
 // ---------------------------------------------------------------- label
 
 const BULAN = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];

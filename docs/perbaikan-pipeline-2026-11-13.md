@@ -26,7 +26,8 @@ both pulls failed. Then `run.py --tahap transform,load` ran and made two mistake
    every past date that has a `_SUKSES` folder (laptop or VPS) but no loaded run yet,
    then today. It never goes before the warehouse start dates (Blibli 7 Nov,
    Tokopedia 8 Nov), so your 9 Nov "complete dates only" decision still holds.
-   With `--tanggal` it behaves exactly as before.
+   With `--tanggal` it behaves exactly as before. *(Changed 20 Nov: `--tanggal` also uses the
+   VPS copy now; see the 20 Nov section.)*
 
 Task Scheduler needs no change: it already runs `run.py --tahap transform,load`.
 
@@ -137,3 +138,54 @@ identical to what production holds (22 of 22). Design:
 
 Until step 3 the scheduled run resends all dates once (the production snapshot has the old
 columns); the new columns are ignored by production until step 1.
+
+---
+
+# Pipeline fix — 20 Nov 2026: partial pull loaded, VPS copy skipped
+
+**Result:** 16 Nov Tokopedia reloaded from the VPS copy: **3,936 → 5,680 rows** (15 Nov had
+5,592, 17 Nov had 5,569). Production updated: 362 → 366 spike rows, 40 daily rows. 416 of 416
+tests pass. Commit `67ea945`.
+
+## What went wrong on 16 Nov
+
+The laptop lost internet around 09:00–12:30 (`Could not resolve host`).
+
+| Step | What happened | Bug |
+|---|---|---|
+| `tarik_harian.py` | Tokopedia stopped at page 68 of 100 → status `sebagian`, no `_SUKSES` marker. | None: correct. |
+| `run.py` (11:09, 12:15) | Loaded the partial laptop folder: **`berhasil`, 3,936 rows**. | A partial pull counted as a full day. |
+| `sinkron_vps.py`, `kirim_supabase.py` | Failed (no internet), then recovered on 17 Nov. | None. |
+| Catch-up on 17 Nov | The full VPS copy (100 pages, `_SUKSES`) arrived, but 16 Nov already had a loaded run, so it was skipped. | The complete copy was never used. |
+
+## What changed (`data-science/run.py`)
+
+1. **Catch-up reloads from the VPS copy.** When the laptop folder has no `_SUKSES` but the VPS
+   copy does, the date only counts as loaded if a run loaded it **from the VPS copy**
+   (`pesan_galat` starts with `data dari data_lake_vps`). Otherwise the next scheduled run
+   reloads it.
+2. **`--tanggal` uses the VPS copy too.** Before, `python run.py --tanggal X` never looked at
+   `data_lake_vps/`, so a manual reload would have read the partial laptop folder again.
+
+Tests: `test_harian_memuat_ulang_dari_vps_kalau_yang_dimuat_tarikan_laptop_sebagian`,
+`test_tanggal_manual_memakai_salinan_vps` (both failed before the fix). On the real warehouse
+the new rule flags no other date.
+
+## How it was applied
+
+1. Backups in `data-science/data_lake/cadangan/` (ignored by git):
+   `tokopedia_date=2026-11-16_sebagian/` (the 68-page laptop folder) and
+   `harga_buah.sebelum-16nov-ulang.duckdb` (the warehouse before the reload).
+2. Reloaded 16 Nov Tokopedia from `data_lake_vps/` → `sebagian`,
+   `data dari data_lake_vps (tanpa halaman varian)`, 5,680 rows loaded, 6 quarantined.
+3. `kirim_supabase.py --coba` → only 16 Nov changes; then `kirim_supabase.py` to **production**
+   (with the user's OK); `--coba` afterwards → 0 dates waiting.
+
+To undo: copy the warehouse backup over `warehouse/harga_buah.duckdb`, then run
+`python kirim_supabase.py`.
+
+## Still open
+
+- **No retry after a failed run** (from 13 Nov): both 16 Nov runs fell inside the outage.
+- **The VPS runs old code** (no variant pages), so VPS backups are always `sebagian`. The VPS
+  rental ends around 27 Nov.

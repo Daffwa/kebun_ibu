@@ -95,8 +95,11 @@ python run.py                             # extract + transform + load, kedua su
                                           # (extract dilewati kalau hari itu sudah _SUKSES)
                                           # tanpa --tanggal: juga menyusulkan tanggal tertinggal
                                           # (folder _SUKSES belum dimuat; salinan VPS dipakai kalau
-                                          # tarikan laptop gagal, status `sebagian` tanpa halaman varian)
+                                          # tarikan laptop gagal atau putus, status `sebagian` tanpa
+                                          # halaman varian; tanggal yang dimuat dari tarikan laptop
+                                          # yang putus dimuat ulang begitu salinan VPS-nya datang)
 python run.py --tahap transform,load --tanggal 2026-11-08   # proses ulang tanpa menarik
+                                          # (salinan VPS dipakai kalau folder laptop tanpa _SUKSES)
 python run.py --sumber tokopedia
 python evaluasi_asal.py --tanggal 2026-11-08                 # nilai aturan asal (lihat di bawah)
 python kirim_supabase.py                  # kirim data dashboard Manalagi yang berubah ke Supabase
