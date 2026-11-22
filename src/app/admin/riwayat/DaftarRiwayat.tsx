@@ -105,7 +105,7 @@ export default function DaftarRiwayat({
                     </p>
                   </div>
 
-                  <ul className="grid gap-2">
+                  <ul className="grid gap-3 sm:grid-cols-2">
                     {isi.map((p) => (
                       <li
                         key={p.id}

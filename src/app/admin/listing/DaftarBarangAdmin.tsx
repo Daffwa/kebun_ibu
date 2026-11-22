@@ -59,7 +59,7 @@ export default function DaftarBarangAdmin({
           </p>
         </div>
       ) : (
-        <ul className="grid gap-4">
+        <ul className="grid gap-4 sm:grid-cols-2">
           {hasil.map((l) => (
             <li key={l.id}>
               <BarisListing listing={l} jumlahPesanan={hitung[l.id] ?? 0} templat={templat} />

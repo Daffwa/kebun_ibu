@@ -46,11 +46,15 @@ export default function DaftarKotakMasuk({
           </p>
         </div>
       ) : (
-        <div className="grid gap-4">
-          {lelang.map((r) => (
-            <KartuLelang key={r.listing.id} ringkasan={r} sekarang={waktu} />
-          ))}
-          <ul className="grid gap-4">
+        <div className="space-y-6">
+          {lelang.length > 0 ? (
+            <div className="grid gap-4 sm:grid-cols-2">
+              {lelang.map((r) => (
+                <KartuLelang key={r.listing.id} ringkasan={r} sekarang={waktu} />
+              ))}
+            </div>
+          ) : null}
+          <ul className="grid gap-4 sm:grid-cols-2">
             {biasa.map((p) => (
               <li key={p.id}>
                 <KartuPesanan pesanan={p} />

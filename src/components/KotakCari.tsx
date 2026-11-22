@@ -35,14 +35,14 @@ export default function KotakCari({
           onChange={(e) => ubah(e.target.value)}
           placeholder={petunjuk}
           autoComplete="off"
-          className="w-full rounded-full border-2 border-daun-tua bg-putih py-3 pr-13 pl-5 text-lg placeholder:text-daun-muda"
+          className="w-full rounded-full border-2 border-daun-tua bg-putih py-3 pr-13 pl-5 text-lg placeholder:text-daun-muda shadow-xs transition-all duration-200 focus:shadow-md focus:border-daun focus:ring-4 focus:ring-daun/20"
         />
         {menyaring ? (
           <button
             type="button"
             onClick={() => ubah("")}
             aria-label="Kosongkan pencarian"
-            className="absolute top-1/2 right-2 flex size-10 -translate-y-1/2 items-center justify-center rounded-full border-2 border-daun-tua text-xl font-bold text-daun-tua"
+            className="absolute top-1/2 right-2 flex size-10 -translate-y-1/2 items-center justify-center rounded-full border-2 border-daun-tua text-xl font-bold text-daun-tua transition-transform duration-150 hover:scale-110 active:scale-95"
           >
             &times;
           </button>

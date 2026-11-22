@@ -84,7 +84,7 @@ export default function TombolBagikan({
         aria-live="polite"
         className={
           className ||
-          "flex min-h-13 items-center justify-center rounded-full bg-emas px-4 font-bold text-daun-tua"
+          "flex min-h-13 items-center justify-center rounded-full bg-emas px-4 font-bold text-daun-tua shadow-sm tombol-interaktif"
         }
       >
         {keadaan === "tersalin" ? "Tersalin ✓" : "Bagikan"}

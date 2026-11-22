@@ -1,5 +1,8 @@
 /** Bucket "foto" bersifat publik, jadi URL-nya bisa dibentuk langsung. */
 export function urlFoto(path: string): string {
+  if (path.startsWith("/") || path.startsWith("http://") || path.startsWith("https://")) {
+    return path;
+  }
   const base = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";
   return `${base}/storage/v1/object/public/foto/${path}`;
 }
